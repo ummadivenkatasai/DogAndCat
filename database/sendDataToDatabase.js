@@ -63,7 +63,7 @@ async function sendCatDataToDatabase(){
             if(dataExtension == '.jpg'){
                 if(!allMessages.includes(data.url)){
                     await collection.insertOne(data);
-                    console.log('cat data inserted')
+                    // console.log('cat data inserted')
                 }else{
                     console.log('cat data already exists')
                 }
