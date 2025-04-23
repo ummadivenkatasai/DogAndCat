@@ -2,8 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
-const app = express();
-app.use(cors());
+function createServer(){
+    const app = express();
+    app.use(cors());
 
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
@@ -34,7 +35,8 @@ app.get('/api/cats',async (req,res)=>{
     }
 })
 
-const port = 5000;
-app.listen(port,()=>{
-    console.log(`server is running on ${port}`)
-})
+return app;
+
+}
+
+module.exports = createServer;
