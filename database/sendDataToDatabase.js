@@ -24,9 +24,24 @@ async function sendDogDataToDatabase() {
         // await collection.insertOne(apiResponseData)
         const existingData = await collection.find({}).toArray();
         const allMessages = existingData.map((data)=>data.message)
-        
+        // console.log(apiResponseData)
+
+        // if(!allMessages.includes(apiResponseData.message)){
+        //     const extract = path.parse(apiResponseData.message);
+        //     // console.log(extract)
+        //     const breeadName = extract.dir.slice(30);
+        //     apiResponseData.breead=breeadName;
+        //     console.log(apiResponseData)
+        // }else{
+        //     console.log('alread exists')
+        // }
+
         if(existingData.length<250){
             if(!allMessages.includes(apiResponseData.message)){
+                const extract = path.parse(apiResponseData.message);
+                const breeadName = extract.dir.slice(30);
+                apiResponseData.breead=breeadName;
+                // console.log(apiResponseData)
                 await collection.insertOne(apiResponseData)
                 
             }else{
@@ -35,13 +50,15 @@ async function sendDogDataToDatabase() {
         }else{
             clearInterval(dogInterval);
             console.log('dog limit over')
-        } 
+        }
     } catch (error) {
         throw error
     } finally{
         await client.close()
     }
 }
+
+// sendDogDataToDatabase()
 
 async function sendCatDataToDatabase(){
     const { collection, client } = await connectToDatabase({ databaseCollection:'CatData' });
@@ -59,7 +76,7 @@ async function sendCatDataToDatabase(){
 
         const exisitingData = await collection.find({}).toArray();
         const allMessages = exisitingData.map((data)=>data.url);
-        if(exisitingData.length<250){
+        /*if(exisitingData.length<250){
             if(dataExtension == '.jpg'){
                 if(!allMessages.includes(data.url)){
                     await collection.insertOne(data);
@@ -73,19 +90,19 @@ async function sendCatDataToDatabase(){
         }else{
             clearInterval(catInterval);
             console.log('cat limit over');
-        }
+        }*/
     } catch (error) {
         throw error
     } finally{
-        await client.close()
+        // await client.close()
     }
 }
 
 
 dogInterval = setInterval(()=>{
     sendDogDataToDatabase()
-},5000)
+},1000)
 
-catInterval = setInterval(()=>{
-    sendCatDataToDatabase()
-},5000)
+// catInterval = setInterval(()=>{
+//     sendCatDataToDatabase()
+// },5000)
