@@ -21,27 +21,15 @@ async function sendDogDataToDatabase() {
     try {
         const apiResponse = await fetch('https://dog.ceo/api/breeds/image/random');
         const apiResponseData = await apiResponse.json();
-        // await collection.insertOne(apiResponseData)
         const existingData = await collection.find({}).toArray();
         const allMessages = existingData.map((data)=>data.message)
-        // console.log(apiResponseData)
-
-        // if(!allMessages.includes(apiResponseData.message)){
-        //     const extract = path.parse(apiResponseData.message);
-        //     // console.log(extract)
-        //     const breeadName = extract.dir.slice(30);
-        //     apiResponseData.breead=breeadName;
-        //     console.log(apiResponseData)
-        // }else{
-        //     console.log('alread exists')
-        // }
+        
 
         if(existingData.length<250){
             if(!allMessages.includes(apiResponseData.message)){
                 const extract = path.parse(apiResponseData.message);
                 const breeadName = extract.dir.slice(30);
                 apiResponseData.breead=breeadName;
-                // console.log(apiResponseData)
                 await collection.insertOne(apiResponseData)
                 
             }else{
@@ -58,8 +46,6 @@ async function sendDogDataToDatabase() {
     }
 }
 
-// sendDogDataToDatabase()
-
 async function sendCatDataToDatabase(){
     const { collection, client } = await connectToDatabase({ databaseCollection:'CatData' });
     try {
@@ -67,20 +53,20 @@ async function sendCatDataToDatabase(){
         const apiResponseData = await apiResponse.json();
         const [data] = apiResponseData.map((output)=>output);
         const dataExtension = path.extname(data.url);
-        
-        // if(dataExtension == '.jpg'){
-        //     await collection.insertOne(data)
-        // }else{
-        //     console.log('noobject')
-        // }
 
         const exisitingData = await collection.find({}).toArray();
         const allMessages = exisitingData.map((data)=>data.url);
-        /*if(exisitingData.length<250){
-            if(dataExtension == '.jpg'){
+        if(exisitingData.length<250){
+            if(dataExtension === '.jpg' || dataExtension === '.png'){
                 if(!allMessages.includes(data.url)){
-                    await collection.insertOne(data);
-                    // console.log('cat data inserted')
+                    const response = await fetch(`https://api.thecatapi.com/v1/images/${data.id}`);
+                    const responseData = await response.json();
+                    if(responseData.breeds){
+                        await collection.insertOne(responseData);
+                        console.log('inserted')
+                    }else{
+                        console.log('useless')
+                    }
                 }else{
                     console.log('cat data already exists')
                 }
@@ -90,19 +76,18 @@ async function sendCatDataToDatabase(){
         }else{
             clearInterval(catInterval);
             console.log('cat limit over');
-        }*/
+        }
     } catch (error) {
-        throw error
+        console.log('cat data error : ',error)
     } finally{
-        // await client.close()
+        await client.close()
     }
 }
-
 
 dogInterval = setInterval(()=>{
     sendDogDataToDatabase()
 },1000)
 
-// catInterval = setInterval(()=>{
-//     sendCatDataToDatabase()
-// },5000)
+catInterval = setInterval(()=>{
+    sendCatDataToDatabase()
+},1000)
