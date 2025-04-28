@@ -1,4 +1,5 @@
 import './App.css'
+import CatData from './components/catData'
 import DogData from './components/dogData'
 import Home from './components/Home'
 
@@ -7,7 +8,8 @@ function App() {
   return (
     <>
       {/* <Home /> */}
-      <DogData/>
+      {/* <DogData/> */}
+      <CatData/>
     </>
   )
 }
