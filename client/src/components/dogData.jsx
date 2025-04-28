@@ -14,25 +14,19 @@ const DogData = () => {
         }
         dogDataFetching()
     },[])
-
-    // dogData.map((value)=>{
-    //     console.log(value)
-    //     // id, message, breead
-    // })
+    
 
   return (
-    <>
-      {dogData.map(({id,message,breead})=>{
+    <div style={{display:'flex',flexWrap:'wrap', gap:'50px'}} >
+      {dogData.map(({_id,message,breead})=>{
         return(
-            <>
-                <div key={id} >
-                    <img src={message} />
-                    <p>{breead}</p>
-                </div>
-            </>
+          <div key={_id} >
+        <img src={message} alt='dog Image' style={{height:'250px',width:'250px'}} />
+        <p>{breead}</p>
+    </div>
         )
       })}
-    </>
+    </div>
   )
 }
 
