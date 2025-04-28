@@ -1,11 +1,12 @@
 import './App.css'
 import DogData from './components/dogData'
+import Home from './components/Home'
 
 function App() {
 
   return (
     <>
-      <DogData/>
+      <Home />
     </>
   )
 }
