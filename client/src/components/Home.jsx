@@ -16,10 +16,6 @@ function Home() {
           const catResData = await catRes.json();
           setDogData(dogResData);
           setDogData(catResData)
-          // catResData.map((data)=>{
-          //   // console.log(data)
-          //   setCatData(data);
-          // })
 
           const combine = [];
           const totalLength = Math.max(dogResData.length + catResData.length );
@@ -51,11 +47,13 @@ function Home() {
         type === 'dog' ? (<div key={data._id} >
           <img src={data.message} alt='dog Image' style={{height: '300px', width:'300px' }}  />
           <h2>{data.breead}</h2>
+          <p>Price: 2000 </p>
         </div>) 
         : 
         (<div key={data._id} >
           <img src={data.url} alt='cat Image' style={{height: '300px', width:'300px' }} />
           <h2>{data.breeds[0].name}</h2>
+          <p>Price: 1500 </p>
         </div>)
       ) )}
       </div>
