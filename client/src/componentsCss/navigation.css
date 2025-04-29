@@ -1,0 +1,35 @@
+.navigation{
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid black;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.navigation .websiteName a{
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    position: relative;
+    left: 8rem;
+}
+
+.navigation .websiteName a:hover{
+    color: blue;
+}
+
+.navigation .iconsContent{
+    display: flex;
+    gap: 70px;
+    position: relative;
+    right: 50px;
+    padding: 0 10px;
+}
+
+.navigation .iconsContent .icon a svg{
+    /* font-size: 40px; */
+    height: 40px;
+    width: 40px;
+    color: black;
+}

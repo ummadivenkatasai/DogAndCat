@@ -1,4 +1,5 @@
 import './App.css'
+import '@coreui/coreui/dist/css/coreui.min.css'
 import { Routes, Route } from 'react-router-dom'
 import CatData from './components/catData'
 import DogData from './components/dogData'
