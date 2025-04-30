@@ -1,9 +1,10 @@
 .navigation{
     display: flex;
     justify-content: space-between;
-    border: 2px solid black;
     padding: 1rem;
     margin-bottom: 2rem;
+    align-items: center;
+    background-color: orange;
 }
 
 .navigation .websiteName a{
@@ -16,20 +17,41 @@
 }
 
 .navigation .websiteName a:hover{
-    color: blue;
+    color: white;
 }
 
 .navigation .iconsContent{
     display: flex;
-    gap: 70px;
-    position: relative;
-    right: 50px;
-    padding: 0 10px;
+    padding: 0 20px;
+    align-items: center;
+    justify-content: space-between;
+    width: 400px;
+    gap: 30px;
+}
+
+.navigation .iconsContent .icon{
+    height: 32px;
+    width: 32px;
+    color: white;
 }
 
 .navigation .iconsContent .icon a svg{
-    /* font-size: 40px; */
-    height: 40px;
-    width: 40px;
-    color: black;
+    color: rgba(255, 255, 255, 0.619);
+}
+
+.navigation .iconsContent .singin a svg{
+    height: 17px;
+    width: 17px;
+    position: relative;
+    left: -5px;
+}
+
+.navigation .iconsContent .btn a{
+    font-size: 18px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.619);
+}
+
+.navigation .iconsContent .links a:hover, .navigation .iconsContent .links a svg:hover{
+    color: white;
 }
