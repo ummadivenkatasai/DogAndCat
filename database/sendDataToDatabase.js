@@ -28,8 +28,10 @@ async function sendDogDataToDatabase() {
         if(existingData.length<250){
             if(!allMessages.includes(apiResponseData.message)){
                 const extract = path.parse(apiResponseData.message);
-                const breeadName = extract.dir.slice(30);
-                apiResponseData.breead=breeadName;
+                const breedName = extract.dir.slice(30);
+                apiResponseData.breed=breedName;
+                apiResponseData.stock=10;
+                apiResponseData.price=1499;
                 await collection.insertOne(apiResponseData)
                 
             }else{
@@ -62,10 +64,11 @@ async function sendCatDataToDatabase(){
                     const response = await fetch(`https://api.thecatapi.com/v1/images/${data.id}`);
                     const responseData = await response.json();
                     if(responseData.breeds){
+                        responseData.stock=10;
+                        responseData.price=1299;
                         await collection.insertOne(responseData);
-                        console.log('inserted')
                     }else{
-                        console.log('useless')
+                        console.log(`data doesn't contain breeds`)
                     }
                 }else{
                     console.log('cat data already exists')
