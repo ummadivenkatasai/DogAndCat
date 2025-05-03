@@ -18,11 +18,11 @@ const DogData = () => {
 
   return (
     <div style={{display:'flex',flexWrap:'wrap', gap:'50px'}} >
-      {dogData.map(({_id,message,breead})=>{
+      {dogData.map(({_id,message,breed})=>{
         return(
           <div key={_id} >
         <img src={message} alt='dog Image' style={{height:'250px',width:'250px'}} />
-        <p>{breead}</p>
+        <p>{breed}</p>
     </div>
         )
       })}
