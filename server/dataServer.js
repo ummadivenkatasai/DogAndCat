@@ -27,7 +27,7 @@ app.get('/',async(req,res)=>{
             connectToDatabase({db:'DogAndCatApiData',col:'DogData'}),
             connectToDatabase({db:'DogAndCatApiData',col:'CatData'})
         ])
-        res.status(200).json({dogs:dogRes,cat:catRes})
+        res.status(200).json({dog:dogRes,cat:catRes})
     } catch (error) {
         console.log("main page error",error);
         res.status(500).send('Error fetching data');
