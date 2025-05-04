@@ -5,6 +5,7 @@ import CatData from './components/catData'
 import DogData from './components/dogData'
 import Home from './components/Home'
 import Navigation from './components/Navigation'
+import Footer from './components/Footer'
 
 function App() {
 
@@ -13,9 +14,10 @@ function App() {
     <Navigation/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path='cat' element={<CatData/>} />
+        <Route path="cat" element={<CatData/>} />
         <Route path="dog" element={<DogData />} />
       </Routes>
+      <Footer/>
     </>
   )
 }
