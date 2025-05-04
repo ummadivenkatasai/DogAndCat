@@ -40,7 +40,7 @@ function Footer() {
       </Grid>
       <Grid container className="footer-lower" >
         <Grid size={4} className=" col col-1">
-          <h5>Pet Breeds Guide</h5>
+          <h5>Pet Pals</h5>
           <p>Your comprehensive guide to cat and dog breeds from around the world</p>
           <Grid size={3} className='social-media' >
             <Link to='' > <CIcon icon={cibFacebook} /> </Link> 
