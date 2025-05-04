@@ -1,0 +1,46 @@
+.coverContent{
+    height: 80vh;
+    position: relative;
+    
+}
+
+.coverContent .coverImage{
+    background-image: url('https://images.pexels.com/photos/1254140/pexels-photo-1254140.jpeg');
+    background-attachment: scroll;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    opacity: 0.7;
+}
+
+.coverContent .content{
+    position: absolute;
+    top: 5rem;
+    left: 6.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.coverContent .content .contentHeading{
+    color: black;
+    margin-bottom: 1rem;
+}
+
+.coverContent .content .contentPara p{
+    color: white;
+    font-size: 18px;
+}
+
+.coverContent .explore{
+    position: absolute;
+    top:19rem;
+    display: flex;
+    gap: 3rem;
+    left: 5rem;
+}
+
+.coverContent .explore .dogBtn{
+    background-color: orange;
+    color: white;
+}

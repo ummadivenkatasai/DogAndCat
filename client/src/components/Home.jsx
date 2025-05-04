@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { data } from 'react-router-dom';
+import '../componentsCss/home.css'
+import Explore from './Explore';
 
 function Home() {
     const [dogData,setDogData]=useState([]);
@@ -34,23 +35,9 @@ function Home() {
     },[])
 
   return (
-    
-      <div style={{display:'flex',flexWrap:'wrap', gap:'90px' }}  >
-      {combineData.map(({type,data})=> (
-        type === 'dog' ? (<div key={data._id} >
-          <img src={data.message} alt='dog Image' style={{height: '300px', width:'300px' }}  />
-          <h2>{data.breed}</h2>
-          <p>Price: 2000 </p>
-        </div>) 
-        : 
-        (<div key={data._id} >
-          <img src={data.url} alt='cat Image' style={{height: '300px', width:'300px' }} />
-          <h2>{data.breeds[0].name}</h2>
-          <p>Price: 1500 </p>
-        </div>)
-      ) )}
-      </div>
-    
+    <>
+      <Explore/>
+    </>
   )
 }
 
