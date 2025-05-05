@@ -14,7 +14,7 @@ async function connectToDatabase({db,col}) {
         await client.connect();
         const database = client.db(`${db}`);
         const collection = database.collection(`${col}`)
-        const data = (await collection.find({}).limit(5).toArray());
+        const data = (await collection.find({}).limit(4).toArray());
         return data;
     } catch (error) {
         console.log('Error on connecting database',error);

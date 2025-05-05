@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '../componentsCss/home.css'
 import Explore from './Explore';
+import { Link } from 'react-router-dom'
+import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 
 function Home() {
     const [dogData,setDogData]=useState([]);
@@ -37,8 +39,34 @@ function Home() {
   return (
     <>
       <Explore/>
+      <Grid container className='displayImages'>
+        <Grid className='heading' >
+          <Typography variant='h4'>Featured Pets</Typography>
+        </Grid>
+        <Grid container className='images' rowGap={6} >
+          {combineData.map(({ type, data }) => (
+            <Grid className='cardContent' key={data._id} size={{ xs: 2, sm: 4, md: 4 }}  >
+              <Link to="">
+              <Card className='card'>
+                <CardMedia component='img' alt={type} image={type === 'dog' ? data.message : data.url} className='cardImage'/>
+                <CardContent className='content'>
+                  <Typography variant='body1'>
+                    {type === 'dog' ? data.breed : data.breeds[0].name}
+                  </Typography>
+                  <Typography variant='body1'>Price: {data.price}</Typography>
+                </CardContent>
+              </Card>
+              </Link>
+              </Grid>
+            ))}
+        </Grid>
+      </Grid>
+
     </>
   )
 }
 
 export default Home
+
+// sx={{maxWidth:250,maxHeight:250}}
+// sx={{maxWidth:250,maxHeight:250}}

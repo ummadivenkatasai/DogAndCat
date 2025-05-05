@@ -1,0 +1,46 @@
+.displayImages {
+    min-height: 100vh;
+    background-color: whitesmoke;
+    padding: 2rem 2rem 5rem;
+    margin: 3rem 0;
+  }
+  
+  .displayImages .heading {
+    margin-bottom: 1rem;
+    margin-left:25px;
+    padding: 0;
+  }
+  
+  .displayImages .images .cardContent {
+    height: 300px;
+    width: 100%;
+    max-width: 320px;
+    margin: auto;
+  }
+
+  .displayImages .images .cardContent a{
+    text-decoration: none;
+  }
+  
+  .displayImages .images .cardContent .card {
+    height: 100%;
+    border-radius: 3%;
+  }
+  
+  .displayImages .images .cardContent .card img {
+    height: 80%;
+    width: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  
+  .displayImages .images .cardContent .card .content {
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5rem;
+  }
+  
+
+/* <Grid container className='images' spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 4, md: 4 }} columnGap={6} > */
