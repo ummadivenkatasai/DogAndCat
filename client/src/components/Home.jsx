@@ -67,6 +67,3 @@ function Home() {
 }
 
 export default Home
-
-// sx={{maxWidth:250,maxHeight:250}}
-// sx={{maxWidth:250,maxHeight:250}}
