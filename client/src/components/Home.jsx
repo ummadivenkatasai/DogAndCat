@@ -3,6 +3,7 @@ import '../componentsCss/home.css'
 import Explore from './Explore';
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import Choose from './Choose';
 
 function Home() {
     const [dogData,setDogData]=useState([]);
@@ -61,7 +62,7 @@ function Home() {
             ))}
         </Grid>
       </Grid>
-
+      <Choose/>
     </>
   )
 }
