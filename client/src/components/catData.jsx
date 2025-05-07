@@ -1,15 +1,16 @@
 import '../componentsCss/cat.css'
-import { Checkbox, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, selectClasses, Typography } from '@mui/material';
+import { Checkbox, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 
 
 const CatData = () => {
   const [catData,setCatData] = useState([]);
-  const [breedNames,setBreedNames]=useState(new Set())
-  const [alltemperament,setAllTemperament] = useState(new Set());
-  const [country,setCountry] = useState(new Set());
-  const [lifeSpan,setLifeSpan] = useState(new Set());
-  const [energy,setEnergy] = useState(new Set());
+  const [breedNames,setBreedNames]=useState([])
+  const [alltemperament,setAllTemperament] = useState([]);
+  const [country,setCountry] = useState([]);
+  const [lifeSpan,setLifeSpan] = useState([]);
+  const [energy,setEnergy] = useState([]);
+
   const [breedNameSeleted,setBreedNameSeleted]=useState([]);
   const [temperamentSeleted,setTemperamentSeleted] = useState([]);
   const [countrySelected,setCountrySeleted] = useState('');
@@ -24,48 +25,32 @@ const CatData = () => {
 
       const nameSet = new Set();
       const temperamentSet = new Set();
-      const origin = new Set();
-      const span = new Set();
-      const power = new Set();
+      const countrySet = new Set();
+      const lifeSpanSet = new Set();
+      const enegrySet = new Set();
 
       responseData.forEach(({breeds})=>{
         nameSet.add(breeds[0].name)
         breeds[0].temperament.split(',').map((data)=>data.trim()).forEach((data)=>temperamentSet.add(data))
-        origin.add(breeds[0].origin)
-        breeds[0].life_span.split('-').map((data)=>data.trim()).forEach((data)=>span.add(data))
-        power.add(breeds[0].energy_level)
+        countrySet.add(breeds[0].origin)
+        breeds[0].life_span.split('-').map((data)=>data.trim()).forEach((data)=>lifeSpanSet.add(data))
+        enegrySet.add(breeds[0].energy_level)
       })
 
-      setBreedNames(nameSet);
-      setAllTemperament(temperamentSet)
-      setCountry(origin)
-      const sortedLifeSpan = [...span].sort((a, b) => a-b)
-      setLifeSpan(sortedLifeSpan)
-      const sortedEnegry = [...power].sort((a,b)=>a-b)
-      setEnergy(sortedEnegry)
+      setBreedNames([...nameSet]);
+      setAllTemperament([...temperamentSet])
+      setCountry([...countrySet])
+      setLifeSpan([...lifeSpanSet].sort((x,y)=>x-y))
+      setEnergy([...enegrySet].sort((x,y)=>x-y))
 
     }
     fetchCatData()
   },[])
 
-  function selectBreedName({target:{value}}){
-    setBreedNameSeleted(value)
-  }
-
-  function selectTemperament({target:{value}}){
-    setTemperamentSeleted(value)
-  }
-
-  function selectCountry({target:{value}}){
-    setCountrySeleted(value);
-  }
-
-  function selectLifeSpan({target:{value}}){
-    setLifeSpanSelected(value)
-  }
-
-  function selectEnergy({target:{value}}){
-    setEnergySelected(value)
+  function handleChange(set){
+    return function({target:{value}}){
+      set(value)
+    }
   }
 
   return (
@@ -74,10 +59,10 @@ const CatData = () => {
         <Grid className='breedname' >
           <Typography variant='body1' >Breeds</Typography>
           <FormControl sx={{minWidth:250,maxWidth:250}} >
-            <Select input={<OutlinedInput />} value={breedNameSeleted} label="Breed Name" onChange={selectBreedName} multiple renderValue={(selected) => selected.join(', ')} >
-              {[...breedNames].map((data)=>(
+            <Select input={<OutlinedInput />} value={breedNameSeleted} label="Breed Name" onChange={handleChange(setBreedNameSeleted)} multiple renderValue={(selected) => selected.join(', ')} >
+              {breedNames.map((data)=>(
                   <MenuItem value={data} key={data} >
-                    <Checkbox checked={breedNameSeleted.indexOf(data) > -1} />
+                    <Checkbox checked={breedNameSeleted.includes(data)} />
                     {data}
                   </MenuItem>
               ))}
@@ -87,10 +72,10 @@ const CatData = () => {
         <Grid className='Temperament' >
             <Typography variant='body1' >Temperament</Typography>
             <FormControl sx={{minWidth:250,maxWidth:250}} >
-              <Select input={<OutlinedInput />} value={temperamentSeleted} label='Temperament' onChange={selectTemperament} multiple renderValue={(selected)=> selected.join(', ') } >
-                {[...alltemperament].map((data)=>(
+              <Select input={<OutlinedInput />} value={temperamentSeleted} label='Temperament' onChange={handleChange(setTemperamentSeleted)} multiple renderValue={(selected)=> selected.join(', ') } >
+                {alltemperament.map((data)=>(
                   <MenuItem value={data} key={data} >
-                    < Checkbox checked={temperamentSeleted.indexOf(data) > -1}  />
+                    < Checkbox checked={temperamentSeleted.includes(data)}  />
                     {data}
                   </MenuItem>
                 ))}
@@ -100,8 +85,8 @@ const CatData = () => {
         <Grid className='origin' >
           <Typography variant='body1' >Country</Typography>
           <FormControl sx={{minWidth:250,maxWidth:250}} >
-            <Select input={<OutlinedInput/>} value={countrySelected} label='Country' onChange={selectCountry} renderValue={(selected)=> selected} >
-                {[...country].map((data)=>(
+            <Select input={<OutlinedInput/>} value={countrySelected} label='Country' onChange={handleChange(setCountrySeleted)} renderValue={(selected)=> selected} >
+                {country.map((data)=>(
                   <MenuItem value={data} key={data} >
                     < Checkbox checked={countrySelected === data} />
                     {data}
@@ -113,10 +98,10 @@ const CatData = () => {
         <Grid className='lifeSpan' >
            <Typography variant='body1' >Life Span</Typography>
            <FormControl sx={{minWidth:250,maxWidth:250}} >
-           <Select input={<OutlinedInput />} value={lifeSpanSelected} label='lifeSpan' onChange={selectLifeSpan} multiple renderValue={(selected)=> selected.join(', ') } >
-           {[...lifeSpan].map((data)=>(
+           <Select input={<OutlinedInput />} value={lifeSpanSelected} label='lifeSpan' onChange={handleChange(setLifeSpanSelected)} multiple renderValue={(selected)=> selected.join(', ') } >
+           {lifeSpan.map((data)=>(
             <MenuItem value={data} key={data} >
-            <Checkbox checked={lifeSpanSelected.indexOf(data) > -1} />
+            <Checkbox checked={lifeSpanSelected.includes(data)} />
             {data}
           </MenuItem>
            ))}
@@ -126,8 +111,8 @@ const CatData = () => {
         <Grid className='enegryLevel' >
             <Typography variant='body1' >Energy Level</Typography>
             <FormControl sx={{minWidth:250,maxWidth:250}} >
-              <Select input={<OutlinedInput/>} value={energySelected} label='enegry' onChange={selectEnergy} renderValue={(selected)=> selected} >
-                {[...energy].map((data)=>(
+              <Select input={<OutlinedInput/>} value={energySelected} label='enegry' onChange={handleChange(setEnergySelected)} renderValue={(selected)=> selected} >
+                {energy.map((data)=>(
                   <MenuItem value={data} key={data} >
                     <Checkbox checked={energySelected === data} />
                     {data}
