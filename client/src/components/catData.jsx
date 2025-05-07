@@ -1,5 +1,5 @@
 import '../componentsCss/cat.css'
-import { Checkbox, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Checkbox, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 
 
@@ -53,15 +53,19 @@ const CatData = () => {
     }
   }
 
+  catData.map((data)=>{
+    // console.log(data)
+  })
+
   return (
     <Grid container className='catData' >
       <Grid container className='catFilters' >
-        <Grid className='breedname' >
+        <Grid className='fliters breedname' >
           <Typography variant='body1' >Breeds</Typography>
-          <FormControl sx={{minWidth:250,maxWidth:250}} >
-            <Select input={<OutlinedInput />} value={breedNameSeleted} label="Breed Name" onChange={handleChange(setBreedNameSeleted)} multiple renderValue={(selected) => selected.join(', ')} >
+          <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
+            <Select className='select' input={<OutlinedInput />} value={breedNameSeleted} label="Breed Name" onChange={handleChange(setBreedNameSeleted)} multiple renderValue={(selected) => selected.join(', ')} >
               {breedNames.map((data)=>(
-                  <MenuItem value={data} key={data} >
+                  <MenuItem className='menuItem' value={data} key={data} >
                     <Checkbox checked={breedNameSeleted.includes(data)} />
                     {data}
                   </MenuItem>
@@ -69,12 +73,12 @@ const CatData = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid className='Temperament' >
+        <Grid className='fliters Temperament' >
             <Typography variant='body1' >Temperament</Typography>
-            <FormControl sx={{minWidth:250,maxWidth:250}} >
-              <Select input={<OutlinedInput />} value={temperamentSeleted} label='Temperament' onChange={handleChange(setTemperamentSeleted)} multiple renderValue={(selected)=> selected.join(', ') } >
+            <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
+              <Select className='select' input={<OutlinedInput />} value={temperamentSeleted} label='Temperament' onChange={handleChange(setTemperamentSeleted)} multiple renderValue={(selected)=> selected.join(', ') } >
                 {alltemperament.map((data)=>(
-                  <MenuItem value={data} key={data} >
+                  <MenuItem className='menuItem' value={data} key={data} >
                     < Checkbox checked={temperamentSeleted.includes(data)}  />
                     {data}
                   </MenuItem>
@@ -82,12 +86,12 @@ const CatData = () => {
               </Select>
             </FormControl>
         </Grid>
-        <Grid className='origin' >
+        <Grid className='fliters origin' >
           <Typography variant='body1' >Country</Typography>
-          <FormControl sx={{minWidth:250,maxWidth:250}} >
-            <Select input={<OutlinedInput/>} value={countrySelected} label='Country' onChange={handleChange(setCountrySeleted)} renderValue={(selected)=> selected} >
+          <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
+            <Select className='select' input={<OutlinedInput/>} value={countrySelected} label='Country' onChange={handleChange(setCountrySeleted)} renderValue={(selected)=> selected} >
                 {country.map((data)=>(
-                  <MenuItem value={data} key={data} >
+                  <MenuItem className='menuItem' value={data} key={data} >
                     < Checkbox checked={countrySelected === data} />
                     {data}
                   </MenuItem>
@@ -95,12 +99,12 @@ const CatData = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid className='lifeSpan' >
+        <Grid className='fliters lifeSpan' >
            <Typography variant='body1' >Life Span</Typography>
-           <FormControl sx={{minWidth:250,maxWidth:250}} >
-           <Select input={<OutlinedInput />} value={lifeSpanSelected} label='lifeSpan' onChange={handleChange(setLifeSpanSelected)} multiple renderValue={(selected)=> selected.join(', ') } >
+           <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
+           <Select className='select' input={<OutlinedInput />} value={lifeSpanSelected} label='lifeSpan' onChange={handleChange(setLifeSpanSelected)} multiple renderValue={(selected)=> selected.join(', ') } >
            {lifeSpan.map((data)=>(
-            <MenuItem value={data} key={data} >
+            <MenuItem className='menuItem' value={data} key={data} >
             <Checkbox checked={lifeSpanSelected.includes(data)} />
             {data}
           </MenuItem>
@@ -108,12 +112,12 @@ const CatData = () => {
            </Select>
             </FormControl>     
         </Grid>
-        <Grid className='enegryLevel' >
+        <Grid className='fliters enegryLevel' >
             <Typography variant='body1' >Energy Level</Typography>
-            <FormControl sx={{minWidth:250,maxWidth:250}} >
-              <Select input={<OutlinedInput/>} value={energySelected} label='enegry' onChange={handleChange(setEnergySelected)} renderValue={(selected)=> selected} >
+            <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
+              <Select className='select' input={<OutlinedInput/>} value={energySelected} label='enegry' onChange={handleChange(setEnergySelected)} renderValue={(selected)=> selected} >
                 {energy.map((data)=>(
-                  <MenuItem value={data} key={data} >
+                  <MenuItem className='menuItem'  value={data} key={data} >
                     <Checkbox checked={energySelected === data} />
                     {data}
                   </MenuItem>
@@ -122,8 +126,18 @@ const CatData = () => {
             </FormControl>
         </Grid>
       </Grid>
-      <Grid container className='catImages' >
-
+      <Grid container className='catImages' rowSpacing={5} >
+        {catData.map((data)=>(
+          <Grid size={4} key={data._id} className='images'  >
+            <Card className='card' sx={{maxWidth:345}} >
+              <CardMedia className='cargImage' component='img' image={data.url} alt={data.id} height='275' />
+              <CardContent className='cardContent' >
+                <Typography variant='body1' >{data.breeds[0].name}</Typography>
+                <Typography variant='body1' >Price: {data.price}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Grid>
   )

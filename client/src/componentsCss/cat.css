@@ -1,8 +1,39 @@
 .catData .catFilters{
-    border: 1px solid black;
+    /* border: 1px solid black; */
     min-width: 22.5vw;
     min-height: 70vh;
     padding: 1rem;
     display: flex;
     flex-direction: column;
+}
+
+.catData .catImages{
+    max-width: 77.5%;
+    padding: 2rem;
+}
+
+.catData .catFilters .fliters p,
+.catData .catFilters .fliters .checkbox{
+    margin-bottom: 1rem;
+}
+
+.catData .catFilters .fliters{
+    position: relative;
+}
+
+.catData .catImages .images .card{
+    height: 350px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.catData .catImages .images .card .cargImage{
+    object-fit: cover;
+    object-position: top;
+}
+
+.catData .catImages .images .card .cardContent{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
