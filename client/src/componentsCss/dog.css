@@ -1,0 +1,35 @@
+.dogData{
+    display: flex;
+    flex-direction: column;
+}
+
+.dogData .dogFilters{
+    min-width: 22.5vw;
+    min-height: 70vw;
+    padding: 2rem;
+}
+
+.dogData .dogFilters .breedName p{
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.dogData .dogImages{
+    max-width: 77.5vw;
+    padding: 2rem;
+}
+
+.dogData .dogImages a{
+    text-decoration: none;
+}
+
+.dogData .dogImages .images .card .cardImage{
+    object-fit: cover;
+    object-position: top;
+}
+
+.dogData .dogImages .images .card .cardContent{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

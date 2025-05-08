@@ -53,10 +53,6 @@ const CatData = () => {
     }
   }
 
-  catData.map((data)=>{
-    // console.log(data)
-  })
-
   return (
     <Grid container className='catData' >
       <Grid container className='catFilters' >

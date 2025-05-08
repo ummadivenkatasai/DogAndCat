@@ -1,8 +1,7 @@
 .catData .catFilters{
-    /* border: 1px solid black; */
     min-width: 22.5vw;
     min-height: 70vh;
-    padding: 1rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
 }
