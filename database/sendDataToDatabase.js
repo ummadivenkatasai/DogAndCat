@@ -3,12 +3,27 @@ const path = require('path');
 
 let dogInterval, catInterval;
 
-async function connectToDatabase({databaseCollection}){
-    const url = 'mongodb://localhost:27017/';
+const url = 'mongodb+srv://venkatsai32:Blueriders%401@cluster0.pcoq3ol.mongodb.net/';
+const database = 'DogAndCatApiData';
+
+async function createCollection(collectionName) {
     const client = new MongoClient(url);
     try {
         await client.connect();
-        const db = client.db('DogAndCatApiData');
+        const db = client.db(database);
+        await db.createCollection(collectionName);
+    } catch (error) {
+        console.log('create collection error',error)
+    } finally{
+        await client.close();
+    }
+}
+
+async function connectToDatabase({databaseCollection}){
+    const client = new MongoClient(url);
+    try {
+        await client.connect();
+        const db = client.db(database);
         const col = db.collection(databaseCollection);
         return { collection:col,client } 
     } catch (error) {
@@ -94,3 +109,4 @@ dogInterval = setInterval(()=>{
 catInterval = setInterval(()=>{
     sendCatDataToDatabase()
 },1000)
+
