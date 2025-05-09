@@ -1,5 +1,5 @@
 import React, {  useState } from 'react'
-import { Button, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material'
+import { Button, Grid, Typography, TextField } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import '../componentsCss/signin.css'
@@ -28,7 +28,8 @@ function Signin() {
     localStorage.setItem("token",response.data.token);
     navigate('/')
    } catch (error) {
-    // setError(error.response.data.message || "Login failed")
+    // setError('Login Failed')
+    setError(error.response.data.message || "Login failed")
    }
   }
 
@@ -47,11 +48,11 @@ function Signin() {
         <Grid className='inputData loginBtn' >
           <Button variant='contained' sx={{minWidth:200}} type='submit' >Login</Button>
         </Grid>
-        <Grid className='loginSignup' size={8} >
+        <Grid className='loginSignup' size={12} >
           <Typography variant='body1' >
           Already have Account?
           </Typography>
-          <span><Link to="/singup">SignUp</Link></span>
+          <span><Link to="/signup">Create an Account</Link></span>
         </Grid>
       </form>
     </Grid>
@@ -59,29 +60,3 @@ function Signin() {
 }
 
 export default Signin
-
-
-{/* <Grid className='userName' size={12} >
-          <Grid className='firstName' size={6} >
-            <TextField variant='outlined' placeholder='First Name' name='firstName' value='' onChange='' />
-          </Grid>
-          <Grid className='lastName' >
-            <TextField variant='outlined' placeholder='Last Name' name='lastName' value='' onChange='' />
-          </Grid>
-        </Grid>
-        <Grid className='genderContent' size={12} >
-          <FormControl className='genderForm' >
-            <FormLabel>Gender</FormLabel>
-            <RadioGroup name='gender' className='genderContent' >
-              <FormControlLabel value='male' control={<Radio/>} label='Male' onChange='' />
-              <FormControlLabel value='female' control={<Radio/>} label='Female' onChange='' />
-              <FormControlLabel value='other' control={<Radio/>} label='Other' onChange='' />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        <Grid className='email' size={12} >
-          <TextField variant='outlined' placeholder='Email' name='email' value='' onChange='' sx={{minWidth:543}} />
-        </Grid>
-        <Grid className='password' size={12} >
-          <TextField variant='outlined' placeholder='Password' name='password' value='' onChange='' sx={{minWidth:543}} />
-        </Grid> */}

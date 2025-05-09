@@ -7,6 +7,7 @@ import Home from './components/Home'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import Signin from './components/Singin'
+import Signup from './components/Signup'
 
 function App() {
 
@@ -17,7 +18,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="cat" element={<CatData/>} />
         <Route path="dog" element={<DogData />} />
-        <Route path='login' element={<Signin/>} />
+        <Route path="login" element={<Signin/>} />
+        <Route path="signup" element={<Signup/>} />
       </Routes>
       <Footer/>
     </>

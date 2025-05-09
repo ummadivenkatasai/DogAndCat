@@ -1,0 +1,39 @@
+.signupForm{
+    min-height: 70vh;
+}
+
+.signupForm .signupContent{
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.signupForm .signupContent .input{
+    margin-bottom: 1rem;
+}
+
+.signupForm .signupContent .userName{
+    display: flex;
+    gap: 3rem;
+}
+
+
+
+.signupForm .signupContent .genderContent .genderForm{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5.5rem;
+}
+
+.signupForm .signupContent .genderContent .genderForm #genderLabel{
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.781);
+}
+
+.signupForm .signupContent .dateOfBirth{
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
