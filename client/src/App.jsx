@@ -6,7 +6,7 @@ import DogData from './components/dogData'
 import Home from './components/Home'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
-import Singin from './components/Singin'
+import Signin from './components/Singin'
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="cat" element={<CatData/>} />
         <Route path="dog" element={<DogData />} />
-        <Route path='login' element={<Singin/>} />
+        <Route path='login' element={<Signin/>} />
       </Routes>
       <Footer/>
     </>

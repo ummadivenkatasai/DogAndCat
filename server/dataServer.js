@@ -9,6 +9,7 @@ function createServer(){
 const url = 'mongodb+srv://venkatsai32:Blueriders%401@cluster0.pcoq3ol.mongodb.net/';
 const client = new MongoClient(url);
 
+
 async function connectToDatabase({db,col}) {
     try {
         await client.connect();

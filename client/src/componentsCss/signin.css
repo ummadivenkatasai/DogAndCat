@@ -1,8 +1,8 @@
-.singinForm{
+.signinForm{
     min-height: 80vh;
 }
 
-.singinForm .singinContent{
+.signinForm .signinContent{
     margin: 0 auto;
     min-width: 30vw;
     display: flex;
@@ -11,11 +11,11 @@
     padding: 3rem 2rem;
 }
 
-.singinForm .singinContent .inputData{
+.signinForm .signinContent .inputData{
     margin: 1.5rem 0rem;
 }
 
-.singinForm .singinContent .loginSingup{
+.signinForm .signinContent .loginSignup{
     display: flex;
     gap: 0.5rem;
     justify-content: center;
