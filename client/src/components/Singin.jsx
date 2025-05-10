@@ -37,14 +37,15 @@ function Signin() {
     <Grid container className='signinForm' >
       <form className='signinContent' onSubmit={sendData} >
         <Typography variant='h5' >Singin</Typography>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <span style={{ color: "red" }}>{error}</span>}
         <Grid className='inputData email' size={8} >
           <TextField variant='outlined' name='email' value={formData.email} onChange={handleChange} placeholder='Email' sx={{minWidth:262,maxWidth:400}}  />
+          {formData.email === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
         </Grid>
         <Grid className='inputData password' size={8} >
           <TextField variant='outlined' name='password' value={formData.password} onChange={handleChange} type='password' placeholder='Password' sx={{minWidth:262,maxWidth:400}}  />
+          {formData.password === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
         </Grid>
-        {fieldError && <p style={{ color: 'red' }}>{fieldError}</p>}
         <Grid className='inputData loginBtn' >
           <Button variant='contained' sx={{minWidth:200}} type='submit' >Login</Button>
         </Grid>
