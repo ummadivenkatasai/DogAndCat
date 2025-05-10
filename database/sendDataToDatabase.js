@@ -3,7 +3,7 @@ const path = require('path');
 
 let dogInterval, catInterval;
 
-const url = 'mongodb+srv://venkatsai32:Blueriders%401@cluster0.pcoq3ol.mongodb.net/';
+const url = 'mongodb://localhost:27017';
 const database = 'DogAndCatApiData';
 
 async function createCollection(collectionName) {
