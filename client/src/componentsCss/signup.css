@@ -1,39 +1,58 @@
-.signupForm{
+.signupForm .card{
     min-height: 70vh;
-}
-
-.signupForm .signupContent{
-    margin: 0 auto;
-    padding: 2rem;
+    margin: 3rem auto;
+    /* border: 1px solid black; */
+    min-width: 30vw;
+    max-width: 30vw;
     text-align: center;
+    padding: 1rem;
 }
 
-.signupForm .signupContent .input{
-    margin-bottom: 1rem;
+.signupForm .signupContent .content{
+    /* border: 1px solid red; */
+    margin: 1rem 0rem;
 }
 
 .signupForm .signupContent .userName{
     display: flex;
-    gap: 3rem;
+    gap: 2rem;
 }
 
+.signupForm .signupContent .gender{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-around;
+}
 
-
-.signupForm .signupContent .genderContent .genderForm{
+.signupForm .signupContent .dob {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 5.5rem;
+    justify-content: space-around;
 }
 
-.signupForm .signupContent .genderContent .genderForm #genderLabel{
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.781);
+.signupForm .signupContent .dob .dobOptions .dobField{
+    max-width: 70px;
+    margin: 0 0.5rem;
+    padding: 0.5rem;
 }
 
-.signupForm .signupContent .dateOfBirth{
+.signupForm .signupContent .mobile .mobileNumber #phoneNumber{
+    padding: 0.5rem;
+    width: 13.8rem;
+}
+
+.signupForm .signupContent .mobile,
+.signupForm .signupContent .mail {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    justify-content: start;
+    gap: 4rem;
+}
+
+.signupForm .signupContent .mobile .verfication,
+.signupForm .signupContent .mail .verfication{
+position: relative;
+    left: 2.5rem;
 }

@@ -28,7 +28,6 @@ function Signin() {
     localStorage.setItem("token",response.data.token);
     navigate('/')
    } catch (error) {
-    // setError('Login Failed')
     setError(error.response.data.message || "Login failed")
    }
   }
@@ -37,7 +36,8 @@ function Signin() {
     <Grid container className='signinForm' >
       <form className='signinContent' onSubmit={sendData} >
         <Typography variant='h5' >Singin</Typography>
-        {error && <span style={{ color: "red" }}>{error}</span>}
+        {fieldError && error ? <></> : <span style={{ color: "red" }}>{error}</span> }
+        {/* {error && <span style={{ color: "red" }}>{error}</span>} */}
         <Grid className='inputData email' size={8} >
           <TextField variant='outlined' name='email' value={formData.email} onChange={handleChange} placeholder='Email' sx={{minWidth:262,maxWidth:400}}  />
           {formData.email === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
