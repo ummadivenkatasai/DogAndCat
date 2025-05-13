@@ -1,4 +1,4 @@
-import { Button, Card, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { Button, Card, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, Snackbar, TextField, Typography } from '@mui/material';
 import { NumericFormat } from 'react-number-format'
 import React, { useState } from 'react'
 import '../componentsCss/signup.css'
@@ -6,48 +6,105 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 function Signup() {
-    const [formData,setFormData] = useState({ firstName:'', lastName:'', gender:'', dateOfBirth:{day:'',month:'',year:''}, mobileNumber:'', email:'', password:'' });
-    const [formError,setFormError] = useState('');
-    const [verification,setVerification] = useState('');
+    const [formData,setFormData] = useState({firstName:'',lastName:'',gender:'',dateOfBirth:{day:'',month:'',year:''},mobileNumber:'',email:'',password:''});
+
+    const [verificationOtp,setVerificationOtp] = useState({mobileOtp:'',emailOtp:''});
+    const [inputOtp,setInputOtp] = useState({mobileOtpVerify:'',emailOtpVerify:''});
+    const [verifyField,setVerifyField] = useState({mobileVerify:false,emailVerify:false})
     const [showPassword,setShowPassword] = useState(false);
 
+    const [snackBarOpen,setSnackBarOpen] = useState(false);
+
+
     function handleChange({target}){
-        const {name,value} = target;
-        const trimmedValue = value.trim()
+        let {name,value} = target
+        const trimmedValue = value.trim();
         if(['day','month','year'].includes(name)){
-            setFormData((pre)=>({
-                ...pre,
+            setFormData((previousValue)=> ({
+                ...previousValue,
                 dateOfBirth:{
-                    ...pre.dateOfBirth,
+                    ...previousValue.dateOfBirth,
                     [name]:trimmedValue
                 }
-            }))
+            }) )
+        }else if(['mobileVerification','emailVerification'].includes(name)){
+            if(name === 'mobileVerification'){
+                setInputOtp((previousValue)=>({
+                    ...previousValue,
+                    mobileOtpVerify:value
+                }))
+            }else{
+                setInputOtp((previousValue)=>({
+                    ...previousValue,
+                    emailOtpVerify:value
+                }))
+            }
         }else{
-            setFormData((pre)=>({
-                ...pre,
+            setFormData((previousValue)=>({
+                ...previousValue,
                 [name]:trimmedValue
             }))
         }
-        // if(['mobileVerification','emailVerification'].includes(name)){
 
-        // }
+        
     }
 
-    function otpValidation(){
+    function generateOtp(name){
+        const otp = Math.floor(100000+Math.random()*900000);
+        if(name === 'mobile'){
+            console.log(formData.mobileNumber.length)
+            if(formData.mobileNumber.length == 10){
+                setVerificationOtp((previousValue)=>({...previousValue,mobileOtp:otp}));
+                setSnackBarOpen(!snackBarOpen);
+            }
+        }else{
+            if(formData.email.toLowerCase().endsWith('@gmail.com')){
+                setVerificationOtp((previousValue)=>({...previousValue,emailOtp:otp}));
+                setSnackBarOpen(!snackBarOpen);
+            }
 
-    }
-
-    function handleShowPassword(){
-
-    }
-
-    function submitData(e){
-        e.preventDefault();
-        if(formData.firstName === '' || formData.lastName === '' || formData.gender=== '' || formData.dateOfBirth.day === '' || formData.dateOfBirth.month === '' || formData.dateOfBirth.year === '' || formData.mobileNumber === '' || formData.email === '' || formData.password === ''  ){
-            setFormError('requried');
         }
-        console.log(formData)
     }
+
+    function otpValidation(target){
+        if(target === 'mobile'){
+            if(verificationOtp.mobileOtp == inputOtp.mobileOtpVerify){
+                setVerifyField((previousValue)=>({
+                    ...previousValue,
+                    mobileVerify:true
+                }))
+                setVerificationOtp((previousValue)=>({
+                    ...previousValue,
+                    mobileOtp:''
+                }))
+            }else{
+                console.log('wrong otp')
+            }
+        }else{
+            if(verificationOtp.emailOtp == inputOtp.emailOtpVerify){
+                setVerifyField((previousValue)=>({
+                    ...previousValue,
+                    emailVerify:true
+                }))
+                setVerificationOtp((previousValue)=>({
+                    ...previousValue,
+                    emailOtp:''
+                }))
+            }else{
+                console.log('wrong otp')
+            }
+        }
+    }
+
+    function handlePassword(){
+        setShowPassword(!showPassword);
+    }
+
+    function submitData(event){
+        event.preventDefault()
+        console.log(formData);
+    }
+
 
   return (
     <Grid className='signupForm' container >
@@ -81,9 +138,9 @@ function Signup() {
                         <Typography variant='body1' >Data of Birth:</Typography>
                     </Grid>
                     <Grid className='field dobOptions' >
-                        <NumericFormat className='dobField day' placeholder='Day' name='day' value={formData.dateOfBirth.day} onChange={handleChange} required  />
-                        <NumericFormat className='dobField month' placeholder='Month' name='damonthy' value={formData.dateOfBirth.month} onChange={handleChange} required  />
-                        <NumericFormat className='dobField year' placeholder='Year' name='year' value={formData.dateOfBirth.year} onChange={handleChange} required  />
+                        <NumericFormat className='dobField day'  placeholder='Day' name='day' value={formData.dateOfBirth.day} format='##'  isAllowed={({ floatValue }) => !floatValue || (floatValue >= '01' && floatValue <= 31)}  onValueChange={(values)=>handleChange({target:{name:'day',value:values.value}})} required  />
+                        <NumericFormat className='dobField month'  placeholder='Month' name='month' value={formData.dateOfBirth.month} isAllowed={({ floatValue }) => !floatValue || (floatValue >= 1 && floatValue <= 12)} onValueChange={(values)=>handleChange({target:{name:'month',value:values.value}})} required  />
+                        <NumericFormat className='dobField year'  placeholder='Year' name='year' value={formData.dateOfBirth.year} isAllowed={({ floatValue }) =>!floatValue || (floatValue >= 1900 && floatValue <= new Date().getFullYear())} onValueChange={(values)=>handleChange({target:{name:'year',value:values.value}})} required  />
                     </Grid>
             </Grid>
             <Grid className='content mobile' >
@@ -91,29 +148,40 @@ function Signup() {
                     <NumericFormat id='phoneNumber' placeholder='Mobile Number' name='mobileNumber' value={formData.mobileNumber} onChange={handleChange} required />
                 </Grid>
                 <Grid className='field numberVerify verfication' >
-                    <Button variant='contained' type='button' >Verify</Button>
+                    <Button variant='contained' type='button' disabled={ verificationOtp.mobileOtp !== '' || verifyField.mobileVerify == true } onClick={ ()=> generateOtp('mobile') } >Verify</Button>
                 </Grid>
-                {verification && <Grid className='verify phoneVerification' >
-                    <NumericFormat placeholder='Enter OTP' name='mobileVerification' value={verification} onChange={handleChange} />
-                </Grid>}
             </Grid>
+             {verificationOtp.mobileOtp && <Grid className='content otpVerify mobileOtpVerify' >
+                <Grid className='field verify phoneVerification' >
+                    <NumericFormat placeholder='Enter OTP' name='mobileVerification'  onChange={handleChange} />
+                </Grid>
+                <Grid className='field verificationBtn' >
+                    <Button variant='contained' type='button' name='mobileOtpVerify' onClick={()=>otpValidation('mobile')}   >Submit</Button>
+                </Grid>
+            </Grid>}
+            {verificationOtp.mobileOtp && <Snackbar className='snackbar' open={open} autoHideDuration={15000} message={verificationOtp.mobileOtp} />}
             <Grid className='content mail' >
                 <Grid className='field email' >
                     <TextField variant='outlined' label='Email' name='email' value={formData.email} onChange={handleChange} required />
                 </Grid>
                 <Grid className='field emailVerify verfication' >
-                    <Button variant='contained' type='button' >Verify</Button>
+                    <Button variant='contained' type='button' disabled={ verificationOtp.mobileOtp !== '' || verifyField.emailVerify == true } onClick={ ()=> generateOtp('email') }  >Verify</Button>
                 </Grid>
-                {verification && <Grid className='verify phoneVerification' >
-                    <NumericFormat placeholder='Enter OTP' name='mobileVerification' value={verification} onChange={handleChange} />
-                </Grid>}
-                {/* --> modify phoneverification to email verification */}
             </Grid>
+            {verificationOtp.emailOtp && <Grid className='content otpVerify emailOtpVerify' >
+                <Grid className='field verify emailVerification' >
+                    <NumericFormat placeholder='Enter OTP' name='emailVerification'  onChange={handleChange} />
+                </Grid>
+                <Grid className='field verificationBtn' >
+                    <Button variant='contained' type='button' name='emailOtpVerify' onClick={()=>otpValidation('email')}   >Submit</Button>
+                </Grid>
+            </Grid>}
+            {verificationOtp.emailOtp && <Snackbar className='snackbar' open={open} autoHideDuration={15000} message={verificationOtp.emailOtp} />}
             <Grid className='content passwordSetup' >
                 <FormControl className='field passwordField' fullWidth >
-                    <OutlinedInput placeholder='Password' type={showPassword ? 'text' : 'password' } endAdornment={
+                    <OutlinedInput placeholder='Password' name='password' type={showPassword ? 'text' : 'password' } value={formData.password} onChange={handleChange} endAdornment={
                         <InputAdornment position='end'> 
-                            <IconButton onClick={handleShowPassword} >
+                            <IconButton onClick={handlePassword} >
                                 {showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                             </IconButton>
                         </InputAdornment>

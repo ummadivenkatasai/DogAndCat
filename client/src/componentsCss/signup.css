@@ -1,7 +1,6 @@
 .signupForm .card{
     min-height: 70vh;
     margin: 3rem auto;
-    /* border: 1px solid black; */
     min-width: 30vw;
     max-width: 30vw;
     text-align: center;
@@ -9,7 +8,6 @@
 }
 
 .signupForm .signupContent .content{
-    /* border: 1px solid red; */
     margin: 1rem 0rem;
 }
 
@@ -43,6 +41,11 @@
     width: 13.8rem;
 }
 
+.signupForm .signupContent .otpVerify{
+    display: flex;
+    gap: 8.5rem;
+}
+
 .signupForm .signupContent .mobile,
 .signupForm .signupContent .mail {
     display: flex;
@@ -55,4 +58,11 @@
 .signupForm .signupContent .mail .verfication{
 position: relative;
     left: 2.5rem;
+}
+
+.signupForm .signupContent .snackbar{
+    bottom: 17rem;
+    right: 25rem;
+    height: fit-content;
+    width: fit-content;
 }
