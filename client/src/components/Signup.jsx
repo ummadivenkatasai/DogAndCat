@@ -1,6 +1,7 @@
 import { Button, Card, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, Snackbar, TextField, Typography } from '@mui/material';
 import { NumericFormat } from 'react-number-format'
 import React, { useState } from 'react'
+import axios from 'axios'
 import '../componentsCss/signup.css'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -14,7 +15,7 @@ function Signup() {
     const [verifyField,setVerifyField] = useState({mobileVerify:false,emailVerify:false})
     const [showPassword,setShowPassword] = useState(false);
 
-    const [snackBarOpen,setSnackBarOpen] = useState(false);
+    const [snackBarOpen,setSnackBarOpen] = useState({ open:false, vertical:'bottom', horizontal:'left' });
 
     function handleChange({target}){
         let {name,value} = target
@@ -40,13 +41,19 @@ function Signup() {
                 ...previousValue,
                 mobileOtp:otp
             }));
-            setSnackBarOpen(true)
+            setSnackBarOpen((previousValue)=>({
+                ...previousValue,
+                open:true
+            }))
         }else if( name === 'email' && formData.email.toLocaleLowerCase().endsWith('@gmail.com') ){
             setVerificationOtp((previousValue)=>({
                 ...previousValue,
                 emailOtp:otp
             }));
-            setSnackBarOpen(true);
+            setSnackBarOpen((previousValue)=>({
+                ...previousValue,
+                open:true
+            }));
         }
     }
 
@@ -78,12 +85,20 @@ function Signup() {
         setShowPassword(!showPassword);
     }
 
-    function submitData(event){
+    async function submitData(event){
         event.preventDefault()
         if( verifyField.mobileVerify && verifyField.emailVerify ){
-            console.log(formData);
+            try {
+                const res = await axios.post('http://localhost:5000/api/signup',formData);
+                setFormData({firstName:'',lastName:'',gender:'',dateOfBirth:'',mobileNumber:'',email:'',password:''});
+                setVerifyField({mobileVerify:false,emailVerify:false})
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
+
 
   return (
     <Grid className='signupForm' container >

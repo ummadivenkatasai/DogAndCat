@@ -64,10 +64,3 @@ width: 15rem;
 position: relative;
     left: 2.5rem;
 }
-
-.signupForm .signupContent .snackbar{
-    bottom: 17rem;
-    right: 25rem;
-    height: fit-content;
-    width: fit-content;
-}

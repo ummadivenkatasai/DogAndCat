@@ -5,6 +5,7 @@ const { MongoClient } = require('mongodb');
 function createServer(){
     const app = express();
     app.use(cors());
+    app.use(express.json())
 
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
@@ -59,6 +60,11 @@ app.get('/api/cats',async (req,res)=>{
         console.log('cat data error : ',error)
         res.status(500).send('Error fetching data');
     }
+})
+
+app.post('/api/signup',(req,res)=>{
+    console.log(req.body)
+    res.status(200).send('data received');
 })
 
 return app;
