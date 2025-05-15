@@ -6,7 +6,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 function Signup() {
-    const [formData,setFormData] = useState({firstName:'',lastName:'',gender:'',dateOfBirth:{day:'',month:'',year:''},mobileNumber:'',email:'',password:''});
+
+
+    const [formData,setFormData] = useState({firstName:'',lastName:'',gender:'',dateOfBirth:'',mobileNumber:'',email:'',password:''});
 
     const [verificationOtp,setVerificationOtp] = useState({mobileOtp:'',emailOtp:''});
     const [inputOtp,setInputOtp] = useState({mobileOtpVerify:'',emailOtpVerify:''});
@@ -15,84 +17,61 @@ function Signup() {
 
     const [snackBarOpen,setSnackBarOpen] = useState(false);
 
-
     function handleChange({target}){
         let {name,value} = target
         const trimmedValue = value.trim();
-        if(['day','month','year'].includes(name)){
-            setFormData((previousValue)=> ({
-                ...previousValue,
-                dateOfBirth:{
-                    ...previousValue.dateOfBirth,
-                    [name]:trimmedValue
-                }
-            }) )
-        }else if(['mobileVerification','emailVerification'].includes(name)){
-            if(name === 'mobileVerification'){
-                setInputOtp((previousValue)=>({
-                    ...previousValue,
-                    mobileOtpVerify:value
-                }))
-            }else{
-                setInputOtp((previousValue)=>({
-                    ...previousValue,
-                    emailOtpVerify:value
-                }))
-            }
-        }else{
-            setFormData((previousValue)=>({
-                ...previousValue,
-                [name]:trimmedValue
-            }))
-        }
+        setFormData((previousValue)=>({
+            ...previousValue,
+            [name]:trimmedValue
+        }))
+    }
 
-        
+    function handleOtpChange({target}){
+        const {name,value} = target
+        setInputOtp((previousValue)=>({
+            ...previousValue,
+            [name]:value
+        }))
     }
 
     function generateOtp(name){
         const otp = Math.floor(100000+Math.random()*900000);
-        if(name === 'mobile'){
-            console.log(formData.mobileNumber.length)
-            if(formData.mobileNumber.length == 10){
-                setVerificationOtp((previousValue)=>({...previousValue,mobileOtp:otp}));
-                setSnackBarOpen(!snackBarOpen);
-            }
-        }else{
-            if(formData.email.toLowerCase().endsWith('@gmail.com')){
-                setVerificationOtp((previousValue)=>({...previousValue,emailOtp:otp}));
-                setSnackBarOpen(!snackBarOpen);
-            }
-
+        if( name === 'mobile' && formData.mobileNumber.length == 10 ){
+            setVerificationOtp((previousValue)=>({
+                ...previousValue,
+                mobileOtp:otp
+            }));
+            setSnackBarOpen(true)
+        }else if( name === 'email' && formData.email.toLocaleLowerCase().endsWith('@gmail.com') ){
+            setVerificationOtp((previousValue)=>({
+                ...previousValue,
+                emailOtp:otp
+            }));
+            setSnackBarOpen(true);
         }
     }
 
     function otpValidation(target){
-        if(target === 'mobile'){
-            if(verificationOtp.mobileOtp == inputOtp.mobileOtpVerify){
-                setVerifyField((previousValue)=>({
-                    ...previousValue,
-                    mobileVerify:true
-                }))
-                setVerificationOtp((previousValue)=>({
-                    ...previousValue,
-                    mobileOtp:''
-                }))
-            }else{
-                console.log('wrong otp')
-            }
+        if( target === 'mobile' && verificationOtp.mobileOtp == inputOtp.mobileOtpVerify ){
+            setVerifyField((previousValue)=>({
+                ...previousValue,
+                mobileVerify:true
+            }));
+            setVerificationOtp((previousValue)=>({
+                ...previousValue,
+                mobileOtp:''
+            }))
+        }else if( target === 'email' && verificationOtp.emailOtp == inputOtp.emailOtpVerify ){
+            setVerifyField((previousValue)=>({
+                ...previousValue,
+                emailVerify:true
+            }));
+            setVerificationOtp((previousValue)=>({
+                ...previousValue,
+                emailOtp:''
+            }))
         }else{
-            if(verificationOtp.emailOtp == inputOtp.emailOtpVerify){
-                setVerifyField((previousValue)=>({
-                    ...previousValue,
-                    emailVerify:true
-                }))
-                setVerificationOtp((previousValue)=>({
-                    ...previousValue,
-                    emailOtp:''
-                }))
-            }else{
-                console.log('wrong otp')
-            }
+            console.log('wrong otp')
         }
     }
 
@@ -108,7 +87,7 @@ function Signup() {
 
   return (
     <Grid className='signupForm' container >
-       <Card className='card' >
+        <Card className='card' >
          <form className='signupContent' onSubmit={submitData} >
            <Grid className='formType' >
                 <Typography variant='body1' >Register</Typography>
@@ -138,9 +117,7 @@ function Signup() {
                         <Typography variant='body1' >Data of Birth:</Typography>
                     </Grid>
                     <Grid className='field dobOptions' >
-                        <NumericFormat className='dobField day'  placeholder='Day' name='day' value={formData.dateOfBirth.day} format='##'  isAllowed={({ floatValue }) => !floatValue || (floatValue >= '01' && floatValue <= 31)}  onValueChange={(values)=>handleChange({target:{name:'day',value:values.value}})} required  />
-                        <NumericFormat className='dobField month'  placeholder='Month' name='month' value={formData.dateOfBirth.month} isAllowed={({ floatValue }) => !floatValue || (floatValue >= 1 && floatValue <= 12)} onValueChange={(values)=>handleChange({target:{name:'month',value:values.value}})} required  />
-                        <NumericFormat className='dobField year'  placeholder='Year' name='year' value={formData.dateOfBirth.year} isAllowed={({ floatValue }) =>!floatValue || (floatValue >= 1900 && floatValue <= new Date().getFullYear())} onValueChange={(values)=>handleChange({target:{name:'year',value:values.value}})} required  />
+                        <input type="date" className='dobField' name='dateOfBirth' value={formData.dateOfBirth} onChange={handleChange} />
                     </Grid>
             </Grid>
             <Grid className='content mobile' >
@@ -153,13 +130,13 @@ function Signup() {
             </Grid>
              {verificationOtp.mobileOtp && <Grid className='content otpVerify mobileOtpVerify' >
                 <Grid className='field verify phoneVerification' >
-                    <NumericFormat placeholder='Enter OTP' name='mobileVerification'  onChange={handleChange} />
+                    <NumericFormat placeholder='Enter OTP' name='mobileOtpVerify'  onChange={handleOtpChange} />
                 </Grid>
                 <Grid className='field verificationBtn' >
                     <Button variant='contained' type='button' name='mobileOtpVerify' onClick={()=>otpValidation('mobile')}   >Submit</Button>
                 </Grid>
             </Grid>}
-            {verificationOtp.mobileOtp && <Snackbar className='snackbar' open={open} autoHideDuration={15000} message={verificationOtp.mobileOtp} />}
+            {verificationOtp.mobileOtp && <Snackbar className='snackbar' open={snackBarOpen}  autoHideDuration={15000} message={verificationOtp.mobileOtp} />}
             <Grid className='content mail' >
                 <Grid className='field email' >
                     <TextField variant='outlined' label='Email' name='email' value={formData.email} onChange={handleChange} required />
@@ -170,13 +147,13 @@ function Signup() {
             </Grid>
             {verificationOtp.emailOtp && <Grid className='content otpVerify emailOtpVerify' >
                 <Grid className='field verify emailVerification' >
-                    <NumericFormat placeholder='Enter OTP' name='emailVerification'  onChange={handleChange} />
+                    <NumericFormat placeholder='Enter OTP' name='emailOtpVerify'  onChange={handleOtpChange} />
                 </Grid>
                 <Grid className='field verificationBtn' >
                     <Button variant='contained' type='button' name='emailOtpVerify' onClick={()=>otpValidation('email')}   >Submit</Button>
                 </Grid>
             </Grid>}
-            {verificationOtp.emailOtp && <Snackbar className='snackbar' open={open} autoHideDuration={15000} message={verificationOtp.emailOtp} />}
+            {verificationOtp.emailOtp && <Snackbar className='snackbar' open={snackBarOpen}  autoHideDuration={15000} message={verificationOtp.emailOtp} />}
             <Grid className='content passwordSetup' >
                 <FormControl className='field passwordField' fullWidth >
                     <OutlinedInput placeholder='Password' name='password' type={showPassword ? 'text' : 'password' } value={formData.password} onChange={handleChange} endAdornment={

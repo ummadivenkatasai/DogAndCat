@@ -19,19 +19,24 @@
 .signupForm .signupContent .gender{
     display: flex;
     align-items: center;
-    gap: 2rem;
-    justify-content: space-around;
+    gap: 5rem;
+    justify-content: space-evenly;
 }
 
 .signupForm .signupContent .dob {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    gap: 5rem;
+    justify-content: space-evenly;
+}
+
+.signupForm .signupContent .dob .dobOptions{
+width: 15rem;
 }
 
 .signupForm .signupContent .dob .dobOptions .dobField{
-    max-width: 70px;
+    max-width: fit-content;
     margin: 0 0.5rem;
     padding: 0.5rem;
 }
