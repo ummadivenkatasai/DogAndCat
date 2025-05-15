@@ -7,7 +7,6 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 function Signup() {
 
-
     const [formData,setFormData] = useState({firstName:'',lastName:'',gender:'',dateOfBirth:'',mobileNumber:'',email:'',password:''});
 
     const [verificationOtp,setVerificationOtp] = useState({mobileOtp:'',emailOtp:''});
@@ -81,14 +80,15 @@ function Signup() {
 
     function submitData(event){
         event.preventDefault()
-        console.log(formData);
+        if( verifyField.mobileVerify && verifyField.emailVerify ){
+            console.log(formData);
+        }
     }
-
 
   return (
     <Grid className='signupForm' container >
         <Card className='card' >
-         <form className='signupContent' onSubmit={submitData} >
+         <form className='signupContent' onSubmit={submitData} method='post' >
            <Grid className='formType' >
                 <Typography variant='body1' >Register</Typography>
            </Grid>
