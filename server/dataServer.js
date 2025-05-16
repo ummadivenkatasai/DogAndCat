@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
+
 async function connectDB() {
   if (!client.topology || !client.topology.isConnected()) {
     await client.connect();
@@ -12,9 +15,6 @@ function createServer(){
     const app = express();
     app.use(cors());
     app.use(express.json())
-
-const url = 'mongodb://localhost:27017';
-const client = new MongoClient(url);
 
 
 async function connectToDatabase({db,col}) {

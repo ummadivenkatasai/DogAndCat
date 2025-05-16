@@ -1,6 +1,7 @@
 import { Button, Card, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, Snackbar, TextField, Typography } from '@mui/material';
 import { NumericFormat } from 'react-number-format'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import '../componentsCss/signup.css'
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -9,6 +10,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 function Signup() {
 
     const [formData,setFormData] = useState({firstName:'',lastName:'',gender:'',dateOfBirth:'',mobileNumber:'',email:'',password:''});
+    const navigate = useNavigate();
 
     const [verificationOtp,setVerificationOtp] = useState({mobileOtp:'',emailOtp:''});
     const [inputOtp,setInputOtp] = useState({mobileOtpVerify:'',emailOtpVerify:''});
@@ -92,7 +94,7 @@ function Signup() {
                 const res = await axios.post('http://localhost:5000/api/signup',formData);
                 setFormData({firstName:'',lastName:'',gender:'',dateOfBirth:'',mobileNumber:'',email:'',password:''});
                 setVerifyField({mobileVerify:false,emailVerify:false})
-                console.log(res.data)
+                navigate('/login');
             } catch (error) {
                 console.log(error)
             }
