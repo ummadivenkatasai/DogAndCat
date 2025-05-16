@@ -2,6 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
+async function connectDB() {
+  if (!client.topology || !client.topology.isConnected()) {
+    await client.connect();
+  }
+}
+
 function createServer(){
     const app = express();
     app.use(cors());
@@ -13,7 +19,7 @@ const client = new MongoClient(url);
 
 async function connectToDatabase({db,col}) {
     try {
-        await client.connect();
+        await connectDB();
         const database = client.db(`${db}`);
         const collection = database.collection(`${col}`)
         const data = (await collection.find({}).limit(4).toArray());
@@ -38,7 +44,7 @@ app.get('/',async(req,res)=>{
 
 app.get('/api/dogs',async (req,res)=>{
     try {
-        await client.connect();
+        await connectDB();
         const database = client.db('DogAndCatApiData');
         const collection = database.collection('DogData');
         const data = await collection.find({}).toArray();
@@ -51,7 +57,7 @@ app.get('/api/dogs',async (req,res)=>{
 
 app.get('/api/cats',async (req,res)=>{
     try {
-        await client.connect();
+        await connectDB();
         const database = client.db('DogAndCatApiData');
         const collection = database.collection('CatData');
         const data = await collection.find({}).toArray();
@@ -62,10 +68,21 @@ app.get('/api/cats',async (req,res)=>{
     }
 })
 
-app.post('/api/signup',(req,res)=>{
-    console.log(req.body)
-    res.status(200).send('data received');
+app.post('/api/signup',async (req,res)=>{
+    try {
+        await connectDB();
+        const db = client.db('DogAndCatApiData');
+        const collection = db.collection('Users');
+
+        const result = await collection.insertOne(req.body);
+        res.status(200).json({message:'user saved',id:result.insertedId})
+
+    } catch (error) {
+        res.status(500).json({error:'Serval Error'})
+    }
 })
+
+// app.
 
 return app;
 
