@@ -1,4 +1,4 @@
-const createServer = require('./dataServer');
+const createServer = require('./server');
 
 const app = createServer();
 const port = 5000;

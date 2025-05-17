@@ -12,7 +12,7 @@ function Signin() {
   const navigate = useNavigate();
 
   function handleChange ({target}){
-   setFormData({...formData,[target.name]:target.value})
+   setFormData({...formData,[target.name]:target.value.trim()})
    setFieldError('');
   }
 
@@ -24,10 +24,11 @@ function Signin() {
   }
    
    try {
-    const response = await axios.post('http://localhost:5173/api/auth/signin',formData);
-    localStorage.setItem("token",response.data.token);
-    navigate('/')
+    const response = await axios.post('http://localhost:5000/api/auth/signin',formData);
+    // localStorage.setItem("token",response.data.token);
+    // navigate('/')
    } catch (error) {
+    console.log(error)
     setError(error.response.data.message || "Login failed")
    }
   }
@@ -37,7 +38,7 @@ function Signin() {
       <form className='signinContent' onSubmit={sendData} >
         <Typography variant='h5' >Singin</Typography>
         {fieldError && error ? <></> : <span style={{ color: "red" }}>{error}</span> }
-        {/* {error && <span style={{ color: "red" }}>{error}</span>} */}
+        {error && <span style={{ color: "red" }}>{error}</span>}
         <Grid className='inputData email' size={8} >
           <TextField variant='outlined' name='email' value={formData.email} onChange={handleChange} placeholder='Email' sx={{minWidth:262,maxWidth:400}}  />
           {formData.email === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
