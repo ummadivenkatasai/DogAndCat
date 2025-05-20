@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
+const url = require('url')
 require('dotenv').config();
-const { connectDB, connectToDatabase, client } = require('./database');
+const { connectDB, connectToDatabase, client, insertToDatabase } = require('./database');
 
 function createServer(){
     const app = express();
@@ -43,7 +45,7 @@ app.get('/api/cats',async (req,res)=>{
 
 app.post('/api/signup',async (req,res)=>{
     try {
-        const result = await connectToDatabase({ db:'DogAndCatApiData', col:'Users', data:req.body })
+        const result = await insertToDatabase({ db:'DogAndCatApiData', col:'Users', data:req.body })
         res.status(200).json({message:'user saved',id:result.insertedId})
 
     } catch (error) {
@@ -51,13 +53,21 @@ app.post('/api/signup',async (req,res)=>{
     }
 })
 
-// app.post('/api/auth/signin', async (req,res)=>{
-//     try {
-//         console.log(req.body);
-//     } catch (error) {
-//         res.status(500).send(error);
-//     }
-// })
+app.post('/api/auth/signin', async (req,res)=>{
+    const { email, password } = req.body;
+    try {
+        const users = await connectToDatabase({ db:'DogAndCatApiData', col:'Users', limit:0 });
+        const user = users.find((value)=>value.email === email)
+        if(!user) return res.status(400).json({ message: 'User not found' });
+        if(user.password !== password){
+            return res.status(400).json({ message:'Invalid credentials' })
+        }
+        const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET,{ expiresIn:'1h' } )
+        res.status(200).json({token})
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
 
 return app;
 

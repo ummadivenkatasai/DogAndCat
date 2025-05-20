@@ -6,8 +6,7 @@ import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import Choose from './Choose';
 
 function Home() {
-    const [dogData,setDogData]=useState([]);
-    const [catData,setCatData]=useState([]);
+
     const [combineData,setCombineData] = useState([]);
 
     useEffect(()=>{

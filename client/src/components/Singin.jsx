@@ -1,11 +1,12 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Grid, Typography, TextField } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import '../componentsCss/signin.css'
 
-function Signin() {
 
+function Signin({prop}) {
+  
   const [formData,setFormData] = useState({email:'',password:''});
   const [fieldError,setFieldError] = useState('');
   const [error,setError] = useState('');
@@ -21,24 +22,25 @@ function Signin() {
    if(formData.email ==='' || formData.password === '' ){
     setFieldError('All Field is required')
     setError('')
-  }
-   
-   try {
+  }else{
+    try {
     const response = await axios.post('http://localhost:5000/api/auth/signin',formData);
-    // localStorage.setItem("token",response.data.token);
-    // navigate('/')
+    localStorage.setItem("token",response.data.token);
+    prop(true);
+    navigate('/')
    } catch (error) {
-    console.log(error)
-    setError(error.response.data.message || "Login failed")
+    setError( "Login failed");
+    console.log(error);
    }
   }
+} 
+
 
   return (
     <Grid container className='signinForm' >
       <form className='signinContent' onSubmit={sendData} >
-        <Typography variant='h5' >Singin</Typography>
+        <Typography variant='h5' >Signin</Typography>
         {fieldError && error ? <></> : <span style={{ color: "red" }}>{error}</span> }
-        {error && <span style={{ color: "red" }}>{error}</span>}
         <Grid className='inputData email' size={8} >
           <TextField variant='outlined' name='email' value={formData.email} onChange={handleChange} placeholder='Email' sx={{minWidth:262,maxWidth:400}}  />
           {formData.email === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
