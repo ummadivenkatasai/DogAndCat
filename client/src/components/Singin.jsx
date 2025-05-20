@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import { Button, Grid, Typography, TextField } from '@mui/material'
+import { Button, Grid, Typography, TextField, FormControl, OutlinedInput, InputAdornment, IconButton } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import '../componentsCss/signin.css'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
 function Signin({prop}) {
   
   const [formData,setFormData] = useState({email:'',password:''});
+  const [showPassword,setShowpassword] = useState('');
   const [fieldError,setFieldError] = useState('');
   const [error,setError] = useState('');
   const navigate = useNavigate();
@@ -15,6 +18,10 @@ function Signin({prop}) {
   function handleChange ({target}){
    setFormData({...formData,[target.name]:target.value.trim()})
    setFieldError('');
+  }
+
+  function handlePassword(){
+    setShowpassword(!showPassword);
   }
 
   async function sendData(event){
@@ -46,7 +53,16 @@ function Signin({prop}) {
           {formData.email === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
         </Grid>
         <Grid className='inputData password' size={8} >
-          <TextField variant='outlined' name='password' value={formData.password} onChange={handleChange} type='password' placeholder='Password' sx={{minWidth:262,maxWidth:400}}  />
+          <FormControl className='field passwordField' fullWidth >
+                    <OutlinedInput placeholder='Password' name='password' type={showPassword ? 'text' : 'password' } value={formData.password} onChange={handleChange} endAdornment={
+                        <InputAdornment position='end'> 
+                            <IconButton onClick={handlePassword} >
+                                {showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                            </IconButton>
+                        </InputAdornment>
+                    } required />
+                </FormControl>
+          {/* <TextField variant='outlined' name='password' value={formData.password} onChange={handleChange} type='password' placeholder='Password' sx={{minWidth:262,maxWidth:400}}  /> */}
           {formData.password === '' && fieldError ? <span style={{ color: 'red' }} >{fieldError}</span> : '' }
         </Grid>
         <Grid className='inputData loginBtn' >

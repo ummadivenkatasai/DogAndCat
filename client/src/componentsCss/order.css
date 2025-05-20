@@ -1,0 +1,12 @@
+.orderBody{
+    /* border: 1px solid black; */
+    min-height: 50rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.orderBody a{
+    margin-top: 2rem;
+    /* font-size: 2rem; */
+    text-decoration: none;
+}
