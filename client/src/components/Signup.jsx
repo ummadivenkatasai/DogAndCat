@@ -1,11 +1,13 @@
-import { Button, Card, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, Snackbar, TextField, Typography } from '@mui/material';
-import { NumericFormat } from 'react-number-format'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
-import '../componentsCss/signup.css'
+import { useNavigate } from 'react-router-dom';
+import { Button, Card, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, Snackbar, TextField, Typography } from '@mui/material';
+import { Bounce, ToastContainer, toast } from 'react-toastify'
+import { NumericFormat } from 'react-number-format'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import 'react-toastify/dist/ReactToastify.css';
+import '../componentsCss/signup.css'
 
 function Signup() {
 
@@ -16,8 +18,7 @@ function Signup() {
     const [inputOtp,setInputOtp] = useState({mobileOtpVerify:'',emailOtpVerify:''});
     const [verifyField,setVerifyField] = useState({mobileVerify:false,emailVerify:false})
     const [showPassword,setShowPassword] = useState(false);
-
-    const [snackBarOpen,setSnackBarOpen] = useState({ open:false, vertical:'bottom', horizontal:'left' });
+    const [alreadyUser,setAlreadyUser] = useState({mobileNumber:'',email:''});
 
     function handleChange({target}){
         let {name,value} = target
@@ -36,50 +37,47 @@ function Signup() {
         }))
     }
 
-    function generateOtp(name){
+    async function generateOtp(name){
         const otp = Math.floor(100000+Math.random()*900000);
-        if( name === 'mobile' && formData.mobileNumber.length == 10 ){
-            setVerificationOtp((previousValue)=>({
-                ...previousValue,
-                mobileOtp:otp
-            }));
-            setSnackBarOpen((previousValue)=>({
-                ...previousValue,
-                open:true
-            }))
-        }else if( name === 'email' && formData.email.toLocaleLowerCase().endsWith('@gmail.com') ){
-            setVerificationOtp((previousValue)=>({
-                ...previousValue,
-                emailOtp:otp
-            }));
-            setSnackBarOpen((previousValue)=>({
-                ...previousValue,
-                open:true
-            }));
+        const {mobileNumber,email} = formData
+        const existingMobileNumber = await axios.post('http://localhost:5000/api/mobileNumber',{mobileNumber});
+        const existingEmail = await axios.post('http://localhost:5000/api/email',{email});
+        if( name === 'mobile' ){
+            if(formData.mobileNumber.length == 10 && existingMobileNumber.data.message === 'new user' ){
+                setVerificationOtp((previousValue)=>({ ...previousValue,mobileOtp:otp }))
+                toast.success(otp,{ position:'bottom-left', autoClose:5000, hideProgressBar:false, closeOnClick:false, pauseOnHover:true, draggable:true, theme:'light', transition: Bounce })
+            }else if( formData.mobileNumber.length !=10 || existingMobileNumber.data.message !== 'new user' ){
+                setAlreadyUser((previousValue)=>({ ...previousValue,mobileNumber:existingMobileNumber.data.message }))
+                
+                toast.error(`${existingMobileNumber.data.message}`,{
+                    position:'top-left',autoClose:5000,hideProgressBar:false,newestOnTop:false,closeOnClick:false,rtl:false,pauseOnFocusLoss:true,draggable:true,pauseOnHover:true,theme:'light',transition:Bounce
+                })
+            }
+        }
+        
+
+        if( name === 'email' ){
+            if( formData.email.toLocaleLowerCase().endsWith('@gmail.com') && existingEmail.data.message === 'new user' ){
+                setVerificationOtp((previousValue)=>({...previousValue,emailOtp:otp}));
+                toast.success(otp,{ position:'bottom-left', autoClose:5000, hideProgressBar:false, closeOnClick:false, pauseOnHover:true, draggable:true, theme:'light', transition: Bounce })
+            }else if( !formData.email.toLocaleLowerCase().endsWith('@gmail.com') || existingEmail.data.message !== 'new user' ){
+                setAlreadyUser((previousValue)=>({...previousValue,email:existingEmail.data.message}))
+                toast.error(`${existingEmail.data.message}`,{position:'top-left',autoClose:5000,hideProgressBar:false,newestOnTop:false,closeOnClick:false,rtl:false,pauseOnFocusLoss:true,draggable:true,pauseOnHover:true,theme:'light',transition:Bounce
+                })
+            }
+            
         }
     }
 
     function otpValidation(target){
         if( target === 'mobile' && verificationOtp.mobileOtp == inputOtp.mobileOtpVerify ){
-            setVerifyField((previousValue)=>({
-                ...previousValue,
-                mobileVerify:true
-            }));
-            setVerificationOtp((previousValue)=>({
-                ...previousValue,
-                mobileOtp:''
-            }))
+            setVerifyField((previousValue)=>({ ...previousValue,mobileVerify:true }));
+            setVerificationOtp((previousValue)=>({ ...previousValue,mobileOtp:'' }))
         }else if( target === 'email' && verificationOtp.emailOtp == inputOtp.emailOtpVerify ){
-            setVerifyField((previousValue)=>({
-                ...previousValue,
-                emailVerify:true
-            }));
-            setVerificationOtp((previousValue)=>({
-                ...previousValue,
-                emailOtp:''
-            }))
+            setVerifyField((previousValue)=>({ ...previousValue,emailVerify:true }));
+            setVerificationOtp((previousValue)=>({ ...previousValue,emailOtp:''}))
         }else{
-            console.log('wrong otp')
+            toast.warning('Invalid Otp',{ position:'bottom-left', autoClose:5000, theme:'light', transition:Bounce })
         }
     }
 
@@ -104,6 +102,7 @@ function Signup() {
 
   return (
     <Grid className='signupForm' container >
+        <ToastContainer  />
         <Card className='card' >
          <form className='signupContent' onSubmit={submitData} method='post' >
            <Grid className='formType' >
@@ -153,7 +152,6 @@ function Signup() {
                     <Button variant='contained' type='button' name='mobileOtpVerify' onClick={()=>otpValidation('mobile')}   >Submit</Button>
                 </Grid>
             </Grid>}
-            {verificationOtp.mobileOtp && <Snackbar className='snackbar' open={snackBarOpen}  autoHideDuration={15000} message={verificationOtp.mobileOtp} />}
             <Grid className='content mail' >
                 <Grid className='field email' >
                     <TextField variant='outlined' label='Email' name='email' value={formData.email} onChange={handleChange} required />
@@ -170,7 +168,6 @@ function Signup() {
                     <Button variant='contained' type='button' name='emailOtpVerify' onClick={()=>otpValidation('email')}   >Submit</Button>
                 </Grid>
             </Grid>}
-            {verificationOtp.emailOtp && <Snackbar className='snackbar' open={snackBarOpen}  autoHideDuration={15000} message={verificationOtp.emailOtp} />}
             <Grid className='content passwordSetup' >
                 <FormControl className='field passwordField' fullWidth >
                     <OutlinedInput placeholder='Password' name='password' type={showPassword ? 'text' : 'password' } value={formData.password} onChange={handleChange} endAdornment={
