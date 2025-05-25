@@ -1,7 +1,7 @@
 import '../componentsCss/dog.css'
 import { Card, CardContent, CardMedia, Checkbox, FormControl, Grid, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 const DogData = () => {
     const [dogData,setDogData]=useState([]);
@@ -52,7 +52,7 @@ const DogData = () => {
       <Grid container className='dogImages' rowSpacing={5} columnSpacing={4} >
         {dogData.map((data)=>(
           <Grid className='images' key={data._id} size={4} >
-            <Link>
+            <Link to={`/dog/${data._id}`} >
             <Card className='card' >
               <CardMedia component='img' className='cardImage' image={data.message} alt={data.breed} height='275' />
               <CardContent className='cardContent' >
@@ -64,6 +64,7 @@ const DogData = () => {
           </Grid>
         ))}
       </Grid>
+      <Outlet/>
     </Grid>
   )
 }

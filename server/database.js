@@ -3,10 +3,11 @@ const { MongoClient } = require('mongodb');
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 
-async function connectDB() {
+async function connectDB(col) {
   if (!client.topology || !client.topology.isConnected()) {
     await client.connect();
   }
+  return client.db('DogAndCatApiData').collection(col);
 }
 
 async function connectToDatabase({db,col,limit}) {

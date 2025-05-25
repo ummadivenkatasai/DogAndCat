@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const url = require('url')
 require('dotenv').config();
 const { connectDB, connectToDatabase, client, insertToDatabase } = require('./database');
+const { ObjectId } = require('mongodb');
 
 function createServer() {
     const app = express();
@@ -31,6 +32,13 @@ function createServer() {
             console.log('dog data error : ', error)
             res.status(500).send('Error fetching data')
         }
+    })
+
+    app.get('/api/dogs/:_id',async(req,res)=>{
+       const { _id } = req.params;
+      const collection = await connectDB('DogData');
+      const dogData = await collection.findOne({ _id: new ObjectId(_id) });
+      return res.status(200).json({dogData});
     })
 
     app.get('/api/cats', async (req, res) => {
