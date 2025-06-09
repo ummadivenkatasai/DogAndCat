@@ -21,6 +21,7 @@ function App() {
     if(!isSignIn) return localStorage.removeItem('token')
   },[isSignIn])
 
+
   return (
     <>
     {  isSignIn ? <NavigationProfile prop={setIsSignIn} /> : <NavigationLogin/>}
@@ -28,7 +29,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="cat" element={<CatData/>} />
         <Route path="dog" element={<DogData />} />
-        <Route path='dog/:_id' element={<DogContent/>} />
+        <Route path='dog/:_id' element={<DogContent />} />
         <Route path='orders' element={<Orders prop={isSignIn} />} />
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />

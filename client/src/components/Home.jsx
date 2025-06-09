@@ -46,7 +46,7 @@ function Home() {
         <Grid container className='images' rowGap={6} >
           {combineData.map(({ type, data }) => (
             <Grid className='cardContent' key={data._id} size={{ xs: 2, sm: 4, md: 4 }}  >
-              <Link to="">
+              <Link to={ type === 'cat' ? `cat/${data._id}` : `dog/${data._id}` }  >
               <Card className='card'>
                 <CardMedia component='img' alt={type} image={type === 'dog' ? data.message : data.url} className='cardImage'/>
                 <CardContent className='content'>

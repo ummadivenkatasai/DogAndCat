@@ -1,5 +1,84 @@
 .dogcontent{
     min-height: 70rem;
     padding: 2rem;
+    /* border: 2px solid black; */
+    display: flex;
+    justify-content: space-between;
 }
 
+.dogcontent .itemList{
+    display: flex;
+    gap: 5rem;
+    border: 2px solid black;
+    height: 36rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.dogcontent .itemList .item{
+    /* border: 2px solid red; */
+    height: 23.7rem;
+}
+
+.dogcontent .itemList .dogContentImage{
+    height: 35rem;
+    width: fit-content;
+}
+
+.dogcontent .itemList .dogContentImage img{
+    height: 35rem;
+    width: 35rem;
+    object-fit: cover;
+    object-position: top;
+}
+
+.dogcontent .itemList .dogContentData{
+    width: 25rem;
+    padding: 2rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.dogcontent .itemList .dogContentData .dogContentButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    width: 20rem;
+}
+
+.dogcontent .itemList .dogContentData .dogContentButtons .btnContent{
+    width: 10rem;
+}
+
+.dogcontent .itemList .dogContentData .pincodeContent{
+    display: flex;
+    gap: 3rem;
+    /* border: 1px solid blue; */
+}
+
+.dogcontent .itemList .dogContentData .pincodeContent input{
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
+}
+
+.dogcontent .itemList .dogContentData .pincodePlace{
+    /* border: 2px solid red; */
+    margin-top: -1.5rem;
+}
+
+.dogcontent .itemList .dogContentData .pincodePlace p{
+    font-weight: bold;
+}
+
+.dogcontent .itemList .dogContentData .delivery{
+    /* border: 1px solid green; */
+    margin-top: -1.5rem;
+}
+
+.dogcontent .itemList .wishlistContent a{
+    background-color: rgba(128, 128, 128, 0.547);
+    color: black;
+}
