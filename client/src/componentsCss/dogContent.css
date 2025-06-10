@@ -52,6 +52,10 @@
     width: 10rem;
 }
 
+.dogcontent .itemList .dogContentData .dogContentButtons .wishlistIconBtn .selected{
+    color: red;
+}
+
 .dogcontent .itemList .dogContentData .pincodeContent{
     display: flex;
     gap: 3rem;
@@ -71,6 +75,9 @@
 
 .dogcontent .itemList .dogContentData .pincodePlace p{
     font-weight: bold;
+}
+.dogcontent .itemList .dogContentData .pincodePlace #invalid{
+    color: red;
 }
 
 .dogcontent .itemList .dogContentData .delivery{

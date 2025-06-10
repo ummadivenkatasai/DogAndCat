@@ -17,7 +17,7 @@ function Home() {
           const dogResData = responseData.dog;
           const catResData = responseData.cat;
           let combine =[]
-          const totalLength = Math.max(dogResData.length+catResData.length);
+          const totalLength = dogResData.length+catResData.length;
           
           for(let i=0;i<totalLength;i++){
             if(i%2==0 && dogResData[i/2] ){

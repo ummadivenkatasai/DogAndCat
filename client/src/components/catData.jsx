@@ -3,7 +3,7 @@ import { Card, CardContent, CardMedia, Checkbox, FormControl, Grid, InputLabel, 
 import React, { useEffect, useState } from 'react'
 
 
-const CatData = () => {
+function CatData(){
   const [catData,setCatData] = useState([]);
   const [breedNames,setBreedNames]=useState([])
   const [alltemperament,setAllTemperament] = useState([]);

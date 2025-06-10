@@ -1,20 +1,10 @@
 import "../componentsCss/dog.css";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Checkbox,
-  FormControl,
-  Grid,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Typography,
+import {Card,CardContent,CardMedia,Checkbox,FormControl,Grid,MenuItem,OutlinedInput,Select,Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-const DogData = () => {
+function DogData (){
   const [dogData, setDogData] = useState([]);
   const [breedName, setBreedName] = useState([]);
 
@@ -30,7 +20,7 @@ const DogData = () => {
         responseData.map((data) => {
           breedSet.add(data.breed);
         });
-        setBreedName([...breedSet].map((data) => data));
+        setBreedName([...breedSet]);
       } catch (error) {
         console.log("dog data error:", error);
       }
