@@ -61,7 +61,7 @@ function DogContent({isAuthenticated}) {
 
 
   function validatingAuthenication(type){
-    if( type === 'wishList' ){
+    if( type === 'wishListBtn' || type === 'wishlist' ){
       if( isAuthenticated === true ){
         wishListData();
       }else{
@@ -95,7 +95,7 @@ function DogContent({isAuthenticated}) {
                 <Typography variant="body1">Price:{dogData.price}</Typography>
               </Grid>
               <Grid className="sub-item dogContentButtons">
-                <Button className="wishlistIconBtn btnContent" type="button" variant="contained" onClick={()=>validatingAuthenication('wishList')}> <FavoriteIcon className={wishList.status ? 'selected' : 'unselected' } /> </Button>
+                <Button className="wishlistIconBtn btnContent" type="button" variant="contained" onClick={()=>validatingAuthenication('wishListBtn')}> <FavoriteIcon className={wishList.status ? 'selected' : 'unselected' } /> </Button>
                 <Button className="addToCart btnContent" type="button" variant="contained" onClick={()=>validatingAuthenication('cart')}> Add To Cart</Button>
               </Grid>
               <Grid className="pincodeContent">
@@ -110,7 +110,7 @@ function DogContent({isAuthenticated}) {
               {/* <Grid className='offerContent' ></Grid> */}
             </Grid>
             <Grid className="wishlistContent">
-              <Button href="/wishlist" type="button">WishList</Button>
+              <Button href={isAuthenticated ? '/wishlist' : '/login'} type="button" onClick={()=>validatingAuthenication('wishlist')} >WishList</Button>
             </Grid>
           </Grid>
           

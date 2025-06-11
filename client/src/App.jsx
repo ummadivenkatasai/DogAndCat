@@ -11,6 +11,7 @@ import Orders from './components/Orders'
 import Signup from './components/Signup'
 import Signin from './components/Singin'
 import Footer from './components/Footer'
+import PageNotFound from './components/Page'
 
 function App() {
   const [isSignIn,setIsSignIn] = useState(()=>{
@@ -33,6 +34,7 @@ function App() {
         <Route path='orders' element={<Orders prop={isSignIn} />} />
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />
+        <Route path='*' element={<PageNotFound/>} />
       </Routes>
       <Footer/>
     </>
