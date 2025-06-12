@@ -9,7 +9,7 @@
 .dogcontent .itemList{
     display: flex;
     gap: 5rem;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     height: 36rem;
     width: 100%;
     justify-content: space-between;
@@ -88,4 +88,41 @@
 .dogcontent .itemList .wishlistContent a{
     background-color: rgba(128, 128, 128, 0.547);
     color: black;
+}
+
+.dogcontent .randomDogs{
+    /* border: 1px solid red; */
+    width: 100%;
+    align-content: center;
+}
+
+.dogcontent .randomDogs #randomDogsContent{
+    /* border: 1px solid blue; */
+    display: flex;
+    align-items: center;
+}
+
+.dogcontent .randomDogs #randomDogsContent #content{
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    gap: 3rem;
+}
+
+.dogcontent .randomDogs #randomDogsContent #content .dogimages a{
+    text-decoration: none;
+}
+
+.dogcontent .randomDogs #randomDogsContent #content .dogimages a .card .cardImage{
+    width: 20rem;
+}
+
+.dogcontent .randomDogs #randomDogsContent .letfBtn{
+    position: relative;
+    left: -1.5rem;
+}
+
+.dogcontent .randomDogs #randomDogsContent .rightBtn{
+    position: relative;
+    right: -1.5rem;
 }

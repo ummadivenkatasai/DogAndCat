@@ -65,13 +65,7 @@ function DogData (){
           <Grid className="images" key={data._id} size={4}>
             <Link to={`/dog/${data._id}`} target="_blank">
               <Card className="card">
-                <CardMedia
-                  component="img"
-                  className="cardImage"
-                  image={data.message}
-                  alt={data.breed}
-                  height="275"
-                />
+                <CardMedia component="img" className="cardImage" image={data.message} alt={data.breed} height="275"/>
                 <CardContent className="cardContent">
                   <Typography variant="body1">{data.breed}</Typography>
                   <Typography variant="body1">Price:{data.price}</Typography>
