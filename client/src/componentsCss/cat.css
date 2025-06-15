@@ -20,18 +20,22 @@
     position: relative;
 }
 
-.catData .catImages .images .card{
+.catData .catImages .images a{
+    text-decoration: none;
+}
+
+.catData .catImages .images a .card{
     height: 350px;
     display: flex;
     justify-content: space-between;
 }
 
-.catData .catImages .images .card .cargImage{
+.catData .catImages .images a .card .cargImage{
     object-fit: cover;
     object-position: top;
 }
 
-.catData .catImages .images .card .cardContent{
+.catData .catImages .images a .card .cardContent{
     display: flex;
     align-items: center;
     justify-content: space-between;

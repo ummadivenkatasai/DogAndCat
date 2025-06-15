@@ -12,6 +12,7 @@ import Signup from './components/Signup'
 import Signin from './components/Singin'
 import Footer from './components/Footer'
 import PageNotFound from './components/Page'
+import CatContent from './components/CatContent'
 
 function App() {
   const [isSignIn,setIsSignIn] = useState(()=>{
@@ -30,7 +31,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="cat" element={<CatData/>} />
         <Route path="dog" element={<DogData />} />
-        <Route path='dog/:_id' element={<DogContent />} />
+        <Route path='dog/:_id' element={<DogContent isAuthenticated={isSignIn} />} />
+        <Route path='cat/:_id' element={<CatContent isAuthenticated={isSignIn} />} />
         <Route path='orders' element={<Orders prop={isSignIn} />} />
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />

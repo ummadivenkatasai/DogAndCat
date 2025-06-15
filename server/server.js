@@ -51,6 +51,13 @@ function createServer() {
         }
     })
 
+    app.get('/api/cats/:_id',async(req,res)=>{
+        const {_id} = req.params;
+        const collection = await connectDB('CatData');
+        const catData = await collection.findOne({ _id: new ObjectId(_id) });
+        return res.status(200).json({catData});
+    })
+
     app.post('/api/signup', async (req, res) => {
         try {
             const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: req.body })

@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Box, Button, Card, CardContent, CardMedia, Grid, IconButton, TextField, Typography } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { NumericFormat } from "react-number-format";
 import "../componentsCss/dogContent.css";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -20,11 +20,11 @@ function DogContent({isAuthenticated}) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dogFetchingData();
+    fetchingDogData();
     dogContent();
   }, [_id]);
 
-  async function dogFetchingData() {
+  async function fetchingDogData() {
       const response = await axios.get(`http://localhost:5000/api/dogs/${_id}`);
       const responseData = response.data.dogData;
       setDogData(responseData);

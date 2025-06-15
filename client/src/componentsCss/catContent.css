@@ -1,0 +1,141 @@
+.catContent{
+    /* border: 2px solid black; */
+    min-height: 70rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.catContent .itemList{
+    display: flex;
+    gap: 5rem;
+    /* border: 2px solid green; */
+    height: 36rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.catContent .itemList .item{
+    /* border: 2px solid red; */
+    height: 23.7rem;
+}
+
+.catContent .itemList .catContentImage{
+    height: 35rem;
+    width: fit-content;
+}
+
+.catContent .itemList .catContentImage img{
+    height: 35rem;
+    width: 35rem;
+    object-fit: cover;
+    object-position: top;
+}
+
+.catContent .itemList .catContentData{
+    width: 40rem;
+    padding: 2rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* border: 2px solid red; */
+}
+
+.catContent .itemList .catContentData .catContentInfo #breed,.catContent .itemList .catContentData .catContentInfo #price, .catContent .itemList .catContentData .catContentInfo #country, .catContent .itemList .catContentData .catContentInfo #weight{
+    font-weight: bold;
+    font-size: 600;
+}
+
+.catContent .itemList .catContentData .catContentInfo .info{
+    margin-bottom: 0.5rem;
+}
+
+.catContent .itemList .catContentData .catContentButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    width: 20rem;
+}
+
+.catContent .itemList .catContentData .catContentButtons .btnContent{
+    width: 10rem;
+}
+
+.catContent .itemList .catContentData .catContentButtons .wishlistIconBtn .selected{
+    color: red;
+}
+
+.catContent .itemList .catContentData .pincodeContent{
+    display: flex;
+    gap: 3rem;
+    /* border: 1px solid blue; */
+}
+
+.catContent .itemList .catContentData .pincodeContent #pincode{
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
+}
+
+.catContent .itemList .catContentData .pincodePlace{
+    /* border: 2px solid red; */
+    margin-top: -1.5rem;
+}
+
+.catContent .itemList .catContentData .pincodePlace p{
+    font-weight: bold;
+}
+.catContent .itemList .catContentData .pincodePlace #invalid{
+    color: red;
+}
+
+.catContent .itemList .catContentData .delivery{
+    /* border: 1px solid green; */
+    margin-top: -1.5rem;
+}
+
+.catContent .itemList .wishlistContent a{
+    background-color: rgba(128, 128, 128, 0.547);
+    color: black;
+}
+
+.catContent .randomCats{
+    /* border: 1px solid red; */
+    width: 100%;
+    align-content: center;
+}
+
+.catContent .randomCats #randomCatsContent{
+    /* border: 1px solid blue; */
+    display: flex;
+    align-items: center;
+}
+
+.catContent .randomCats #randomCatsContent #content{
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    gap: 3rem;
+}
+
+.catContent .randomCats #randomCatsContent #content .catImages a{
+    text-decoration: none;
+}
+
+.catContent .randomCats #randomCatsContent #content .catImages a .card .cardImage{
+    width: 20rem;
+    object-fit: cover;
+    object-position: top;
+}
+
+.catContent .randomCats #randomCatsContent #letfBtn{
+    position: relative;
+    left: -1.5rem;
+}
+
+.catContent .randomCats #randomCatsContent #rightBtn{
+    position: relative;
+    right: -1.5rem;
+}
