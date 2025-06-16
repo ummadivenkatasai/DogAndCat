@@ -60,11 +60,16 @@ function createServer() {
 
     app.post('/api/signup', async (req, res) => {
         try {
-            const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: req.body })
-            res.status(200).json({ message: 'user saved', id: result.insertedId })
+            const { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password } = req.body;
+            const user = { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password}
+            const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: user })
+            const userId = result.insertedId;
+            await insertToDatabase( { db:'DogAndCatApiData', col:'wishlists', data:{ userId, items:[] } } )
+            await insertToDatabase( { db:'DogAndCatApiData', col:'orders', data:{ userId, orders:[] } } )
+            res.status(200).json({ message: 'User registered successfully', id: userId })
 
         } catch (error) {
-            res.status(500).json({ error: 'Serval Error' })
+            res.status(500).json({ error: 'Server Error' })
         }
     })
 
@@ -102,7 +107,7 @@ function createServer() {
         const { email, password } = req.body;
         try {
             const users = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users', limit: 0 });
-            const user = users.find((value) => value.email === email)
+            const user = users.find((value) => value.email === email);
             if (!user) return res.status(400).json({ message: 'User not found' });
             if (user.password !== password) {
                 return res.status(400).json({ message: 'Invalid credentials' })
