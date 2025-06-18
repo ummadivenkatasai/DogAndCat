@@ -13,6 +13,10 @@ import Signin from './components/Singin'
 import Footer from './components/Footer'
 import PageNotFound from './components/Page'
 import CatContent from './components/CatContent'
+import AddToCart from './components/AddToCart'
+import WishlistData from './components/WishlistData'
+
+
 
 function App() {
   const [isSignIn,setIsSignIn] = useState(()=>{
@@ -34,6 +38,8 @@ function App() {
         <Route path='dog/:_id' element={<DogContent isAuthenticated={isSignIn} />} />
         <Route path='cat/:_id' element={<CatContent isAuthenticated={isSignIn} />} />
         <Route path='orders' element={<Orders prop={isSignIn} />} />
+        <Route path='wishlist' element={<WishlistData/>} />
+        <Route path='checkout' element={<AddToCart isAuthenticated={isSignIn} />} />
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />
         <Route path='*' element={<PageNotFound/>} />

@@ -5,7 +5,7 @@ import { CIcon } from "@coreui/icons-react";
 import { cilDog, cilCat, cilUser } from "@coreui/icons";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Button } from "@mui/material";
-import { Navigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom"; 
 
 function NavigationLogin() {
   return (
@@ -32,10 +32,13 @@ function NavigationLogin() {
 }
 
 function NavigationProfile({prop}) {
+
+  const navigate = useNavigate();
   
   function handleLogOut(){
     localStorage.removeItem('token');
     prop(false)
+    navigate('/')
   }
 
   return (

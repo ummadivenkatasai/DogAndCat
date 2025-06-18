@@ -10,7 +10,19 @@ async function connectDB(col) {
   return client.db('DogAndCatApiData').collection(col);
 }
 
-async function connectToDatabase({db,col,limit}) {
+async function connectToDatabase({db,col}) {
+    try {
+        await connectDB();
+        const database = client.db(db);
+        const collection = database.collection(col)
+        const data = (await collection.find({}).toArray());
+        return data;
+    } catch (error) {
+        console.log('Error on connecting database',error);
+    }
+}
+
+async function connectToLimtDatabase({db,col,limit}) {
     try {
         await connectDB();
         const database = client.db(db);
@@ -35,4 +47,4 @@ async function insertToDatabase({ db, col, data }) {
     }
 }
 
-module.exports = { connectDB, connectToDatabase, insertToDatabase, client }
+module.exports = { connectDB, connectToDatabase, insertToDatabase, client, connectToLimtDatabase }

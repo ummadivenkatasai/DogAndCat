@@ -63,7 +63,7 @@
     width: 10rem;
 }
 
-.catContent .itemList .catContentData .catContentButtons .wishlistIconBtn .selected{
+.catContent .itemList .catContentData .catContentButtons .wishListIconBtn .selected{
     color: red;
 }
 
@@ -73,7 +73,7 @@
     /* border: 1px solid blue; */
 }
 
-.catContent .itemList .catContentData .pincodeContent #pincode{
+.catContent .itemList .catContentData .pincodeContent .pincode{
     border: none;
     outline: none;
     border-bottom: 1px solid black;
@@ -87,7 +87,7 @@
 .catContent .itemList .catContentData .pincodePlace p{
     font-weight: bold;
 }
-.catContent .itemList .catContentData .pincodePlace #invalid{
+.catContent .itemList .catContentData .pincodePlace .invalid{
     color: red;
 }
 

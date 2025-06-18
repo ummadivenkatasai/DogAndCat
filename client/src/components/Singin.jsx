@@ -34,7 +34,12 @@ function Signin({prop}) {
     const response = await axios.post('http://localhost:5000/api/auth/signin',formData);
     localStorage.setItem("token",response.data.token);
     prop(true);
-    navigate('/')
+    navigate('/');
+    setTimeout(()=>{
+      localStorage.removeItem('token')
+      navigate('/login');
+      alert('session expired. please login');
+    },60*60*1000)
    } catch (error) {
     setError( "Login failed");
     console.log(error);

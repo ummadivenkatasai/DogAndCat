@@ -13,18 +13,26 @@ function CatContent({isAuthenticated}) {
     const {_id} = useParams();
     const [catData,setCatData] = useState(null);
     const [catInfo,setCatInfo] = useState({ catName:null, description:null, country:null, weight:null  });
-    const [carouselcats,setCarouselCats] = useState([]);
-    const [wishList, setWishList] = useState({ data:[],status:false });
+    const [isWishList,setIsWishList]=useState(false);
     const [pincodevalue, setpincodeValue] = useState("");
-      const [pincodePlace, setPincodePlace] = useState({pincode: "",pincodeTown: "",status: "",});
-      const [invalidPincode,setInvalidPincode]= useState('')
+    const [pincodePlace, setPincodePlace] = useState({pincode: "",pincodeTown: "",status: "",});
+    const [invalidPincode,setInvalidPincode]= useState('')
+    const [carouselcats,setCarouselCats] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(()=>{
-        fetchingCatData();
-        catContent()
-    },[_id])
+        const fetchData = async ()=>{
+          try {
+            await fetchingCatData();
+            await catContent();
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        if(isAuthenticated) checkWishListStatus()
+        fetchData()
+    },[_id,isAuthenticated])
 
     async function fetchingCatData(){
         const response= await axios.get(`http://localhost:5000/api/cats/${_id}`)
@@ -55,45 +63,52 @@ function CatContent({isAuthenticated}) {
       }
     }
 
-    function validatieAuthentication(type){
-      if( type === 'wishListBtn' || type === 'wishlist' ){
-      if( isAuthenticated === true ){
-        wishListData();
+    async function checkWishListStatus() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5000/api/wishlist',{ headers:{ Authorization:`Bearer ${token}` } })
+        const userWishListItems = response.data.items || [];
+        setIsWishList(userWishListItems.includes(_id))
+      } catch (error) {
+        console.log('checking wishlist status error',error)
+      }
+    }
+
+    async function validatieAuthentication(type){
+      if(isAuthenticated){
+        try {
+          const authoriseToken = localStorage.getItem("token");
+        if(type === 'wishListBtn'){
+          const result = await axios.post(`http://localhost:5000/api/wishlist`,{_id},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
+          setIsWishList(result.data.selected)
+        }
+        } catch (error) {
+         console.log(error) 
+        }
       }else{
         navigate('/login')
       }
-    }else if( type === 'cart' ){
-      if( isAuthenticated === true ){
-        // addToCart()
-      }else{
-        navigate('/login');
+    }
+
+    function pincodeChange({ target: { value } }) {
+      setpincodeValue(value);
+    }
+
+    async function checkingPincode() {
+      try {
+        const respose = await axios.get(`https://api.postalpincode.in/pincode/${pincodevalue}`);
+        if (respose.data[0].Status != "Error") {
+          const town = respose.data.map(({ PostOffice }) => {return PostOffice[0].Block || null});
+          setPincodePlace({pincode: pincodevalue,pincodeTown: town[0],status: respose.data[0].Status,});
+          setpincodeValue("");
+        } else {
+          setPincodePlace({pincode:'',pincodeTown:'',status:respose.data[0].Status})
+          setInvalidPincode('Invalid Pincode')
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
-    }
-
-    function wishListData(){
-    setWishList((previousValue)=>({...previousValue,status:!previousValue.status}))
-  }
-
-  function pincodeChange({ target: { value } }) {
-    setpincodeValue(value);
-  }
-
-  async function checkingPincode() {
-    try {
-      const respose = await axios.get(`https://api.postalpincode.in/pincode/${pincodevalue}`);
-      if (respose.data[0].Status != "Error") {
-        const town = respose.data.map(({ PostOffice }) => {return PostOffice[0].Block || null});
-        setPincodePlace({pincode: pincodevalue,pincodeTown: town[0],status: respose.data[0].Status,});
-        setpincodeValue("");
-      } else {
-        setPincodePlace({pincode:'',pincodeTown:'',status:respose.data[0].Status})
-        setInvalidPincode('Invalid Pincode')
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
 
   return (
@@ -108,7 +123,7 @@ function CatContent({isAuthenticated}) {
 
                       <CatContentData containerName='sub-item catContentInfo' breedName={catInfo.catName} value={catData.price} description={catInfo.description} origin={catInfo.country} catWeight={catInfo.weight}  />
 
-                      <CatWishListAndAddToCartBtn containerName='sub-item catContentButtons' wishClassname='wishListIconBtn btnContent' wishValidate={validatieAuthentication} wishIconClassname={wishList.status ? 'selected' : 'unselected' } cartClassname='addToCart btnContent' cartValidate={validatieAuthentication}  />
+                      <CatWishListAndAddToCartBtn containerName='sub-item catContentButtons' wishClassname='wishListIconBtn btnContent' wishValidate={validatieAuthentication} wishIconClassname={isWishList ? 'selected' : 'unselected' } cartClassname='addToCart btnContent' cartValidate={validatieAuthentication}  />
 
                       <CatPincodeContent containerName='pincodeContent' value={pincodevalue} handlePincodeChange={pincodeChange} validatePincode={checkingPincode} />
 
@@ -120,7 +135,8 @@ function CatContent({isAuthenticated}) {
 
                     </Grid>
                   <Grid className='wishlistContent' >
-                    <Button href={ isAuthenticated ? '/wishlist' : '/login' } type='button' onClick={()=> validatieAuthentication('wishlist') } >WishList</Button>
+                    <Button href={ isAuthenticated ? '/wishlist' : '/login' } type='button'  >WishList</Button>
+                    {/* onClick={()=> validatieAuthentication('wishlist') } */}
                   </Grid>  
               </Grid>
                 <Grid className='randomCats' >
@@ -156,7 +172,7 @@ function CatWishListAndAddToCartBtn({ containerName, wishClassname, wishValidate
 function CatPincodeContent({ containerName, value, handlePincodeChange, validatePincode }){
   return(
     <Grid className={containerName} >
-      <NumericFormat id='pincode' placeholder='Pincode' value={value} onChange={handlePincodeChange} decimalScale={0} allowNegative={false} isAllowed={(values)=> { const { floatValue } = values; return floatValue === undefined || floatValue<=999999 } } />
+      <NumericFormat className='pincode' placeholder='Pincode' value={value} onChange={handlePincodeChange} decimalScale={0} allowNegative={false} isAllowed={(values)=> { const { floatValue } = values; return floatValue === undefined || floatValue<=999999 } } />
       <Button type='button' variant='contained' onClick={validatePincode} >Check</Button>
     </Grid>
   )
@@ -165,7 +181,7 @@ function CatPincodeContent({ containerName, value, handlePincodeChange, validate
 function PincodePlace({ containerName, pincode, town, status, invalid }){
   return(
     <Grid className={containerName} >
-      { status != 'Error' && town !='' && pincode != ''? ( <Typography variant='body1' >{pincode} {town}</Typography> ) : ( <Typography variant='body1' id='invalid' >{invalid}</Typography> ) }
+      { status != 'Error' && town !='' && pincode != ''? ( <Typography variant='body1' >{pincode} {town}</Typography> ) : ( <Typography variant='body1' className='invalid' >{invalid}</Typography> ) }
     </Grid>
   )
 }
@@ -209,3 +225,41 @@ function CarouselCatImages( { containerName, contentData } ){
 }
 
 export default CatContent
+
+
+
+
+
+  //   function validatieAuthentication(type){
+  //     if(isAuthenticated){
+  //       switch(type){
+  //         case 'wishListBtn':
+  //         case 'wishList': wishListData(); break;
+  //         case 'cart' : //adddToCart(); 
+  //                       break;
+  //         default: break;
+  //       }
+  //     }else{
+  //         navigate('/login')
+  //     }
+  //   }
+
+  // function wishListData(){
+  //   setIsWishList((previousValue)=> !previousValue)
+  // }
+
+  // console.log(isWishList)
+
+  //   if( type === 'wishListBtn' || type === 'wishlist' ){
+    //   if( isAuthenticated === true ){
+    //     wishListData();
+    //   }else{
+    //     navigate('/login')
+    //   }
+    // }else if( type === 'cart' ){
+    //   if( isAuthenticated === true ){
+    //     // addToCart()
+    //   }else{
+    //     navigate('/login');
+    //   }
+    // }

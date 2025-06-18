@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
-const url = require('url')
 require('dotenv').config();
-const { connectDB, connectToDatabase, client, insertToDatabase } = require('./database');
+const { connectDB, connectToDatabase, client, insertToDatabase, connectToLimtDatabase } = require('./database');
 const { ObjectId } = require('mongodb');
+const userAuthentication = require('./userAuthentication');
 
 function createServer() {
     const app = express();
@@ -14,8 +14,8 @@ function createServer() {
     app.get('/', async (req, res) => {
         try {
             const [dogRes, catRes] = await Promise.all([
-                connectToDatabase({ db: 'DogAndCatApiData', col: 'DogData', limit: 4 }),
-                connectToDatabase({ db: 'DogAndCatApiData', col: 'CatData', limit: 4 })
+                connectToLimtDatabase({ db: 'DogAndCatApiData', col: 'DogData', limit: 4 }),
+                connectToLimtDatabase({ db: 'DogAndCatApiData', col: 'CatData', limit: 4 })
             ])
             res.status(200).json({ dog: dogRes, cat: catRes })
         } catch (error) {
@@ -26,7 +26,7 @@ function createServer() {
 
     app.get('/api/dogs', async (req, res) => {
         try {
-            const data = await connectToDatabase({ db: 'DogAndCatApiData', col: 'DogData', limit: 0 });
+            const data = await connectToDatabase({ db: 'DogAndCatApiData', col: 'DogData',  });
             res.json(data)
         } catch (error) {
             console.log('dog data error : ', error)
@@ -43,7 +43,7 @@ function createServer() {
 
     app.get('/api/cats', async (req, res) => {
         try {
-            const data = await connectToDatabase({ db: 'DogAndCatApiData', col: 'CatData', limit: 0 });
+            const data = await connectToDatabase({ db: 'DogAndCatApiData', col: 'CatData',  });
             res.json(data)
         } catch (error) {
             console.log('cat data error : ', error)
@@ -58,25 +58,45 @@ function createServer() {
         return res.status(200).json({catData});
     })
 
-    app.post('/api/signup', async (req, res) => {
-        try {
-            const { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password } = req.body;
-            const user = { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password}
-            const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: user })
-            const userId = result.insertedId;
-            await insertToDatabase( { db:'DogAndCatApiData', col:'wishlists', data:{ userId, items:[] } } )
-            await insertToDatabase( { db:'DogAndCatApiData', col:'orders', data:{ userId, orders:[] } } )
-            res.status(200).json({ message: 'User registered successfully', id: userId })
-
-        } catch (error) {
-            res.status(500).json({ error: 'Server Error' })
+   app.post('/api/wishlist',userAuthentication,async(req,res)=>{
+    const { _id } =req.body;
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('wishlists');
+        const userWishlist = await collection.findOne({ userId: new ObjectId(userInfo) });
+        if(!userWishlist) return res.json({ message:'user not found' });
+        const items = userWishlist.items || [];
+        const alreadyExists = items.includes(_id)
+        if(!alreadyExists){
+            await collection.updateOne({ userId: new ObjectId(userInfo)},{$addToSet: { items: _id }})
+            return res.status(200).json({message:'selected',selected:true})
+        }else{
+            await collection.updateOne({ userId: new ObjectId(userInfo) }, {$pull: { items: _id }})
+            return res.status(200).json({ message: 'unselected', selected: false });
         }
-    })
+    } catch (error) {
+        console.log(error)
+    }
+    res.status(500).json({message:'internal server error'});
+   })
+
+   app.get('/api/wishlist',userAuthentication,async(req,res)=>{
+       const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('wishlists');
+        const userWishlist =await collection.findOne({userId: new ObjectId(userInfo)});
+        if(!userWishlist) res.json({ message:'user not found' });
+        res.status(200).json({items:userWishlist.items})
+    } catch (error) {
+        console.log('error on getting wishlist data',error);
+        res.status(500).json({message:'internal server error'});
+    }
+   })
 
     app.post('/api/mobileNumber', async (req, res) => {
         const { mobileNumber } = req.body;
         if (mobileNumber.length == 10) {
-            const usersData = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users', limit: 0 })
+            const usersData = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users',  })
             const userMobileNumber = usersData.map((data) => { return data.mobileNumber });
             if (!userMobileNumber.includes(mobileNumber)) {
                 return res.status(200).json({ message: 'new user' });
@@ -91,7 +111,7 @@ function createServer() {
     app.post('/api/email', async (req, res) => {
         const { email } = req.body;
         if( email.toLocaleLowerCase().endsWith('@gmail.com') ){
-            const userData = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users', limit: 0 });
+            const userData = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users',  });
             const userEmail = userData.map((data) => { return data.email });
             if (!userEmail.includes(email)) {
                 return res.status(200).json({ message: 'new user' })
@@ -106,7 +126,7 @@ function createServer() {
     app.post('/api/auth/signin', async (req, res) => {
         const { email, password } = req.body;
         try {
-            const users = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users', limit: 0 });
+            const users = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users',  });
             const user = users.find((value) => value.email === email);
             if (!user) return res.status(400).json({ message: 'User not found' });
             if (user.password !== password) {
@@ -116,6 +136,21 @@ function createServer() {
             res.status(200).json({ token })
         } catch (error) {
             res.status(500).send(error);
+        }
+    })
+
+     app.post('/api/signup', async (req, res) => {
+        try {
+            const { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password } = req.body;
+            const user = { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password}
+            const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: user })
+            const userId = result.insertedId;
+            await insertToDatabase( { db:'DogAndCatApiData', col:'wishlists', data:{ userId, items:[] } } )
+            await insertToDatabase( { db:'DogAndCatApiData', col:'orders', data:{ userId, orders:[] } } )
+            res.status(200).json({ message: 'User registered successfully', id: userId })
+
+        } catch (error) {
+            res.status(500).json({ error: 'Server Error' })
         }
     })
 

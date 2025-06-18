@@ -12,7 +12,7 @@ function Home() {
     useEffect(()=>{
       async function fetchingImages() {
         try {
-          const response= await fetch('http://localhost:5000/')
+          const response= await fetch('http://localhost:5000/');
           const responseData = await response.json();
           const dogResData = responseData.dog;
           const catResData = responseData.cat;
