@@ -1,7 +1,7 @@
-import { Grid, Typography } from '@mui/material'
+import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../componentsCss/wishlist.css'
 
 function WishlistData({isAuthenticated}) {
@@ -25,15 +25,45 @@ function WishlistData({isAuthenticated}) {
     }
   }
 
-  wishlistData.map((data)=> console.log(data))
-
   return (
-    <Grid className='wishlistContainer' >
-      {wishlistData.map((data)=>{
-        return data.id ? <h1 key={data.id} >{data.breeds[0].name}</h1> : <h1>dog</h1>
-      })}
+    <Grid container className='wishlistContainer' columnSpacing={4}  > 
+        { wishlistData.map((data)=>{
+        return data.id ? <CatData key={data._id} value={data} /> : <DogData key={data._id} value={data} />
+      }) }
     </Grid>
   )
+}
+
+function CatData({ value }){
+ return(
+  <Grid size={3} className='wishData' >
+    <Link to={`/cat/${value._id}`} >
+      <Card className='card' >
+        <CardMedia component='img' className='cardImage' image={value.url} alt={value.id} height='275' />
+        <CardContent className='cardContent' >
+          <Typography variant='body1' >{value.breeds[0].name}</Typography>
+          <Typography variant='body1' >{value.price}</Typography>
+        </CardContent>
+      </Card>
+    </Link>
+  </Grid>
+ ) 
+}
+
+function DogData({ value }){
+ return(
+  <Grid size={3} className='wishData' >
+    <Link to={`/dog/${value._id}`} >
+      <Card className='card' >
+        <CardMedia component='img' className='cardImage' image={value.message} alt={value.breed} height='275' />
+        <CardContent className='cardContent' >
+          <Typography variant='body1' >{value.breed}</Typography>
+          <Typography variant='body1' >{value.price}</Typography>
+        </CardContent>
+      </Card>
+    </Link>
+  </Grid>
+ )
 }
 
 export default WishlistData

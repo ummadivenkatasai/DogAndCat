@@ -1,5 +1,28 @@
 .wishlistContainer{
-    min-height: 70rem;
+    min-height: 50rem;
     padding: 2rem;
-    border: 2px solid black;
+    display: flex;
+}
+
+.wishlistContainer .wishData{
+ height: fit-content;
+ width: fit-content;
+}
+
+.wishlistContainer a{
+    text-decoration: none;
+}
+
+.wishlistContainer a .card{
+    width: 20rem;
+}
+
+.wishlistContainer a .card .cardImage{
+    object-fit: cover;
+    object-position: top;
+}
+
+.wishlistContainer a .card .cardContent{
+    display: flex;
+    justify-content: space-between;
 }
