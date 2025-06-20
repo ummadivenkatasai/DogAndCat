@@ -37,8 +37,8 @@ function App() {
         <Route path="dog" element={<DogData />} />
         <Route path='dog/:_id' element={<DogContent isAuthenticated={isSignIn} />} />
         <Route path='cat/:_id' element={<CatContent isAuthenticated={isSignIn} />} />
-        <Route path='orders' element={<Orders prop={isSignIn} />} />
-        <Route path='wishlist' element={<WishlistData/>} />
+        <Route path='orders' element={<Orders isAuthenticated={isSignIn} />} />
+        <Route path='wishlist' element={<WishlistData isAuthenticated={isSignIn} />} />
         <Route path='checkout' element={<AddToCart isAuthenticated={isSignIn} />} />
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />

@@ -66,7 +66,7 @@ function CatContent({isAuthenticated}) {
     async function checkWishListStatus() {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/wishlist',{ headers:{ Authorization:`Bearer ${token}` } })
+        const response = await axios.get(`http://localhost:5000/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
         const userWishListItems = response.data.items || [];
         setIsWishList(userWishListItems.includes(_id))
       } catch (error) {
@@ -79,7 +79,7 @@ function CatContent({isAuthenticated}) {
         try {
           const authoriseToken = localStorage.getItem("token");
         if(type === 'wishListBtn'){
-          const result = await axios.post(`http://localhost:5000/api/wishlist`,{_id},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
+          const result = await axios.post(`http://localhost:5000/api/wishlist/cat`,{catData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
         }
         } catch (error) {
@@ -136,7 +136,6 @@ function CatContent({isAuthenticated}) {
                     </Grid>
                   <Grid className='wishlistContent' >
                     <Button href={ isAuthenticated ? '/wishlist' : '/login' } type='button'  >WishList</Button>
-                    {/* onClick={()=> validatieAuthentication('wishlist') } */}
                   </Grid>  
               </Grid>
                 <Grid className='randomCats' >

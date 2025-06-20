@@ -11,18 +11,27 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 function DogContent({isAuthenticated}) {
   const { _id } = useParams();
   const [dogData, setDogData] = useState(null);
-  const [carouselDogs,setCarouselDogs] = useState([]);
+  const [isWishList,setIsWishList]=useState(false);
   const [pincodevalue, setpincodeValue] = useState("");
   const [pincodePlace, setPincodePlace] = useState({pincode: "",pincodeTown: "",status: "",});
   const [invalidPincode,setInvalidPincode]= useState('')
-  const [wishList, setWishList] = useState({ data:[],status:false });
+  const [carouselDogs,setCarouselDogs] = useState([]);
+  
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchingDogData();
-    dogContent();
-  }, [_id]);
+     const fetchData = async ()=>{
+          try {
+            await fetchingDogData();
+            await dogContent();
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        if(isAuthenticated) checkWishListStatus()
+        fetchData()
+  }, [_id,isAuthenticated]);
 
   async function fetchingDogData() {
       const response = await axios.get(`http://localhost:5000/api/dogs/${_id}`);
@@ -48,6 +57,33 @@ function DogContent({isAuthenticated}) {
     }
   }
 
+  async function checkWishListStatus() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5000/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
+        const userWishListItems = response.data.items || [];
+        setIsWishList(userWishListItems.includes(_id))
+      } catch (error) {
+        console.log('checking wishlist status error',error)
+      }
+    }
+
+    async function validatieAuthentication(type){
+      if(isAuthenticated){
+        try {
+          const authoriseToken = localStorage.getItem("token");
+        if(type === 'wishListBtn'){
+          const result = await axios.post(`http://localhost:5000/api/wishlist/dog`,{dogData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
+          setIsWishList(result.data.selected)
+        }
+        } catch (error) {
+         console.log(error) 
+        }
+      }else{
+        navigate('/login')
+      }
+    }
+
   function pincodeChange({ target: { value } }) {
     setpincodeValue(value);
   }
@@ -68,27 +104,6 @@ function DogContent({isAuthenticated}) {
     }
   }
 
-
-  function validatingAuthenication(type){
-    if( type === 'wishListBtn' || type === 'wishlist' ){
-      if( isAuthenticated === true ){
-        wishListData();
-      }else{
-        navigate('/login')
-      }
-    }else if( type === 'cart' ){
-      if( isAuthenticated === true ){
-        // addToCart()
-      }else{
-        navigate('/login');
-      }
-    }
-  }
-
-  function wishListData(){
-    setWishList((previousValue)=>({...previousValue,status:!previousValue.status}))
-  }
-
   return (
     <>
       {dogData && (
@@ -103,8 +118,8 @@ function DogContent({isAuthenticated}) {
                 <Typography variant="body1">Price:{dogData.price}</Typography>
               </Grid>
               <Grid className="sub-item dogContentButtons">
-                <Button className="wishlistIconBtn btnContent" type="button" variant="contained" onClick={()=>validatingAuthenication('wishListBtn')}> <FavoriteIcon className={wishList.status ? 'selected' : 'unselected' } /> </Button>
-                <Button className="addToCart btnContent" type="button" variant="contained" onClick={()=>validatingAuthenication('cart')}> Add To Cart</Button>
+                <Button className="wishlistIconBtn btnContent" type='button' variant="contained" onClick={()=>validatieAuthentication('wishListBtn')}> <FavoriteIcon className={isWishList ? 'selected' : 'unselected' } /> </Button>
+                <Button className="addToCart btnContent" type="button" variant="contained" onClick={()=>validatieAuthentication('cart')}> Add To Cart</Button>
               </Grid>
               <Grid className="pincodeContent">
                 <NumericFormat placeholder="Pincode" value={pincodevalue} onChange={pincodeChange} decimalScale={0} allowNegative={false} isAllowed={(values) => {const { floatValue } = values;return floatValue === undefined || floatValue <= 999999; }}/>
@@ -117,7 +132,7 @@ function DogContent({isAuthenticated}) {
               </Grid>
             </Grid>
             <Grid className="wishlistContent">
-              <Button href={isAuthenticated ? '/wishlist' : '/login'} type="button" onClick={()=>validatingAuthenication('wishlist')} >WishList</Button>
+              <Button href={isAuthenticated ? '/wishlist' : '/login'} type="button" >WishList</Button>
             </Grid>
           </Grid>
           <Grid className='randomDogs' >

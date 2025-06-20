@@ -58,20 +58,20 @@ function createServer() {
         return res.status(200).json({catData});
     })
 
-   app.post('/api/wishlist',userAuthentication,async(req,res)=>{
-    const { _id } =req.body;
+   app.post('/api/wishlist/cat',userAuthentication,async(req,res)=>{
+    const { catData } =req.body;
     const userInfo = req.user.userId;
     try {
         const collection = await connectDB('wishlists');
         const userWishlist = await collection.findOne({ userId: new ObjectId(userInfo) });
         if(!userWishlist) return res.json({ message:'user not found' });
         const items = userWishlist.items || [];
-        const alreadyExists = items.includes(_id)
+        const alreadyExists =  items.some((data)=> data._id === catData._id)
         if(!alreadyExists){
-            await collection.updateOne({ userId: new ObjectId(userInfo)},{$addToSet: { items: _id }})
+            await collection.updateOne({ userId: new ObjectId(userInfo)},{$addToSet: { items: catData }})
             return res.status(200).json({message:'selected',selected:true})
         }else{
-            await collection.updateOne({ userId: new ObjectId(userInfo) }, {$pull: { items: _id }})
+            await collection.updateOne({ userId: new ObjectId(userInfo) }, {$pull: { items: { _id: catData._id }  }}) //
             return res.status(200).json({ message: 'unselected', selected: false });
         }
     } catch (error) {
@@ -80,7 +80,40 @@ function createServer() {
     res.status(500).json({message:'internal server error'});
    })
 
+   app.post('/api/wishlist/dog',userAuthentication,async(req,res)=>{
+    const { dogData } = req.body;
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('wishlists');
+        const userWishlist = await collection.findOne({ userId: new ObjectId(userInfo) });
+        if(!userWishlist) return res.json({ message:'user not found' });
+        const items = userWishlist.items || [];
+        const alreadyExists = items.some((data)=> data._id === dogData._id )
+        if(!alreadyExists){
+            await collection.updateOne({ userId:new ObjectId(userInfo) },{ $addToSet:{ items: dogData } });
+            return res.status(200).json({message:'selected',selected:true})
+        }else{
+            await collection.updateOne({ userId: new ObjectId(userInfo) },{ $pull: { items: { _id:dogData._id } } });
+            return res.status(200).json({message:'unselected',selected:false})
+        }
+    } catch (error) {
+        console.log('post dog wishlist error',error)
+    }
+   })
+
    app.get('/api/wishlist',userAuthentication,async(req,res)=>{
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('wishlists');
+        const userWishlist = await collection.findOne({ userId: new ObjectId(userInfo) });
+        const items = userWishlist.items;
+        res.status(200).json({ message:items });
+    } catch (error) {
+        console.log('fecthing wishlist data error',error)
+    }
+   })
+
+   app.get('/api/wishlist/:id',userAuthentication,async(req,res)=>{
        const userInfo = req.user.userId;
     try {
         const collection = await connectDB('wishlists');
