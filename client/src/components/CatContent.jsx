@@ -34,6 +34,8 @@ function CatContent({isAuthenticated}) {
         fetchData()
     },[_id,isAuthenticated])
 
+    console.log(isWishList)
+
     async function fetchingCatData(){
         const response= await axios.get(`http://localhost:5000/api/cats/${_id}`)
         const breedInfo = response.data.catData.breeds[0];

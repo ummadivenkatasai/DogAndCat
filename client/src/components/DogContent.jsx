@@ -19,19 +19,21 @@ function DogContent({isAuthenticated}) {
   
 
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-     const fetchData = async ()=>{
-          try {
-            await fetchingDogData();
-            await dogContent();
-          } catch (error) {
-            console.log(error)
-          }
-        }
-        if(isAuthenticated) checkWishListStatus()
+    const fetchData = async ()=>{
+      try {
+        await fetchingDogData();
+        await dogContent();
+      } catch (error) {
+        console.log(error)
+      }
+    }
+      if(isAuthenticated) checkWishListStatus()
         fetchData()
   }, [_id,isAuthenticated]);
+
+  // console.log(isWishList)
 
   async function fetchingDogData() {
       const response = await axios.get(`http://localhost:5000/api/dogs/${_id}`);
@@ -62,11 +64,14 @@ function DogContent({isAuthenticated}) {
         const token = localStorage.getItem('token');
         const response = await axios.get(`http://localhost:5000/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
         const userWishListItems = response.data.items || [];
-        setIsWishList(userWishListItems.includes(_id))
+        // console.log(userWishListItems.some((data)=> data._id === _id ))
+        // console.log(response)
+        setIsWishList(userWishListItems.some((data)=> data._id === _id ))
       } catch (error) {
         console.log('checking wishlist status error',error)
       }
     }
+
 
     async function validatieAuthentication(type){
       if(isAuthenticated){
