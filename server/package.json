@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.8.4",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",

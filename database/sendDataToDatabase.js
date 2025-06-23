@@ -109,4 +109,3 @@ dogInterval = setInterval(()=>{
 catInterval = setInterval(()=>{
     sendCatDataToDatabase()
 },1000)
-

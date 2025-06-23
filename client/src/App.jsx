@@ -22,10 +22,24 @@ function App() {
   const [isSignIn,setIsSignIn] = useState(()=>{
     return !!localStorage.getItem('token')
   });
+  // const [cartData,setCartData]=useState(()=>{
+  //   const storedCart=localStorage.getItem('cart');
+  //   return storedCart ? JSON.parse(storedCart):[]
+  // });
+
+  // useEffect(()=>{
+  //   localStorage.setItem('cart',JSON.stringify(cartData))
+  // },[cartData])
 
   useEffect(()=>{
     if(!isSignIn) return localStorage.removeItem('token')
   },[isSignIn])
+
+  // function handleCart(item){
+  //   setCartData((prev)=>[...prev,item])
+  // }
+
+  // console.log(cartData)
 
 
   return (
@@ -35,11 +49,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="cat" element={<CatData/>} />
         <Route path="dog" element={<DogData />} />
-        <Route path='dog/:_id' element={<DogContent isAuthenticated={isSignIn} />} />
-        <Route path='cat/:_id' element={<CatContent isAuthenticated={isSignIn} />} />
+        <Route path='dog/:_id' element={<DogContent isAuthenticated={isSignIn}  />} /> { /* onAddToCart={handleCart} */ }
+        <Route path='cat/:_id' element={<CatContent isAuthenticated={isSignIn}  />} /> { /* onAddToCart={handleCart} */ }
         <Route path='orders' element={<Orders isAuthenticated={isSignIn} />} />
         <Route path='wishlist' element={<WishlistData isAuthenticated={isSignIn} />} />
-        <Route path='checkout' element={<AddToCart isAuthenticated={isSignIn} />} />
+        <Route path='checkout' element={<AddToCart isAuthenticated={isSignIn}  />} /> { /* cartValue={cartData} */ }
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />
         <Route path='*' element={<PageNotFound/>} />

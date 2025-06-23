@@ -126,6 +126,44 @@ function createServer() {
     }
    })
 
+   app.post('/api/cart',userAuthentication,async(req,res)=>{
+    const cartData  = req.body;
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('userCart');
+        const userCart = await collection.findOne({userId:new ObjectId(userInfo)});
+        if(!userCart) res.json({message:'user not found'});
+        const alreadyExists = userCart.cart.findIndex((data)=> data._id === cartData._id );
+        if(alreadyExists === -1){
+            await collection.updateOne({ userId: new ObjectId(userInfo) },{ $addToSet:{ cart:cartData } })
+            return res.status(200).json({ message:'product added to cart' })
+        }else{
+            const currentQty = userCart.cart[alreadyExists].qty || 0;
+            const newQty = currentQty+cartData.qty;
+            if(newQty>5) return res.status(400).json({message:'product limit exceeds'});
+            const key = `cart.${alreadyExists}.qty`;
+            await collection.updateOne({ userId: new ObjectId(userInfo) },{$inc:{[key]:cartData.qty}})
+            return res.status(200).json({message:'cart updated'})
+        }
+    } catch (error) {
+        console.log('cat posting data error:',error)
+    }
+   })
+
+   app.get('/api/cart',userAuthentication,async(req,res)=>{ 
+    const userInfo = req.user.userId;
+    // console.log(userInfo)
+    try {
+        const collection = await connectDB('userCart');
+        const userCart = await collection.findOne({userId:new ObjectId(userInfo)});
+        const cartData = userCart.cart;
+        if(!userCart) return res.json({message:'user not found'});
+        res.status(200).json({cartData})
+    } catch (error) {
+        console.log('cart fetching data error',error)
+    }
+   })
+
     app.post('/api/mobileNumber', async (req, res) => {
         const { mobileNumber } = req.body;
         if (mobileNumber.length == 10) {
@@ -180,6 +218,7 @@ function createServer() {
             const userId = result.insertedId;
             await insertToDatabase( { db:'DogAndCatApiData', col:'wishlists', data:{ userId, items:[] } } )
             await insertToDatabase( { db:'DogAndCatApiData', col:'orders', data:{ userId, orders:[] } } )
+            await insertToDatabase( { db:'DogAndCatApiData', col:'userCart', data:{userId,cart:[]} } )
             res.status(200).json({ message: 'User registered successfully', id: userId })
 
         } catch (error) {

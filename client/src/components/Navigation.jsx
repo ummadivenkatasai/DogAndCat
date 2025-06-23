@@ -57,8 +57,14 @@ function NavigationProfile({prop}) {
           <div className="orders btn links">
             <Link to="orders">orders</Link>
           </div>
+          <div className="wishlist btn links">
+            <Link to="wishlist">wishlist</Link>
+          </div>
+          <div className="orders btn links">
+            <Link to="checkout">cart</Link>
+          </div>
           <div className="profile btn links">
-            <Link to="">{<AccountCircleIcon />}Profile</Link>
+            <Link to="">{<AccountCircleIcon />}</Link>
             <div className="profileOptions">
               <div className="profileSettings option">
                 <Link to="profileSettings">Settings</Link>

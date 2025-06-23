@@ -7,14 +7,17 @@ import "../componentsCss/dogContent.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import MinimizeIcon from '@mui/icons-material/Minimize';
+import AddIcon from '@mui/icons-material/Add';
 
-function DogContent({isAuthenticated}) {
+function DogContent({isAuthenticated}) { //onAddToCart
   const { _id } = useParams();
   const [dogData, setDogData] = useState(null);
   const [isWishList,setIsWishList]=useState(false);
   const [pincodevalue, setpincodeValue] = useState("");
   const [pincodePlace, setPincodePlace] = useState({pincode: "",pincodeTown: "",status: "",});
-  const [invalidPincode,setInvalidPincode]= useState('')
+  const [invalidPincode,setInvalidPincode]= useState('');
+  let [cartQty,setCartQty]=useState(1);
   const [carouselDogs,setCarouselDogs] = useState([]);
   
 
@@ -32,8 +35,6 @@ function DogContent({isAuthenticated}) {
       if(isAuthenticated) checkWishListStatus()
         fetchData()
   }, [_id,isAuthenticated]);
-
-  // console.log(isWishList)
 
   async function fetchingDogData() {
       const response = await axios.get(`http://localhost:5000/api/dogs/${_id}`);
@@ -64,8 +65,6 @@ function DogContent({isAuthenticated}) {
         const token = localStorage.getItem('token');
         const response = await axios.get(`http://localhost:5000/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
         const userWishListItems = response.data.items || [];
-        // console.log(userWishListItems.some((data)=> data._id === _id ))
-        // console.log(response)
         setIsWishList(userWishListItems.some((data)=> data._id === _id ))
       } catch (error) {
         console.log('checking wishlist status error',error)
@@ -75,17 +74,29 @@ function DogContent({isAuthenticated}) {
 
     async function validatieAuthentication(type){
       if(isAuthenticated){
+        const authoriseToken = localStorage.getItem("token");
         try {
-          const authoriseToken = localStorage.getItem("token");
         if(type === 'wishListBtn'){
           const result = await axios.post(`http://localhost:5000/api/wishlist/dog`,{dogData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
+        }else if( type === 'cartBtn' ){
+           const cartData = {...dogData,qty:cartQty};
+          const cartResult = await axios.post(`http://localhost:5000/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
+          console.log(cartResult)
         }
         } catch (error) {
-         console.log(error) 
+         if(error) alert('quantity exceeds')
         }
       }else{
         navigate('/login')
+      }
+    }
+
+    function handleCartQty(type){
+      if( type === 'decrement' && cartQty >= 1 ){
+        setCartQty(prev => prev-1);
+      }else if( type === 'increment' && cartQty <= 5 ){
+        setCartQty(prev => prev+1);
       }
     }
 
@@ -124,7 +135,12 @@ function DogContent({isAuthenticated}) {
               </Grid>
               <Grid className="sub-item dogContentButtons">
                 <Button className="wishlistIconBtn btnContent" type='button' variant="contained" onClick={()=>validatieAuthentication('wishListBtn')}> <FavoriteIcon className={isWishList ? 'selected' : 'unselected' } /> </Button>
-                <Button className="addToCart btnContent" type="button" variant="contained" onClick={()=>validatieAuthentication('cart')}> Add To Cart</Button>
+                <Button className="addToCart btnContent" type="button" variant="contained" onClick={()=>validatieAuthentication('cartBtn')}> Add To Cart</Button>
+              </Grid>
+              <Grid className='sub-item dogQtyBtn' >
+                <Button type="button" className="decrement qtyContent" onClick={()=> handleCartQty('decrement') } disabled={ cartQty === 1 } ><MinimizeIcon/></Button>
+                <Typography variant="body1" className="qtyContent" >{cartQty}</Typography>
+                <Button type="button" className="increment qtyContent" onClick={()=> handleCartQty('increment') } disabled={ cartQty === 5 } ><AddIcon/></Button>
               </Grid>
               <Grid className="pincodeContent">
                 <NumericFormat placeholder="Pincode" value={pincodevalue} onChange={pincodeChange} decimalScale={0} allowNegative={false} isAllowed={(values) => {const { floatValue } = values;return floatValue === undefined || floatValue <= 999999; }}/>

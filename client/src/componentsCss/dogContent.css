@@ -56,6 +56,19 @@
     color: red;
 }
 
+.dogcontent .itemList .dogContentData .dogQtyBtn{
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    width: fit-content;
+    gap: 1rem;
+}
+
+.dogcontent .itemList .dogContentData .dogQtyBtn .qtyContent{
+    padding: 0.25rem;
+    text-align: center;
+}
+
 .dogcontent .itemList .dogContentData .pincodeContent{
     display: flex;
     gap: 3rem;

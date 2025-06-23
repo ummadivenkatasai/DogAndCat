@@ -67,6 +67,19 @@
     color: red;
 }
 
+.catContent .itemList .catContentData .catQtyBtn{
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    width: fit-content;
+    gap: 1rem;
+}
+
+.catContent .itemList .catContentData .catQtyBtn .qtyContent{
+    padding: 0.25rem;
+    text-align: center;
+}
+
 .catContent .itemList .catContentData .pincodeContent{
     display: flex;
     gap: 3rem;
