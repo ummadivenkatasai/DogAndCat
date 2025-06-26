@@ -61,7 +61,7 @@ function NavigationProfile({prop}) {
             <Link to="wishlist">wishlist</Link>
           </div>
           <div className="orders btn links">
-            <Link to="checkout">cart</Link>
+            <Link to="cart">cart</Link>
           </div>
           <div className="profile btn links">
             <Link to="">{<AccountCircleIcon />}</Link>

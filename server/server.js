@@ -138,11 +138,22 @@ function createServer() {
             await collection.updateOne({ userId: new ObjectId(userInfo) },{ $addToSet:{ cart:cartData } })
             return res.status(200).json({ message:'product added to cart' })
         }else{
-            const currentQty = userCart.cart[alreadyExists].qty || 0;
-            const newQty = currentQty+cartData.qty;
-            if(newQty>5) return res.status(400).json({message:'product limit exceeds'});
-            const key = `cart.${alreadyExists}.qty`;
-            await collection.updateOne({ userId: new ObjectId(userInfo) },{$inc:{[key]:cartData.qty}})
+            let currentQty = userCart.cart[alreadyExists].qty || 0;
+            let differnce = currentQty - cartData.qty;
+            if( cartData.updateType === 'increment' ){
+                    let result = currentQty - differnce;
+                    const key = `cart.${alreadyExists}.qty`;
+                    await collection.updateOne({ userId: new ObjectId(userInfo) },{$set:{[key]:result}})
+            }else if( cartData.updateType === 'decrement' ){
+                    let result = currentQty - differnce
+                    const key = `cart.${alreadyExists}.qty`;
+                    await collection.updateOne({userId: new ObjectId(userInfo)},{$set:{[key]:result}})
+            }else{
+                const newQty = currentQty+cartData.qty;
+                if(newQty>5) return res.status(400).json({message:'product limit exceeds'});
+                const key = `cart.${alreadyExists}.qty`;
+                await collection.updateOne({ userId: new ObjectId(userInfo) },{$inc:{[key]:cartData.qty}})
+            }
             return res.status(200).json({message:'cart updated'})
         }
     } catch (error) {

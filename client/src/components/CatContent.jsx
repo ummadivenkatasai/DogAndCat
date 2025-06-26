@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { NumericFormat } from 'react-number-format'
 import '../componentsCss/catContent.css'
 
-function CatContent({isAuthenticated}) { //onAddToCart
+function CatContent({isAuthenticated}) {
 
     const {_id} = useParams();
     const [catData,setCatData] = useState(null);
@@ -84,7 +84,7 @@ function CatContent({isAuthenticated}) { //onAddToCart
         if(type === 'wishListBtn'){
           const result = await axios.post(`http://localhost:5000/api/wishlist/cat`,{catData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
-        }else if( type === 'cartBtn' ){ // onAddToCart(catData)
+        }else if( type === 'cartBtn' ){
           const cartData = {...catData,qty:cartQty};
           const cartResult = await axios.post(`http://localhost:5000/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
           console.log(cartResult)
@@ -251,41 +251,3 @@ function CarouselCatImages( { containerName, contentData } ){
 }
 
 export default CatContent
-
-
-
-
-
-  //   function validatieAuthentication(type){
-  //     if(isAuthenticated){
-  //       switch(type){
-  //         case 'wishListBtn':
-  //         case 'wishList': wishListData(); break;
-  //         case 'cart' : //adddToCart(); 
-  //                       break;
-  //         default: break;
-  //       }
-  //     }else{
-  //         navigate('/login')
-  //     }
-  //   }
-
-  // function wishListData(){
-  //   setIsWishList((previousValue)=> !previousValue)
-  // }
-
-  // console.log(isWishList)
-
-  //   if( type === 'wishListBtn' || type === 'wishlist' ){
-    //   if( isAuthenticated === true ){
-    //     wishListData();
-    //   }else{
-    //     navigate('/login')
-    //   }
-    // }else if( type === 'cart' ){
-    //   if( isAuthenticated === true ){
-    //     // addToCart()
-    //   }else{
-    //     navigate('/login');
-    //   }
-    // }
