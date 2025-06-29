@@ -138,15 +138,15 @@ function Signup() {
             </Grid>
             <Grid className='content mobile' >
                 <Grid className='field mobileNumber' >
-                    <NumericFormat id='phoneNumber' placeholder='Mobile Number' name='mobileNumber' value={formData.mobileNumber} onChange={handleChange} required />
+                    <NumericFormat id='phoneNumber' placeholder='Mobile Number' name='mobileNumber' value={formData.mobileNumber} onChange={handleChange} isAllowed={(values)=> {const { floatValue } = values; return floatValue === undefined || floatValue<=9999999999 } } required />
                 </Grid>
                 <Grid className='field numberVerify verfication' >
-                    <Button variant='contained' type='button' disabled={ verificationOtp.mobileOtp !== '' || verifyField.mobileVerify == true } onClick={ ()=> generateOtp('mobile') } >Verify</Button>
+                    <Button variant='contained' type='button' disabled={ verificationOtp.mobileOtp !== '' || verifyField.mobileVerify == true } onClick={ ()=> generateOtp('mobile') }  >Verify</Button>
                 </Grid>
             </Grid>
              {verificationOtp.mobileOtp && <Grid className='content otpVerify mobileOtpVerify' >
                 <Grid className='field verify phoneVerification' >
-                    <NumericFormat placeholder='Enter OTP' name='mobileOtpVerify'  onChange={handleOtpChange} />
+                    <NumericFormat placeholder='Enter OTP' name='mobileOtpVerify'  onChange={handleOtpChange} isAllowed={(values)=> {const { floatValue } = values; return floatValue === undefined || floatValue<=999999 } } />
                 </Grid>
                 <Grid className='field verificationBtn' >
                     <Button variant='contained' type='button' name='mobileOtpVerify' onClick={()=>otpValidation('mobile')}   >Submit</Button>
@@ -162,7 +162,7 @@ function Signup() {
             </Grid>
             {verificationOtp.emailOtp && <Grid className='content otpVerify emailOtpVerify' >
                 <Grid className='field verify emailVerification' >
-                    <NumericFormat placeholder='Enter OTP' name='emailOtpVerify'  onChange={handleOtpChange} />
+                    <NumericFormat placeholder='Enter OTP' name='emailOtpVerify'  onChange={handleOtpChange} isAllowed={(values)=> {const { floatValue } = values; return floatValue === undefined || floatValue<=999999 } } />
                 </Grid>
                 <Grid className='field verificationBtn' >
                     <Button variant='contained' type='button' name='emailOtpVerify' onClick={()=>otpValidation('email')}   >Submit</Button>

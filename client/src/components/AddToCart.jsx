@@ -63,6 +63,7 @@ function AddToCart({isAuthenticated}) {
   function handleListBtn(){
     setisopen(!isopen);
   }
+
   
   return (
     <Grid  className='cartContainer' >
@@ -89,7 +90,7 @@ function AddToCart({isAuthenticated}) {
         </List>
         <Typography variant='body1' className='totalPrice' ><span className='priceText' >Total Price </span> <span className='pricevalue' >{totalamt}</span></Typography>
         <Grid className='checkoutContent' >
-        <Button href='checkout' type='button' variant='contained' disabled={isAuthenticated ? null : '' } >ChcekOut</Button>
+        <Button href='checkout' type='button' variant='contained' disabled={!token} >CheckOut</Button>
       </Grid>
       </Grid>
     </Grid>

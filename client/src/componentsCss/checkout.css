@@ -1,0 +1,73 @@
+.checkoutContainer{
+    min-height: 70rem;
+    border: 2px solid black;
+    padding: 3rem 2rem;
+}
+
+.checkoutContainer .leftSideContent .addressContainer{
+    border: 2px solid red;
+    max-width: 50rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+}
+
+.checkoutContainer .leftSideContent .addressContainer .newAddressContent{
+    /* border: 2px solid blue; */
+    min-height: 20rem;
+    min-width: 40rem
+}
+
+.checkoutContainer .leftSideContent .newAddressContent{
+    border: 2px solid green;
+    width: 50rem;
+    padding: 2rem;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .inputData{
+    display: flex;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .inputData input{
+    width: 20rem;
+    padding: 1rem 1.2rem;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent input[name='mobileNumber']{
+    height: 3.5rem;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .inputAddress .addressBox{
+    width: 50rem;
+} 
+
+.checkoutContainer .leftSideContent .newAddressContent .nameContent{
+    margin-top: 0;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .nameContent input[name='firstName']{
+    width: 19.5rem;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .nameContent input[name='mobilenumber'],.checkoutContainer .leftSideContent .newAddressContent .pincode input[name='pincode']{
+    width: 22rem;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    outline: none;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .nameContent input[name='mobilenumber']:focus,.checkoutContainer .leftSideContent .newAddressContent .pincode input[name='pincode']:focus{
+    border: 1px solid blue;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .saveBtn{
+    margin-top: 1rem;
+}
+
+.checkoutContainer .leftSideContent .newAddressContent .saveBtn button{
+    width: 7rem;
+    padding: 0.5rem;
+}

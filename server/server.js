@@ -161,6 +161,20 @@ function createServer() {
     }
    })
 
+   app.post('/api/address',userAuthentication,async(req,res)=>{
+        const data = req.body;
+        const userInfo = req.user.userId;
+        try {
+            const collection = await connectDB('Address');
+            const {address} = await collection.findOne({userId:new ObjectId(userInfo)})
+            await collection.updateOne({userId:new ObjectId(userInfo)},{$addToSet:{address:data}})
+            res.status(200).json({message:'address received'})
+        } catch (error) {
+            console.log('geeting address data from frontend error',error)
+        }
+
+    })
+
    app.get('/api/cart',userAuthentication,async(req,res)=>{ 
     const userInfo = req.user.userId;
     // console.log(userInfo)
@@ -205,6 +219,20 @@ function createServer() {
         }
     })
 
+    // app.post('/api/address',userAuthentication,async(req,res)=>{
+    //     const data = req.body;
+    //     const userInfo = req.user.userId;
+    //     try {
+    //         const collection = await connectDB('Address');
+    //         const userAddress = await collection.findOne({userId:new ObjectId(userInfo)})
+            
+    //         // res.status(200).json({message:'address received'})
+    //     } catch (error) {
+    //         console.log('geeting address data from frontend error',error)
+    //     }
+
+    // })
+
     app.post('/api/auth/signin', async (req, res) => {
         const { email, password } = req.body;
         try {
@@ -230,6 +258,7 @@ function createServer() {
             await insertToDatabase( { db:'DogAndCatApiData', col:'wishlists', data:{ userId, items:[] } } )
             await insertToDatabase( { db:'DogAndCatApiData', col:'orders', data:{ userId, orders:[] } } )
             await insertToDatabase( { db:'DogAndCatApiData', col:'userCart', data:{userId,cart:[]} } )
+            await insertToDatabase( { db:'DogAndCatApiData', col:'Address',data:{ userId, address:[] } } )
             res.status(200).json({ message: 'User registered successfully', id: userId })
 
         } catch (error) {
