@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../componentsCss/checkout.css'
-import { Button, Card, Grid, TextField, Typography } from '@mui/material'
+import { Button, Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography,  } from '@mui/material'
 import { NumericFormat } from 'react-number-format';
 import axios from 'axios'
 
 function Checkout() {
-    const [isAddAdrdress,setIsAddAddress] = useState(false);
+    const [isAddAdrdress,setIsAddAddress] = useState(false);;
+    const [addressContent,setAddressContent]=useState([]);
+    const [access,SetAccess] = useState(null);
 
     const token = localStorage.getItem('token');
 
+    useEffect(()=>{
+        fetchingAddress()
+    },[access])
+
+
+    async function fetchingAddress(){
+        const response = await axios.get('http://localhost:5000/api/address',{headers:{Authorization:`Bearer ${token}`}});
+        setAddressContent(response.data.message)
+    }
 
     function handleAddress(){
         setIsAddAddress(!isAddAdrdress)
@@ -22,9 +33,12 @@ function Checkout() {
         </Grid>
          {isAddAdrdress ? 
             <Card className='newAddressContent' >
-                <NewAddressForm userToken={token} />
+                <NewAddressForm userToken={token} accessData={SetAccess} addresshandle={setIsAddAddress} />
             </Card> 
             : null }
+        <Grid className='addressDisplay' >
+            <AddressDisplay content={addressContent} />
+        </Grid>
       </Grid>
       <Grid className='rightSideContent' >
 
@@ -35,27 +49,21 @@ function Checkout() {
 
 function AddAddress({changeFun}){
 
-    const [addressContnet,setAddressContent] = useState([]);
+    // const [addressContnet,setAddressContent] = useState([]);
     
-
-
-
-    
-
-
     return(
-        <>
+        <Card className='card' >
             <Grid className='addressContent' >
                 <Typography variant='body1' style={{fontWeight:'bold'}} >DELIVERY ADDRESS</Typography>
             </Grid>
             <Grid className='addressBtn' >
                 <Button type='button' variant='outlined' onClick={changeFun} >+ Add new address</Button>
             </Grid>
-        </>
+        </Card>
     )
 }
 
- function NewAddressForm({userToken}){
+ function NewAddressForm({userToken,accessData,addresshandle}){
     const [addressData,setAddressData]=useState({personName:'',mobilenumber:'',pincode:'',locality:'',address:'',city:'',state:'',landmark:'',alternate:''});
 
     async function handleAddressData({target}){
@@ -84,7 +92,10 @@ function AddAddress({changeFun}){
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/api/address',addressData,{headers:{Authorization:`Bearer ${userToken}`}})
+            const sendData = ()=> {return addressData}
+            accessData(sendData)
             if(response.status === 200) setAddressData({personName:'',mobilenumber:'',pincode:'',locality:'',address:'',city:'',state:'',landmark:'',alternate:''})
+            addresshandle(false)
         } catch (error) {
             console.log('submit form data error',error)
         }
@@ -110,12 +121,39 @@ function AddAddress({changeFun}){
             </Grid>
             <Grid className='inputData landmark' >
                 <TextField variant='outlined' label='Landmark' name='landmark' onChange={handleAddressData} value={addressData.landmark} />
-                <TextField variant='outlined' label='Alternate Phone Number' name='alternatePhoneNumber' onChange={handleAddressData} value={addressData.alternate} />
+                <TextField variant='outlined' label='Alternate Phone Number' name='alternate' onChange={handleAddressData} value={addressData.alternate} />
             </Grid>
             <Grid className='saveBtn' >
                 <Button type='submit' variant='contained' >Save</Button>
             </Grid>
         </form>
+    )
+}
+
+function AddressDisplay({content}){
+    const [selectedValue,setSeletectedValue] = useState(null);
+
+    function handleSelect({target:{value}}){
+        setSeletectedValue(value)
+    }
+
+    return(
+        <>
+            <RadioGroup value={selectedValue} onChange={handleSelect} className='radioGroup' >
+                {content.map((data,index)=>(
+                    <Card key={index} className='card' >
+                        <FormControlLabel value={index} control={<Radio/>} 
+                        label={
+                        <CardContent className='cardContent' >
+                            <Typography variant='body1' className='userName' >{data.personName}</Typography>
+                            <Typography variant='body2' className='userAddress' >{data.address},{data.locality},{data.landmark},{data.city},{data.state},{data.pincode}</Typography>
+                            <Typography variant='body2' className='userPhoneNumber' >{data.mobilenumber} {data.alternate}</Typography>
+                        </CardContent>
+                        } />    
+                    </Card>
+                ))}
+            </RadioGroup>
+        </>
     )
 }
 

@@ -175,6 +175,17 @@ function createServer() {
 
     })
 
+    app.get('/api/address',userAuthentication,async(req,res)=>{
+        const userInfo = req.user.userId;
+        try {
+            const collection = await connectDB('Address');
+            const {address} = await collection.findOne({userId:new ObjectId(userInfo)});
+            res.status(200).json({message:address})
+        } catch (error) {
+            console.log('sending address content error',error);
+        }
+    })
+
    app.get('/api/cart',userAuthentication,async(req,res)=>{ 
     const userInfo = req.user.userId;
     // console.log(userInfo)

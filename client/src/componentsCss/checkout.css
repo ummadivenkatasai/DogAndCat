@@ -1,16 +1,21 @@
 .checkoutContainer{
     min-height: 70rem;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     padding: 3rem 2rem;
 }
 
 .checkoutContainer .leftSideContent .addressContainer{
-    border: 2px solid red;
+    /* border: 2px solid red; */
     max-width: 50rem;
+    min-width: 50rem;
+}
+
+.checkoutContainer .leftSideContent .addressContainer .card{
+    padding: 1rem;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 2rem;
 }
 
 .checkoutContainer .leftSideContent .addressContainer .newAddressContent{
@@ -20,7 +25,8 @@
 }
 
 .checkoutContainer .leftSideContent .newAddressContent{
-    border: 2px solid green;
+    /* border: 2px solid green; */
+    margin-top: 1rem;
     width: 50rem;
     padding: 2rem;
 }
@@ -70,4 +76,42 @@
 .checkoutContainer .leftSideContent .newAddressContent .saveBtn button{
     width: 7rem;
     padding: 0.5rem;
+}
+
+
+.checkoutContainer .leftSideContent .addressDisplay .radioGroup{
+    /* border: 2px solid green; */
+    width: 50rem;
+    margin: 1rem 0rem;
+    /* padding: 2rem; */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.checkoutContainer .leftSideContent .addressDisplay .radioGroup .card{
+    /* border: 1px solid red; */
+    padding: 1rem;
+}
+
+.checkoutContainer .leftSideContent .addressDisplay .radioGroup .card label .MuiButtonBase-root{
+    position: relative;
+    bottom: 35px;
+}
+
+.checkoutContainer .leftSideContent .addressDisplay .radioGroup .card label .MuiTypography-root .cardContent{
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.checkoutContainer .leftSideContent .addressDisplay .radioGroup .card label .MuiTypography-root .cardContent .userName{
+    position: relative;
+    bottom: 10px;
+    font-weight: bold;
+}
+
+.checkoutContainer .leftSideContent .addressDisplay .radioGroup .card label .MuiTypography-root .cardContent .userPhoneNumber{
+    font-weight: 550;
 }
