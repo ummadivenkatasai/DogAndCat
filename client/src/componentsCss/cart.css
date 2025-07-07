@@ -109,3 +109,11 @@ min-width: 50rem
     width: 94%;
     background-color: orange;
 }
+
+.cartContainer .totalPriceContent .noItems{
+    /* border: 1px solid black; */
+    position: absolute;
+    left: 43rem;
+    padding: 2rem;
+    font-size: 1.5rem;
+}

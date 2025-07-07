@@ -20,11 +20,11 @@ function ListOfOrders(){
   )
 }
 
-function Orders({prop}) {
-  console.log('orders',prop)
+function Orders({isAuthenticated}) {
+  // console.log('orders',isAuthenticated)
   return (
     <>
-      {prop ? <ListOfOrders/> : <OrderSignIn/> }
+      {isAuthenticated ? <ListOfOrders/> : <OrderSignIn/> }
     </>
   )
 }

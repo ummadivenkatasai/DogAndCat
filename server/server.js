@@ -155,9 +155,35 @@ function createServer() {
                 await collection.updateOne({ userId: new ObjectId(userInfo) },{$inc:{[key]:cartData.qty}})
             }
             return res.status(200).json({message:'cart updated'})
-        }
+        }   
     } catch (error) {
         console.log('cat posting data error:',error)
+    }
+   })
+
+   app.post('/api/cart/clear',userAuthentication,async(req,res)=>{
+    const receivedCartData = req.body;
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('userCart');
+        const userCart = await collection.findOne({userId:new ObjectId(userInfo)});
+        if(!userCart) res.json({message:'user not found'});
+        await collection.updateOne({userId:new ObjectId(userInfo)},{$set:{cart:receivedCartData}})
+    } catch (error) {
+        console.log('clear cart error',error)
+    }
+   })
+
+   app.post('/api/orders',userAuthentication,async(req,res)=>{
+    const orderData = req.body;
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('orders');
+        const user = await collection.findOne({userId:new ObjectId(userInfo)});
+        if(!user) res.json({message:'user not found'});
+        await collection.updateOne({userId:new ObjectId(userInfo)},{$addToSet:{orders:orderData}},{ upsert: true })
+    } catch (error) {
+        console.log('posting order error',error)
     }
    })
 
