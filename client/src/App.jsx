@@ -16,6 +16,7 @@ import CatContent from './components/CatContent'
 import AddToCart from './components/AddToCart'
 import WishlistData from './components/WishlistData'
 import Checkout from './components/Checkout'
+import OrderSucess from './components/OrderSucess'
 
 
 
@@ -41,6 +42,7 @@ function App() {
         <Route path='wishlist' element={<WishlistData isAuthenticated={isSignIn} />} />
         <Route path='cart' element={<AddToCart isAuthenticated={isSignIn}  />} />
         <Route path='checkout' element={<Checkout />} />
+        <Route path='ordersuccess' element={<OrderSucess/>} />
         <Route path="login" element={<Signin prop={setIsSignIn} />} />
         <Route path="signup" element={<Signup/>} />
         <Route path='*' element={<PageNotFound/>} />

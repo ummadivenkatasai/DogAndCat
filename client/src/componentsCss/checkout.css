@@ -192,3 +192,15 @@
 .checkoutContainer .rightSideContent .paymentMode .verifyCaptcha button:not(:disabled) {
     background-color: darkorange;
 }
+
+.checkoutContainer .MuiCircularProgress-root{
+    position: absolute;
+    margin: auto;
+    /* border: 2px solid black; */
+    top: 20rem;
+    left: 50rem;
+}
+
+.checkoutContainer .MuiCircularProgress-root svg{
+    height: 7rem;
+}

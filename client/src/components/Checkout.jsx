@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../componentsCss/checkout.css";
-import { Button, Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Button, Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography, CircularProgress, Backdrop, Box } from "@mui/material";
 import { NumericFormat } from "react-number-format";
 import axios from "axios";
 import { CatCart, DogCart } from "./AddToCart";
+import { useNavigate } from "react-router-dom";
 
 function Checkout() {
   const [isAddAdrdress, setIsAddAddress] = useState(false);
@@ -14,10 +15,13 @@ function Checkout() {
   const [deliveryDate,setDeliveryDate]= useState(null);
   const [paymentCaptcha, setPaymentCaptch] = useState("");
   const [captcha, setCaptcha] = useState("");
+  const [isLoading,setIsLoading] = useState(false);
 
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const token = localStorage.getItem("token");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchingAddress();
@@ -88,12 +92,22 @@ function Checkout() {
     });
   }
 
-  function handleSubmit() {
-    sentOrder()
-    clearCart()
-    setCaptcha('');
-    setCartItems([]);
-    setFinalPrice(0);
+  async function handleSubmit() {
+    setIsLoading(true);
+    try {
+      sentOrder()
+      setTimeout(()=>{
+        clearCart()
+        setCaptcha('');
+        setCartItems([]);
+        setFinalPrice(0);
+        navigate('/ordersuccess')
+      },5000)
+    } catch (error) {
+      console.log('submit payment error',error)
+    }finally{
+      setIsAddAddress(false)
+    }
   }
 
   return (
@@ -151,6 +165,12 @@ function Checkout() {
           </Grid>
         </Grid>
       </Grid>
+      {isLoading ? <Backdrop open={isLoading} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
+        <Box textAlign="center">
+          <CircularProgress color="inherit" />
+          <div>Processing your order...</div>
+        </Box>
+      </Backdrop> : null}
     </Grid>
   );
 }
