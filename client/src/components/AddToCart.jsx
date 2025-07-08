@@ -118,8 +118,8 @@ function CatCart({ content, changeFun, itemValue, display }) {
       </Grid>
       <Grid className='itemDetails' >
         <Typography variant='body1' className='itemName' >{content.breeds[0].name}</Typography>
-        <Typography variant='body1' className='itemPrice' >{content.price}</Typography>
-        <Typography variant='body1' className='totalPrice' >Price:{price} * Qunatity:{qty} = {totalPrice}</Typography>
+        <Typography variant='body1' className='itemPrice' >Price: {content.price}</Typography>
+        <Typography variant='body1' className='totalPrice' >Total: {price} * {qty} = {totalPrice}</Typography>
       </Grid>
       {display === 'true' ? null :
         <Grid className='itemQty' >

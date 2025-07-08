@@ -6,6 +6,25 @@ import axios from "axios";
 import { CatCart, DogCart } from "./AddToCart";
 import { useNavigate } from "react-router-dom";
 
+class OrderProcessor {
+  constructor(cartItems, deliveryDate, finalPrice) {
+    this.cartItems = cartItems;
+    this.deliveryDate = deliveryDate;
+    this.date = new Date();
+    this.finalPrice = finalPrice;
+  }
+
+  getProcessedCartData() {
+    return this.cartItems.map((item) => ({
+      ...item,
+      ordered: String(this.date),
+      delivery: this.deliveryDate,
+      total:this.finalPrice
+    }));
+  }
+}
+
+
 function Checkout() {
   const [isAddAdrdress, setIsAddAddress] = useState(false);
   const [addressContent, setAddressContent] = useState([]);
@@ -76,13 +95,8 @@ function Checkout() {
   }
 
   async function sentOrder() {
-    const date = new Date()
-    let cartData = [...cartItems];
-    cartData = cartData.map((data)=>({
-      ...data,
-      ordered:String(date),
-      delivery:deliveryDate
-    }))
+    const processor = new OrderProcessor(cartItems,deliveryDate,finalPrice);
+    const cartData = processor.getProcessedCartData();
     await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
   }
 
@@ -93,6 +107,8 @@ function Checkout() {
   }
 
   async function handleSubmit() {
+    const processor = new OrderProcessor(cartItems,deliveryDate,finalPrice);
+    const cartData = processor.getProcessedCartData();
     setIsLoading(true);
     try {
       sentOrder()
@@ -101,7 +117,7 @@ function Checkout() {
         setCaptcha('');
         setCartItems([]);
         setFinalPrice(0);
-        navigate('/ordersuccess')
+        navigate('/ordersuccess',{state:{cartData}})
       },5000)
     } catch (error) {
       console.log('submit payment error',error)

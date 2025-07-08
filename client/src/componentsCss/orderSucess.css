@@ -1,0 +1,48 @@
+.orderSuccess{
+    min-height: 40rem;
+    padding: 2rem;
+}
+
+.orderSuccess .successContent{
+    /* border: 2px solid black; */
+    /* align-items: center; */
+    text-align: center;
+    padding: 1.5rem 0rem;
+}
+
+.orderSuccess .successContent .successIcon{
+    font-size: 7rem;
+    color: #338cff;
+    margin-bottom: 1rem;
+}
+
+.orderSuccess .orderList{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.orderSuccess .orderList .contentItem{
+    display: flex;
+    gap: 5rem;
+}
+
+.orderSuccess .orderList .contentItem .itemImage img{
+    height: 10rem;
+    width: 15rem;
+}
+
+.orderSuccess .orderList .contentItem .itemDetails{
+    display: flex;
+    flex-direction: column;
+    gap: 0.50rem;
+}
+
+.orderSuccess .navigateBtn{
+    /* border: 1px solid black; */
+    padding: 2rem;
+    display: flex;
+    justify-content: space-around;
+}
