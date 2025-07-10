@@ -58,6 +58,66 @@ function createServer() {
         return res.status(200).json({catData});
     })
 
+   app.get('/api/wishlist',userAuthentication,async(req,res)=>{
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('wishlists');
+        const userWishlist = await collection.findOne({ userId: new ObjectId(userInfo) });
+        const items = userWishlist.items;
+        res.status(200).json({ message:items });
+    } catch (error) {
+        console.log('fecthing wishlist data error',error)
+    }
+   })
+
+   app.get('/api/wishlist/:id',userAuthentication,async(req,res)=>{
+       const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('wishlists');
+        const userWishlist =await collection.findOne({userId: new ObjectId(userInfo)});
+        if(!userWishlist) res.json({ message:'user not found' });
+        res.status(200).json({items:userWishlist.items})
+    } catch (error) {
+        console.log('error on getting wishlist data',error);
+        res.status(500).json({message:'internal server error'});
+    }
+   })
+
+   app.get('/api/address',userAuthentication,async(req,res)=>{
+        const userInfo = req.user.userId;
+        try {
+            const collection = await connectDB('Address');
+            const {address} = await collection.findOne({userId:new ObjectId(userInfo)});
+            res.status(200).json({message:address})
+        } catch (error) {
+            console.log('sending address content error',error);
+        }
+    })
+
+   app.get('/api/cart',userAuthentication,async(req,res)=>{ 
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('userCart');
+        const userCart = await collection.findOne({userId:new ObjectId(userInfo)});
+        const cartData = userCart.cart;
+        if(!userCart) return res.json({message:'user not found'});
+        res.status(200).json({cartData})
+    } catch (error) {
+        console.log('cart fetching data error',error)
+    }
+   })
+
+   app.get('/api/orders',userAuthentication,async(req,res)=>{
+    const userInfo = req.user.userId;
+    try {
+        const collection = await connectDB('orders')
+        const {orders} = await collection.findOne({userId: new ObjectId(userInfo)});
+        return res.json({message:orders})
+    } catch (error) {
+        console.log('fetching order error',error)
+    }
+   })
+
    app.post('/api/wishlist/cat',userAuthentication,async(req,res)=>{
     const { catData } =req.body;
     const userInfo = req.user.userId;
@@ -98,31 +158,6 @@ function createServer() {
         }
     } catch (error) {
         console.log('post dog wishlist error',error)
-    }
-   })
-
-   app.get('/api/wishlist',userAuthentication,async(req,res)=>{
-    const userInfo = req.user.userId;
-    try {
-        const collection = await connectDB('wishlists');
-        const userWishlist = await collection.findOne({ userId: new ObjectId(userInfo) });
-        const items = userWishlist.items;
-        res.status(200).json({ message:items });
-    } catch (error) {
-        console.log('fecthing wishlist data error',error)
-    }
-   })
-
-   app.get('/api/wishlist/:id',userAuthentication,async(req,res)=>{
-       const userInfo = req.user.userId;
-    try {
-        const collection = await connectDB('wishlists');
-        const userWishlist =await collection.findOne({userId: new ObjectId(userInfo)});
-        if(!userWishlist) res.json({ message:'user not found' });
-        res.status(200).json({items:userWishlist.items})
-    } catch (error) {
-        console.log('error on getting wishlist data',error);
-        res.status(500).json({message:'internal server error'});
     }
    })
 
@@ -201,30 +236,7 @@ function createServer() {
 
     })
 
-    app.get('/api/address',userAuthentication,async(req,res)=>{
-        const userInfo = req.user.userId;
-        try {
-            const collection = await connectDB('Address');
-            const {address} = await collection.findOne({userId:new ObjectId(userInfo)});
-            res.status(200).json({message:address})
-        } catch (error) {
-            console.log('sending address content error',error);
-        }
-    })
-
-   app.get('/api/cart',userAuthentication,async(req,res)=>{ 
-    const userInfo = req.user.userId;
-    // console.log(userInfo)
-    try {
-        const collection = await connectDB('userCart');
-        const userCart = await collection.findOne({userId:new ObjectId(userInfo)});
-        const cartData = userCart.cart;
-        if(!userCart) return res.json({message:'user not found'});
-        res.status(200).json({cartData})
-    } catch (error) {
-        console.log('cart fetching data error',error)
-    }
-   })
+    
 
     app.post('/api/mobileNumber', async (req, res) => {
         const { mobileNumber } = req.body;
@@ -255,20 +267,6 @@ function createServer() {
             return res.status(201).json({ message: 'Invalid mail' })
         }
     })
-
-    // app.post('/api/address',userAuthentication,async(req,res)=>{
-    //     const data = req.body;
-    //     const userInfo = req.user.userId;
-    //     try {
-    //         const collection = await connectDB('Address');
-    //         const userAddress = await collection.findOne({userId:new ObjectId(userInfo)})
-            
-    //         // res.status(200).json({message:'address received'})
-    //     } catch (error) {
-    //         console.log('geeting address data from frontend error',error)
-    //     }
-
-    // })
 
     app.post('/api/auth/signin', async (req, res) => {
         const { email, password } = req.body;
