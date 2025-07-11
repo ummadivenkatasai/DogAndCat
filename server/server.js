@@ -183,12 +183,13 @@ function createServer() {
                     let result = currentQty - differnce
                     const key = `cart.${alreadyExists}.qty`;
                     await collection.updateOne({userId: new ObjectId(userInfo)},{$set:{[key]:result}})
-            }else{
-                const newQty = currentQty+cartData.qty;
-                if(newQty>5) return res.status(400).json({message:'product limit exceeds'});
-                const key = `cart.${alreadyExists}.qty`;
-                await collection.updateOne({ userId: new ObjectId(userInfo) },{$inc:{[key]:cartData.qty}})
             }
+            // else{
+            //     const newQty = currentQty+cartData.qty;
+            //     if(newQty>5) return res.status(400).json({message:'product limit exceeds'});
+            //     const key = `cart.${alreadyExists}.qty`;
+            //     await collection.updateOne({ userId: new ObjectId(userInfo) },{$inc:{[key]:cartData.qty}})
+            // }
             return res.status(200).json({message:'cart updated'})
         }   
     } catch (error) {

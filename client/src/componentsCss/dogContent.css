@@ -8,7 +8,7 @@
 
 .dogcontent .itemList{
     display: flex;
-    gap: 5rem;
+    /* gap: 5rem; */
     /* border: 2px solid black; */
     height: 36rem;
     width: 100%;
@@ -39,6 +39,13 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    position: relative;
+    right: 15rem;
+}
+
+.dogcontent .itemList .dogContentData .dogContentInfo p{
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
 
 .dogcontent .itemList .dogContentData .dogContentButtons{

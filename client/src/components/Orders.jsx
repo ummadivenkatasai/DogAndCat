@@ -97,8 +97,8 @@ function getStepIndex(orderDate){
   const diffHours = diffMs / (1000 * 60 * 60);
 
   if (diffHours < 24) return 0;              
-  if (diffHours < 72) return 1;              
-  if (diffHours < 74) return 2;              
+  if (diffHours < 48) return 1;              
+  if (diffHours < 72) return 2;              
   return 3;                                  
 };
 

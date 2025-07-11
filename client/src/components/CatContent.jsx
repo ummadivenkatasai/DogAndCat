@@ -21,6 +21,7 @@ function CatContent({isAuthenticated}) {
     const [invalidPincode,setInvalidPincode]= useState('')
     let [cartQty,setCartQty]=useState(1);
     const [carouselcats,setCarouselCats] = useState([]);
+    const [isCartClick,setIsCartClick] = useState(false)
 
     const navigate = useNavigate();
 
@@ -85,9 +86,9 @@ function CatContent({isAuthenticated}) {
           const result = await axios.post(`http://localhost:5000/api/wishlist/cat`,{catData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
         }else if( type === 'cartBtn' ){
+          setIsCartClick(true)
           const cartData = {...catData,qty:cartQty};
           const cartResult = await axios.post(`http://localhost:5000/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
-          console.log(cartResult)
         }
         } catch (error) {
          if(error) alert('quantity exceeds')
@@ -138,7 +139,7 @@ function CatContent({isAuthenticated}) {
 
                       <CatContentData containerName='sub-item catContentInfo' breedName={catInfo.catName} value={catData.price} description={catInfo.description} origin={catInfo.country} catWeight={catInfo.weight}  />
 
-                      <CatWishListAndAddToCartBtn containerName='sub-item catContentButtons' wishClassname='wishListIconBtn btnContent' wishValidate={validatieAuthentication} wishIconClassname={isWishList ? 'selected' : 'unselected' } cartClassname='addToCart btnContent' cartValidate={validatieAuthentication}  />
+                      <CatWishListAndAddToCartBtn containerName='sub-item catContentButtons' wishClassname='wishListIconBtn btnContent' wishValidate={validatieAuthentication} wishIconClassname={isWishList ? 'selected' : 'unselected' } cartClassname='addToCart btnContent' cartValidate={validatieAuthentication} cartStatus={isCartClick}  />
 
                       <CatQuantityContent containerName='sub-item catQtyBtn' value={cartQty} contentHandle={handleCartQty} />
 
@@ -151,9 +152,7 @@ function CatContent({isAuthenticated}) {
                       </Grid>
 
                     </Grid>
-                  <Grid className='wishlistContent' >
-                    <Button href={ isAuthenticated ? '/wishlist' : '/login' } type='button'  >WishList</Button>
-                  </Grid>  
+                  
               </Grid>
                 <Grid className='randomCats' >
                   <CarouselCatImages containerName='randomCatsContent' contentData={carouselcats} />
@@ -176,11 +175,11 @@ function CatContentData({ containerName, breedName, value, description, origin, 
   )
 }
 
-function CatWishListAndAddToCartBtn({ containerName, wishClassname, wishValidate, wishIconClassname, cartClassname, cartValidate }){
+function CatWishListAndAddToCartBtn({ containerName, wishClassname, wishValidate, wishIconClassname, cartClassname, cartValidate, cartStatus }){
   return(
     <Grid className={containerName} >
       <Button className={wishClassname} type='button' variant='contained' onClick={()=> wishValidate('wishListBtn') } > <FavoriteIcon className={wishIconClassname} /> </Button>
-      <Button className={cartClassname} type='button' variant='contained' onClick={()=> cartValidate('cartBtn') } >Add To Cart</Button>
+      <Button className={cartClassname} type='button' variant='contained' onClick={()=> cartValidate('cartBtn') } href={cartStatus === true ? '/cart' : null } >{cartStatus === true ? 'Cart' : 'Add To Cart' }</Button>
     </Grid>
   )
 }

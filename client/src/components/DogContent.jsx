@@ -19,6 +19,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
   const [invalidPincode,setInvalidPincode]= useState('');
   let [cartQty,setCartQty]=useState(1);
   const [carouselDogs,setCarouselDogs] = useState([]);
+  const [isCartClick,setIsCartClick] = useState(false)
   
 
   const navigate = useNavigate();
@@ -80,9 +81,9 @@ function DogContent({isAuthenticated}) { //onAddToCart
           const result = await axios.post(`http://localhost:5000/api/wishlist/dog`,{dogData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
         }else if( type === 'cartBtn' ){
+          setIsCartClick(true);
            const cartData = {...dogData,qty:cartQty};
           const cartResult = await axios.post(`http://localhost:5000/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
-          console.log(cartResult)
         }
         } catch (error) {
          if(error) alert('quantity exceeds')
@@ -135,7 +136,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
               </Grid>
               <Grid className="sub-item dogContentButtons">
                 <Button className="wishlistIconBtn btnContent" type='button' variant="contained" onClick={()=>validatieAuthentication('wishListBtn')}> <FavoriteIcon className={isWishList ? 'selected' : 'unselected' } /> </Button>
-                <Button className="addToCart btnContent" type="button" variant="contained" onClick={()=>validatieAuthentication('cartBtn')}> Add To Cart</Button>
+                <Button className="addToCart btnContent" type="button" variant="contained" onClick={ ()=> validatieAuthentication('cartBtn') } href={isCartClick === true ? '/cart' : null } >{isCartClick === true ? 'Cart' : 'Add To Cart' }</Button>
               </Grid>
               <Grid className='sub-item dogQtyBtn' >
                 <Button type="button" className="decrement qtyContent" onClick={()=> handleCartQty('decrement') } disabled={ cartQty === 1 } ><MinimizeIcon/></Button>
@@ -152,9 +153,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
               <Grid className="delivery">{pincodePlace.status === "Success" ? (<Typography variant="body1">Delivery with in 3 days</Typography>) : null}
               </Grid>
             </Grid>
-            <Grid className="wishlistContent">
-              <Button href={isAuthenticated ? '/wishlist' : '/login'} type="button" >WishList</Button>
-            </Grid>
+            
           </Grid>
           <Grid className='randomDogs' >
             <CarouselDogImages dogImagesData={carouselDogs} />
