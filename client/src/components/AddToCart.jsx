@@ -8,6 +8,8 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 
+const token = localStorage.getItem('token')
+
 function AddToCart({ isAuthenticated }) {
 
   const [cartContent, setCartContent] = useState([]);
@@ -17,7 +19,6 @@ function AddToCart({ isAuthenticated }) {
 
 
   const navigate = useNavigate();
-  const token = localStorage.getItem('token')
 
   useEffect(() => {
     if (!isAuthenticated) navigate('/login')
@@ -32,7 +33,6 @@ function AddToCart({ isAuthenticated }) {
       setTotalamt(value);
     }
   }, [cartContent])
-
 
   async function fecthingCartData() {
     try {
@@ -52,10 +52,10 @@ function AddToCart({ isAuthenticated }) {
       newQty--
       setCartQty(prev => prev - 1)
     }
-    const updataItems = { ...item, qty: newQty, updateType: type };
+    const updateItems = { ...item, qty: newQty, updateType: type };
 
     try {
-      await axios.post('http://localhost:5000/api/cart', updataItems, { headers: { Authorization: `Bearer ${token}` } })
+      await axios.post('http://localhost:5000/api/cart', updateItems, { headers: { Authorization: `Bearer ${token}` } })
     } catch (error) {
       console.log('update quantity sending error', error)
     }
@@ -104,6 +104,22 @@ function AddToCart({ isAuthenticated }) {
   )
 }
 
+async function updateProducts({type,product}) {
+  
+  if( type === 'delete' ){
+    if(product._id){
+      const productDetails = { ...product, updateType:'delete' }
+      const response = await axios.post(`http://localhost:5000/api/cart/`,productDetails,{headers:{Authorization:`Bearer ${token}`}});
+      window.location.reload()
+    }
+  }else if(type === 'wishlist' ){
+    if(product._id){
+      const updateItems = { ...product, updateType:'wishlist' };
+      const response = await axios.post('http://localhost:5000/api/cart',updateItems,{headers:{Authorization:`Bearer ${token}`}})
+      window.location.reload()
+    }
+  }
+}
 
 function CatCart({ content, changeFun, itemValue, display }) {
 
@@ -117,9 +133,15 @@ function CatCart({ content, changeFun, itemValue, display }) {
         <img src={content.url} alt={content.id} />
       </Grid>
       <Grid className='itemDetails' >
-        <Typography variant='body1' className='itemName' >{content.breeds[0].name}</Typography>
-        <Typography variant='body1' className='itemPrice' >Price: {content.price}</Typography>
-        <Typography variant='body1' className='totalPrice' >Total: {price} * {qty} = {totalPrice}</Typography>
+        <Grid className='itemProductDetails' >
+          <Typography variant='body1' className='itemName' >{content.breeds[0].name}</Typography>
+          <Typography variant='body1' className='itemPrice' >Price: {content.price}</Typography>
+          <Typography variant='body1' className='totalPrice' >Total: {price} * {qty} = {totalPrice}</Typography>
+        </Grid>
+        <Grid className='options' >
+          <Button type='button' onClick={()=> updateProducts({ type:'delete', product:content }) } >Delete</Button>
+          <Button type='button' onClick={()=> updateProducts({ type:'wishlist', product:content }) } >Wishlist</Button>
+        </Grid>
       </Grid>
       {display === 'true' ? null :
         <Grid className='itemQty' >
@@ -143,9 +165,15 @@ function DogCart({ content, changeFun, itemValue, display }) {
         <img src={content.message} alt={content.breed} />
       </Grid>
       <Grid className='itemDetails' >
-        <Typography variant='body1' className='itemName' >{content.breed}</Typography>
+        <Grid className='itemProductDetails' >
+          <Typography variant='body1' className='itemName' >{content.breed}</Typography>
         <Typography variant='body1' className='itemPrice' >{content.price}</Typography>
         <Typography variant='body1' className='totalPrice' >Price:{price} * Qunatity:{qty} = {totalPrice}</Typography>
+        </Grid>
+        <Grid className='options' >
+          <Button type='button' onClick={()=> updateProducts({ type:'delete', product:content }) } >Delete</Button>
+          <Button type='button' onClick={()=> updateProducts({ type:'wishlist', product:content }) }>Wishlist</Button>
+        </Grid>
       </Grid>
       {display === 'true' ? null :
         <Grid className='itemQty' >

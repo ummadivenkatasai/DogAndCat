@@ -30,8 +30,18 @@ min-width: 50rem
 }
 
 .cartContainer .cartContent .itemDetails{
-    position: relative;
-    right: 2rem;
+    /* position: relative; */
+    /* right: 2rem; */
+    padding: 1rem 2rem;
+    /* border: 1px solid black; */
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cartContainer .cartContent .itemDetails .options button{
+    font-size: 0.7rem;
 }
 
 .cartContainer .cartContent .itemQty{
