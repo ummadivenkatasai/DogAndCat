@@ -242,7 +242,20 @@ function createServer() {
 
     })
 
-
+    app.post('/api/products',userAuthentication,async(req,res)=>{
+        const filterData = req.body;
+        const userInfo = req.user.userId;
+        const breedName = filterData.breed;
+        try {
+            if(filterData.category === 'dog'){
+                const collection = await connectToDatabase({ db:'DogAndCatApiData', col:'DogData' })
+                const breedcollection = collection.filter((currentvalue) => breedName.includes(currentvalue.breed) )
+               res.status(200).json({message:breedcollection})
+            }
+        } catch (error) {
+            console.log('fliter error',error);
+        }
+    })
 
     app.post('/api/mobileNumber', async (req, res) => {
         const { mobileNumber } = req.body;

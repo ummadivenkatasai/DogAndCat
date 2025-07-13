@@ -1,6 +1,7 @@
 import "../componentsCss/dog.css";
 import {Card,CardContent,CardMedia,Checkbox,FormControl,Grid,MenuItem,OutlinedInput,Select,Typography,
 } from "@mui/material";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
@@ -9,14 +10,18 @@ function DogData (){
   const [breedName, setBreedName] = useState([]);
 
   const [selectedBreedName, setSelectedBreedName] = useState([]);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    async function dogDataFetching() {
+    dogDataFetching();
+  }, []);
+
+  async function dogDataFetching() {
       const breedSet = new Set();
       try {
         const response = await fetch("http://localhost:5000/api/dogs");
         const responseData = await response.json();
-        setDogData(responseData);
+          setDogData(responseData);
         responseData.map((data) => {
           breedSet.add(data.breed);
         });
@@ -25,11 +30,24 @@ function DogData (){
         console.log("dog data error:", error);
       }
     }
-    dogDataFetching();
-  }, []);
 
-  function selectBreed({ target: { value } }) {
+  async function selectBreed({ target: { value } }) {
     setSelectedBreedName(value);
+    const requestedBody={
+      category:'dog',
+      breed:value
+    }
+    try {
+      if( value.length == 0 ){
+        console.log(value.length)
+        dogDataFetching()
+      }else{
+        const response = await axios.post(`http://localhost:5000/api/products`,requestedBody,{headers:{ Authorization:`Bearer ${token}` }})
+      setDogData(response.data.message)
+      }
+    } catch (error) {
+      console.log('sending dog filters error',error)
+    }
   }
 
   return (
@@ -60,7 +78,7 @@ function DogData (){
           </FormControl>
         </Grid>
       </Grid>
-      <Grid container className="dogImages" rowSpacing={5} columnSpacing={4}>
+      <Grid container className="dogImages" >
         {dogData.map((data) => (
           <Grid className="images" key={data._id} size={4}>
             <Link to={`/dog/${data._id}`} target="_blank">

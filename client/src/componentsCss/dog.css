@@ -4,8 +4,10 @@
 }
 
 .dogData .dogFilters{
-    min-width: 22.5vw;
-    min-height: 70vw;
+    /* min-width: 15vw; */
+    max-width: 20vw;
+    min-height: 100vh;
+    max-height: fit-content;
     padding: 2rem;
 }
 
@@ -15,12 +17,22 @@
 }
 
 .dogData .dogImages{
-    max-width: 77.5vw;
+    max-width: 80vw;
+    min-width: 80vw;
     padding: 2rem;
+    /* border: 2px solid black; */
+    display: flex;
+    row-gap: 2rem;
+    /* position: relative;
+    left: 20rem; */
 }
 
 .dogData .dogImages a{
     text-decoration: none;
+}
+
+.dogData .dogImages .images .card{
+    width: 22rem;
 }
 
 .dogData .dogImages .images .card .cardImage{
@@ -30,6 +42,8 @@
 
 .dogData .dogImages .images .card .cardContent{
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
+
+
+/* line no 81 rowSpacing={5} columnSpacing={4} */
