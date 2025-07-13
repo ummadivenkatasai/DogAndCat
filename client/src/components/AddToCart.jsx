@@ -52,6 +52,7 @@ function AddToCart({ isAuthenticated }) {
       newQty--
       setCartQty(prev => prev - 1)
     }
+    
     const updateItems = { ...item, qty: newQty, updateType: type };
 
     try {
@@ -121,7 +122,7 @@ async function updateProducts({type,product}) {
   }
 }
 
-function CatCart({ content, changeFun, itemValue, display }) {
+function CatCart({ content, changeFun, itemValue, display, options }) {
 
   const price = content.price;
   const qty = content.qty;
@@ -138,10 +139,10 @@ function CatCart({ content, changeFun, itemValue, display }) {
           <Typography variant='body1' className='itemPrice' >Price: {content.price}</Typography>
           <Typography variant='body1' className='totalPrice' >Total: {price} * {qty} = {totalPrice}</Typography>
         </Grid>
-        <Grid className='options' >
+        { options === 'false' ? null : <Grid className='options' >
           <Button type='button' onClick={()=> updateProducts({ type:'delete', product:content }) } >Delete</Button>
           <Button type='button' onClick={()=> updateProducts({ type:'wishlist', product:content }) } >Wishlist</Button>
-        </Grid>
+        </Grid> }
       </Grid>
       {display === 'true' ? null :
         <Grid className='itemQty' >
@@ -155,7 +156,7 @@ function CatCart({ content, changeFun, itemValue, display }) {
   )
 }
 
-function DogCart({ content, changeFun, itemValue, display }) {
+function DogCart({ content, changeFun, itemValue, display, options }) {
   const price = content.price;
   const qty = content.qty;
   const totalPrice = price * qty;
@@ -170,10 +171,10 @@ function DogCart({ content, changeFun, itemValue, display }) {
         <Typography variant='body1' className='itemPrice' >{content.price}</Typography>
         <Typography variant='body1' className='totalPrice' >Price:{price} * Qunatity:{qty} = {totalPrice}</Typography>
         </Grid>
-        <Grid className='options' >
+        { options === 'false' ? null : <Grid className='options' >
           <Button type='button' onClick={()=> updateProducts({ type:'delete', product:content }) } >Delete</Button>
           <Button type='button' onClick={()=> updateProducts({ type:'wishlist', product:content }) }>Wishlist</Button>
-        </Grid>
+        </Grid> }
       </Grid>
       {display === 'true' ? null :
         <Grid className='itemQty' >

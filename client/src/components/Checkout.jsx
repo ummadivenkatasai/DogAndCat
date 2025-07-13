@@ -419,9 +419,9 @@ function DisplayCartItems({ content }) {
     <>
       {content.map((data) =>
         data.id ? (
-          <CatCart key={data._id} content={data} display="true" />
+          <CatCart key={data._id} content={data} display="true" options='false' />
         ) : (
-          <DogCart key={data._id} content={data} display="true" />
+          <DogCart key={data._id} content={data} display="true" options='false' />
         )
       )}
     </>
