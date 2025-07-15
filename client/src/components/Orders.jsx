@@ -96,10 +96,12 @@ function getStepIndex(orderDate){
   const diffMs = now - orderedDate;
   const diffHours = diffMs / (1000 * 60 * 60);
 
-  if (diffHours < 24) return 0;              
-  if (diffHours < 48) return 1;              
-  if (diffHours < 72) return 2;              
-  return 3;                                  
+  if (diffHours < 24) return 0;                
+  if (diffHours < 48) return 1;                
+  if (diffHours < 79) return 2;                
+  if (diffHours < 82) return 3;                
+  if (diffHours < 85) return 3;                
+  return 4;                                  
 };
 
 function ShippingDetails({order}){
@@ -107,7 +109,7 @@ function ShippingDetails({order}){
   const orderDate = `${order.slice(8, 10)}-${order.slice(4,7)}-${order.slice(11,15)}`
 
   const activeStep = getStepIndex(orderDate);
-  const steps = ["Ordered", "Shipped", "Out for Delivery", "Delivered"];
+  const steps = ["Ordered", "Shipped", 'On Tranist',"Out for Delivery", "Delivered"];
 
   return(
     <Box>

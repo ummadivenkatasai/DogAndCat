@@ -16,7 +16,7 @@
 
 .orderBody .orderItem{
     /* border: 1px solid red; */
-    width: 80rem;
+    width: 93rem;
     padding: 1rem;
     display: flex;
     flex-direction: column;
@@ -28,6 +28,8 @@
     display: flex;
     flex-direction: row;
     gap: 5rem;
+    /* border: 1px solid black; */
+    justify-content: space-between;
 }
 
 .orderBody .orderItem .card .cardImage{
@@ -56,7 +58,7 @@
 }
 
 .orderBody .orderItem .card .productShipping .MuiBox-root .MuiStepper-root .MuiStep-root .MuiStepLabel-root .MuiStepLabel-labelContainer .MuiStepLabel-label{
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     /* border: 1px solid red; */
     width: 7rem;
 }
