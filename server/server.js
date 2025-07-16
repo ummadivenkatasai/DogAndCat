@@ -243,14 +243,66 @@ function createServer() {
     })
 
     app.post('/api/products',userAuthentication,async(req,res)=>{
-        const filterData = req.body;
+        const fliterData = req.body;
         const userInfo = req.user.userId;
-        const breedName = filterData.breed;
+
         try {
-            if(filterData.category === 'dog'){
+            if(fliterData.category === 'dog'){
+                const breedName = fliterData.data;
                 const collection = await connectToDatabase({ db:'DogAndCatApiData', col:'DogData' })
                 const breedcollection = collection.filter((currentvalue) => breedName.includes(currentvalue.breed) )
                res.status(200).json({message:breedcollection})
+            }else if(fliterData.category === 'cat'){
+                // const { breedNameSelected, temperamentSelected, countrySelected, lifeSpanSelected, energySelected } = fliterData.data;
+                const { breedNameSelected=[], temperamentSelected=[], countrySelected=[], lifeSpanSelected=[], energySelected } = fliterData.data
+                const collection = await connectToDatabase({ db:'DogAndCatApiData', col:'CatData' });
+                
+                let fliterContent = collection;
+
+                if(breedNameSelected.length>0){
+                    
+                    fliterContent = fliterContent.filter((value) => {
+                        const breed = value.breeds[0]
+                        return breed && breedNameSelected.includes(breed.name)
+                    } )
+                }
+
+                if(temperamentSelected.length>0){
+                    fliterContent = fliterContent.filter((value)=>{
+                        const breed = value.breeds[0]
+                        if(!breed || !breed.temperament) return false
+                        const temperamentData = breed.temperament.split(', ')
+                        return temperamentData.some((data)=> temperamentSelected.includes(data) )
+                    })
+                }
+
+                if(countrySelected.length !=0 ){
+                    fliterContent = fliterContent.filter((value)=> {
+                        const breed = value.breeds[0]
+                        return breed && countrySelected.includes(breed.origin)
+                    } )
+                }
+
+                if(lifeSpanSelected.length>0){
+                    fliterContent = fliterContent.filter((value)=>{
+                        const breed = value.breeds[0]
+                        if(!breed || !breed.life_span) return false
+                        const lifeSpanData = breed.life_span.split(' - ');
+                        return lifeSpanData.some((data)=> countrySelected.includes(data) )
+                    })
+                }
+
+                if(energySelected.length !=0 ){
+                    fliterContent = fliterContent.filter((value)=>{
+                        const breed = value.breeds[0];
+                        return breed && breed.energy_level === energySelected
+                    })
+                }
+                
+                return res.status(200).json({message: fliterContent })
+
+            }else{
+                return res.status(400).json({message:'invalid category'})
             }
         } catch (error) {
             console.log('fliter error',error);
@@ -320,7 +372,8 @@ function createServer() {
         }
     })
 
-    
+    // const details = 'my name is venkatasai';
+    // console.log(details.split(' '))
 
     return app;
 

@@ -35,7 +35,7 @@ function DogData (){
     setSelectedBreedName(value);
     const requestedBody={
       category:'dog',
-      breed:value
+      data:value
     }
     try {
       if( value.length == 0 ){
