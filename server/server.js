@@ -5,6 +5,7 @@ require('dotenv').config();
 const { connectDB, connectToDatabase, client, insertToDatabase, connectToLimtDatabase } = require('./database');
 const { ObjectId } = require('mongodb');
 const userAuthentication = require('./userAuthentication');
+const { User, Pets } = require('./user')
 
 function createServer() {
     const app = express();
@@ -216,13 +217,24 @@ function createServer() {
     })
 
     app.post('/api/orders', userAuthentication, async (req, res) => {
-        const orderData = req.body;
+        const cartData  = req.body;
         const userInfo = req.user.userId;
         try {
+            
             const collection = await connectDB('orders');
+            const dogCollection = await connectDB('DogData');
+            const catCollection = await connectDB('CatData');
             const user = await collection.findOne({ userId: new ObjectId(userInfo) });
+            
             if (!user) res.json({ message: 'user not found' });
-            await collection.updateOne({ userId: new ObjectId(userInfo) }, { $addToSet: { orders: orderData } }, { upsert: true })
+            await collection.updateOne({ userId: new ObjectId(userInfo) }, { $addToSet: { orders: cartData } }, { upsert: true })
+
+            for( const item of cartData ){
+                const isCat = 'url' in item;
+                const db = isCat ? catCollection : dogCollection;
+                await db.updateOne({ _id: new ObjectId(item._id)},{ $inc:{ stock: -item.qty } }) 
+            }
+
         } catch (error) {
             console.log('posting order error', error)
         }
@@ -345,21 +357,22 @@ function createServer() {
             const users = await connectToDatabase({ db: 'DogAndCatApiData', col: 'Users', });
             const user = users.find((value) => value.email === email);
             if (!user) return res.status(400).json({ message: 'User not found' });
+
             if (user.password !== password) {
                 return res.status(400).json({ message: 'Invalid credentials' })
             }
-            const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' })
+            const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '10h' })
             res.status(200).json({ token })
+            
         } catch (error) {
             res.status(500).send(error);
         }
     })
 
     app.post('/api/signup', async (req, res) => {
+        const userData = {...req.body}
         try {
-            const { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password } = req.body;
-            const user = { firstName, lastName, gender, dateOfBirth, mobileNumber, email, password }
-            const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: user })
+            const result = await insertToDatabase({ db: 'DogAndCatApiData', col: 'Users', data: userData })
             const userId = result.insertedId;
             await insertToDatabase({ db: 'DogAndCatApiData', col: 'wishlists', data: { userId, items: [] } })
             await insertToDatabase({ db: 'DogAndCatApiData', col: 'orders', data: { userId, orders: [] } })
@@ -371,9 +384,6 @@ function createServer() {
             res.status(500).json({ error: 'Server Error' })
         }
     })
-
-    // const details = 'my name is venkatasai';
-    // console.log(details.split(' '))
 
     return app;
 

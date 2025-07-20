@@ -3,6 +3,8 @@ import { Button, Card, CardContent, CardMedia, Checkbox, FormControl, Grid, Menu
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setProducts } from '../reduxComponent/slice';
 
 const checkBoxWidth={
   minWidth:250,
@@ -19,26 +21,18 @@ function CatData(){
     breedNameSelected:[], temperamentSelected:[],countrySelected:'', lifeSpanSelected:[], energySelected:'' 
   })
 
-  const initialRender = useRef(false)
+  const products = useSelector((state)=> state.products.products );
+  const dispatch = useDispatch()
 
   useEffect(()=>{
     fetchCatData()
-  },[])
-
-  // useEffect(()=>{
-  //   if(!initialRender.current){
-  //     initialRender.current = true
-  //     return
-  //   }
-  //   if(token){
-  //     fliterData()
-  //   }
-  // },[fliters])
+  },[dispatch])
 
   async function fetchCatData() {
       const response = await fetch('http://localhost:5000/api/cats');
       const responseData = await response.json();
       setCatData(responseData);
+      dispatch(setProducts(responseData))
 
       const nameSet = new Set();
       const temperamentSet = new Set();

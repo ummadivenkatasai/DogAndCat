@@ -1,35 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const dogStock={
-    stock:10
+
+const initialState={
+    products:[]
 }
 
-const catStock={
-    stock:10
-}
-
-const dogSlice=createSlice({
-    name:'dog',
-    initialState:dogStock,
+const productSlice = createSlice({
+    name:'products',
+    initialState,
     reducers:{
-        dogOrdered:(state)=>{
-            state.stock--;
+        setProducts:(state,action)=>{
+            state.products = action.payload
+            console.log(initialState.products)
         },
-        // restocked:()
+        ordered:(state,action)=>{
+            const petId = action.payload;
+            const updated = state.products.map((data)=>{
+                if( petId.includes(data._id) && data.qty > 0 ){
+                    return { ...data, qty:data.qty-1 }
+                }
+                return data
+            })
+            state.products = updated
+        }
     }
 })
 
-const catSlice=createSlice({
-    name:'cat',
-    initialState:catStock,
-    reducers:{
-        catOrdered:(state)=>{
-            state.stock--;
-        },
-        // restocked:()
-    }
-})
-
-export { dogSlice, catSlice };
-export const { dogOrdered } = dogSlice.actions;
-export const { catOrdered } = catSlice.actions;
+export const { setProducts, ordered } = productSlice.actions
+export default productSlice.reducer;

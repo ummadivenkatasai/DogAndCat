@@ -5,6 +5,8 @@ import { NumericFormat } from "react-number-format";
 import axios from "axios";
 import { CatCart, DogCart } from "./AddToCart";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import { ordered,setProducts } from "../reduxComponent/slice";
 
 class OrderProcessor {
   constructor(cartItems, deliveryDate, finalPrice) {
@@ -42,6 +44,8 @@ function Checkout() {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     fetchingAddress();
     fetchingCartItems();
@@ -54,6 +58,20 @@ function Checkout() {
   useEffect(() => {
     generateCaptcha();
   }, []);
+
+    useEffect(()=>{
+      fetchCatAndDogData()
+    },[dispatch])
+
+      async function fetchCatAndDogData() {
+        try {
+          const dogResponse = await axios.get('http://localhost:5000/api/dogs');
+          const catresponse = await axios.get('http://localhost:5000/api/cats');
+          dispatch(setProducts([...dogResponse.data,...catresponse.data]))
+        } catch (error) {
+          console.log('error on getting dog and cat data',error)
+        }
+      }
 
   async function fetchingAddress() {
     const response = await axios.get("http://localhost:5000/api/address", {
@@ -94,10 +112,14 @@ function Checkout() {
     setCaptcha(value);
   }
 
-  async function sentOrder() {
-    const processor = new OrderProcessor(cartItems,deliveryDate,finalPrice);
-    const cartData = processor.getProcessedCartData();
-    await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
+  async function sentOrder(cartData) {
+    const id = cartData.map((data)=> data._id );
+    try {
+      dispatch(ordered(id))
+      await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
+    } catch (error) {
+      console.log('send order function error',error)
+    }
   }
 
   async function clearCart() {
@@ -111,7 +133,7 @@ function Checkout() {
     const cartData = processor.getProcessedCartData();
     setIsLoading(true);
     try {
-      sentOrder()
+      sentOrder(cartData)
       setTimeout(()=>{
         clearCart()
         setCaptcha('');

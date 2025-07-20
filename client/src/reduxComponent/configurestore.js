@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { dogSlice, catSlice } from "./slice";
+import productReducer from './slice'
 
 const store = configureStore({
-    reducer:{
-        dog:dogSlice.reducer,
-        cat:catSlice.reducer
-    }
+    reducer: {
+        products:productReducer
+    },
+    // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 })
-
-store.subscribe(()=> console.log(store.getState()) )
 
 export default store;

@@ -4,18 +4,23 @@ import Explore from './Explore';
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import Choose from './Choose';
+import axios from 'axios'
 
 function Home() {
 
     const [combineData,setCombineData] = useState([]);
 
     useEffect(()=>{
-      async function fetchingImages() {
+      fetchingImages()
+    },[])
+
+    
+
+     async function fetchingImages() {
         try {
-          const response= await fetch('http://localhost:5000/');
-          const responseData = await response.json();
-          const dogResData = responseData.dog;
-          const catResData = responseData.cat;
+          const response= await axios.get('http://localhost:5000/');
+          const dogResData = response.data.dog;
+          const catResData = response.data.cat;
           let combine =[]
           const totalLength = dogResData.length+catResData.length;
           
@@ -31,10 +36,6 @@ function Home() {
           console.log("rendering error",error)
         }
       }
-      
-      fetchingImages()
-
-    },[])
 
   return (
     <>

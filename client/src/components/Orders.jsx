@@ -109,7 +109,7 @@ function ShippingDetails({order}){
   const orderDate = `${order.slice(8, 10)}-${order.slice(4,7)}-${order.slice(11,15)}`
 
   const activeStep = getStepIndex(orderDate);
-  const steps = ["Ordered", "Shipped", 'On Tranist',"Out for Delivery", "Delivered"];
+  const steps = ["Ordered", "Shipped", 'in Tranist',"Out for Delivery", "Delivered"];
 
   return(
     <Box>

@@ -4,6 +4,8 @@ import {Card,CardContent,CardMedia,Checkbox,FormControl,Grid,MenuItem,OutlinedIn
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { setProducts } from "../reduxComponent/slice";
+import { useSelector, useDispatch } from "react-redux";
 
 function DogData (){
   const [dogData, setDogData] = useState([]);
@@ -11,10 +13,13 @@ function DogData (){
 
   const [selectedBreedName, setSelectedBreedName] = useState([]);
   const token = localStorage.getItem('token');
+  
+  const products = useSelector((state)=> state.products.products );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dogDataFetching();
-  }, []);
+  }, [dispatch]);
 
   async function dogDataFetching() {
       const breedSet = new Set();
@@ -22,6 +27,7 @@ function DogData (){
         const response = await fetch("http://localhost:5000/api/dogs");
         const responseData = await response.json();
           setDogData(responseData);
+          dispatch(setProducts(responseData))
         responseData.map((data) => {
           breedSet.add(data.breed);
         });
