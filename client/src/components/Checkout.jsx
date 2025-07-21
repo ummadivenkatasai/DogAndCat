@@ -65,8 +65,8 @@ function Checkout() {
 
       async function fetchCatAndDogData() {
         try {
-          const dogResponse = await axios.get('http://localhost:5000/api/dogs');
-          const catresponse = await axios.get('http://localhost:5000/api/cats');
+          const dogResponse = await axios.get('http://dogandcat-production.up.railway.app/api/dogs');
+          const catresponse = await axios.get('http://dogandcat-production.up.railway.app/api/cats');
           dispatch(setProducts([...dogResponse.data,...catresponse.data]))
         } catch (error) {
           console.log('error on getting dog and cat data',error)
@@ -74,7 +74,7 @@ function Checkout() {
       }
 
   async function fetchingAddress() {
-    const response = await axios.get("http://localhost:5000/api/address", {
+    const response = await axios.get("http://dogandcat-production.up.railway.app/api/address", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setAddressContent(response.data.message);
@@ -85,7 +85,7 @@ function Checkout() {
   }
 
   async function fetchingCartItems() {
-    const response = await axios.get("http://localhost:5000/api/cart", {
+    const response = await axios.get("http://dogandcat-production.up.railway.app/api/cart", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setCartItems(response.data.cartData);
@@ -116,14 +116,14 @@ function Checkout() {
     const id = cartData.map((data)=> data._id );
     try {
       dispatch(ordered(id))
-      await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
+      await axios.post('http://dogandcat-production.up.railway.app/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
     } catch (error) {
       console.log('send order function error',error)
     }
   }
 
   async function clearCart() {
-    await axios.post("http://localhost:5000/api/cart/clear", [], {
+    await axios.post("http://dogandcat-production.up.railway.app/api/cart/clear", [], {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
@@ -241,7 +241,7 @@ function NewAddressForm({ userToken, accessData, addresshandle }) {
     }));
     if (name === "pincode" && value.length === 6) {
       const response = await axios.get(
-        `https://api.postalpincode.in/pincode/${value}`
+        `http://dogandcat-production.up.railway.appcode.in/pincode/${value}`
       );
       if (response.data[0].Status != "Error") {
         const town = response.data.map(({ PostOffice }) => {
@@ -264,7 +264,7 @@ function NewAddressForm({ userToken, accessData, addresshandle }) {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/address",
+        "http://dogandcat-production.up.railway.app/api/address",
         addressData,
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
