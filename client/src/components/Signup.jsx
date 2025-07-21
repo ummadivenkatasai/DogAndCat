@@ -40,8 +40,8 @@ function Signup() {
     async function generateOtp(name){
         const otp = Math.floor(100000+Math.random()*900000);
         const {mobileNumber,email} = formData
-        const existingMobileNumber = await axios.post('http://dogandcat-production.up.railway.app/api/mobileNumber',{mobileNumber});
-        const existingEmail = await axios.post('http://dogandcat-production.up.railway.app/api/email',{email});
+        const existingMobileNumber = await axios.post('https://dogandcat-production.up.railway.app/api/mobileNumber',{mobileNumber});
+        const existingEmail = await axios.post('https://dogandcat-production.up.railway.app/api/email',{email});
         if( name === 'mobile' ){
             if(formData.mobileNumber.length == 10 && existingMobileNumber.data.message === 'new user' ){
                 setVerificationOtp((previousValue)=>({ ...previousValue,mobileOtp:otp }))
@@ -89,7 +89,7 @@ function Signup() {
         event.preventDefault()
         if( verifyField.mobileVerify && verifyField.emailVerify ){
             try {
-                const res = await axios.post('http://dogandcat-production.up.railway.app/api/signup',formData);
+                const res = await axios.post('https://dogandcat-production.up.railway.app/api/signup',formData);
                 setFormData({firstName:'',lastName:'',gender:'',dateOfBirth:'',mobileNumber:'',email:'',password:''});
                 setVerifyField({mobileVerify:false,emailVerify:false})
                 navigate('/login');

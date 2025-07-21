@@ -39,7 +39,7 @@ function CatContent({isAuthenticated}) {
     },[_id,isAuthenticated])
 
     async function fetchingCatData(){
-        const response= await axios.get(`http://dogandcat-production.up.railway.app/api/cats/${_id}`) 
+        const response= await axios.get(`https://dogandcat-production.up.railway.app/api/cats/${_id}`) 
         const breedInfo = response.data.catData.breeds[0];
         const catName = breedInfo.name
         const description = breedInfo.description
@@ -51,7 +51,7 @@ function CatContent({isAuthenticated}) {
 
     async function catContent() {
       try {
-        const response = await axios.get('http://dogandcat-production.up.railway.app/api/cats');
+        const response = await axios.get('https://dogandcat-production.up.railway.app/api/cats');
         const cats = response.data;
         const duplicate = new Set();
         while( duplicate.size<10 ){
@@ -70,7 +70,7 @@ function CatContent({isAuthenticated}) {
     async function checkWishListStatus() {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://dogandcat-production.up.railway.app/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
+        const response = await axios.get(`https://dogandcat-production.up.railway.app/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
         const userWishListItems = response.data.items || [];
         setIsWishList(userWishListItems.some((data)=> data._id === _id ))
       } catch (error) {
@@ -83,12 +83,12 @@ function CatContent({isAuthenticated}) {
         const authoriseToken = localStorage.getItem("token");
         try {
         if(type === 'wishListBtn'){
-          const result = await axios.post(`http://dogandcat-production.up.railway.app/api/wishlist/cat`,{catData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
+          const result = await axios.post(`https://dogandcat-production.up.railway.app/api/wishlist/cat`,{catData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
         }else if( type === 'cartBtn' ){
           setIsCartClick(true)
           const cartData = {...catData,qty:cartQty};
-          const cartResult = await axios.post(`http://dogandcat-production.up.railway.app/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
+          const cartResult = await axios.post(`https://dogandcat-production.up.railway.app/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
         }
         } catch (error) {
          if(error) alert('quantity exceeds')
@@ -112,7 +112,7 @@ function CatContent({isAuthenticated}) {
 
     async function checkingPincode() {
       try {
-        const respose = await axios.get(`http://dogandcat-production.up.railway.appcode.in/pincode/${pincodevalue}`);
+        const respose = await axios.get(`https://dogandcat-production.up.railway.appcode.in/pincode/${pincodevalue}`);
         if (respose.data[0].Status != "Error") {
           const town = respose.data.map(({ PostOffice }) => {return PostOffice[0].Block || null});
           setPincodePlace({pincode: pincodevalue,pincodeTown: town[0],status: respose.data[0].Status,});
