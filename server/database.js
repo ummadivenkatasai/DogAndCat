@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb+srv://venkatsaiking32:4ySMFz9LhCJKAhrW@cluster0.cabpz8c.mongodb.net/Petpals?retryWrites=true&w=majority&appName=Cluster0';
 const client = new MongoClient(url);
 
 async function connectDB(col) {

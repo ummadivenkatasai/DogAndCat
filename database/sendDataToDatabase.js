@@ -3,7 +3,7 @@ const path = require('path');
 
 let dogInterval, catInterval;
 
-const url = 'mongodb://localhost:27017';
+const url = process.env.MONGO_URL || 'mongodb+srv://venkatsaiking32:4ySMFz9LhCJKAhrW@cluster0.cabpz8c.mongodb.net/Petpals?retryWrites=true&w=majority&appName=Cluster0';
 const database = 'DogAndCatApiData';
 
 async function createCollection(collectionName) {
