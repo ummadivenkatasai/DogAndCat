@@ -24,7 +24,7 @@ function DogData (){
   async function dogDataFetching() {
       const breedSet = new Set();
       try {
-        const response = await fetch("https://dogandcat-production.up.railway.app/api/dogs");
+        const response = await fetch("http://localhost:5000/api/dogs");
         const responseData = await response.json();
           setDogData(responseData);
           dispatch(setProducts(responseData))
@@ -48,7 +48,7 @@ function DogData (){
         console.log(value.length)
         dogDataFetching()
       }else{
-        const response = await axios.post(`https://dogandcat-production.up.railway.app/api/products`,requestedBody,{headers:{ Authorization:`Bearer ${token}` }})
+        const response = await axios.post(`http://localhost:5000/api/products`,requestedBody,{headers:{ Authorization:`Bearer ${token}` }})
       setDogData(response.data.message)
       }
     } catch (error) {

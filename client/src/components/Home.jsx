@@ -18,7 +18,7 @@ function Home() {
 
      async function fetchingImages() {
         try {
-          const response= await axios.get('https://dogandcat-production.up.railway.app/');
+          const response= await axios.get('http://localhost:5000/');
           const dogResData = response.data.dog;
           const catResData = response.data.cat;
           let combine =[]
