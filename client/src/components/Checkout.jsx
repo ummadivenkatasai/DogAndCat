@@ -65,8 +65,10 @@ function Checkout() {
 
       async function fetchCatAndDogData() {
         try {
-          const dogResponse = await axios.get('http://localhost:5000/api/dogs');
-          const catresponse = await axios.get('http://localhost:5000/api/cats');
+          // const dogResponse = await axios.get('http://localhost:5000/api/dogs');
+          // const catresponse = await axios.get('http://localhost:5000/api/cats');
+          const dogResponse = await axios.get('https://dogandcat-production.up.railway.app/api/dogs');
+          const catresponse = await axios.get('https://dogandcat-production.up.railway.app/api/cats');
           dispatch(setProducts([...dogResponse.data,...catresponse.data]))
         } catch (error) {
           console.log('error on getting dog and cat data',error)
@@ -74,9 +76,10 @@ function Checkout() {
       }
 
   async function fetchingAddress() {
-    const response = await axios.get("http://localhost:5000/api/address", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get("https://dogandcat-production.up.railway.app/api/address", {headers: { Authorization: `Bearer ${token}` }});
+    // const response = await axios.get("http://localhost:5000/api/address", {
+    //   headers: { Authorization: `Bearer ${token}` },
+    // });
     setAddressContent(response.data.message);
   }
 
@@ -85,9 +88,8 @@ function Checkout() {
   }
 
   async function fetchingCartItems() {
-    const response = await axios.get("http://localhost:5000/api/cart", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    // dogandcat-production.up.railway.app
+    const response = await axios.get("http://localhost:5000/api/cart", { headers: { Authorization: `Bearer ${token}` }});
     setCartItems(response.data.cartData);
   }
 
@@ -116,16 +118,16 @@ function Checkout() {
     const id = cartData.map((data)=> data._id );
     try {
       dispatch(ordered(id))
-      await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
+    await axios.post('https://dogandcat-production.up.railway.app/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
+      // await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
     } catch (error) {
       console.log('send order function error',error)
     }
   }
 
   async function clearCart() {
-    await axios.post("http://localhost:5000/api/cart/clear", [], {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.post("https://dogandcat-production.up.railway.app/api/cart/clear", [], { headers: { Authorization: `Bearer ${token}` }});
+    // await axios.post("http://localhost:5000/api/cart/clear", [], { headers: { Authorization: `Bearer ${token}` }});
   }
 
   async function handleSubmit() {
@@ -156,7 +158,7 @@ function Checkout() {
         </Grid>
         {isAddAdrdress ? (
           <Card className="newAddressContent">
-            <NewAddressForm userToken={token} accessData={SetAccess} addresshandle={setIsAddAddress} />
+            <NewAddressForm accessData={SetAccess} addresshandle={setIsAddAddress} />
           </Card>
         ) : null}
         <Grid className="addressDisplay">
@@ -230,7 +232,7 @@ function AddAddress({ changeFun }) {
   );
 }
 
-function NewAddressForm({ userToken, accessData, addresshandle }) {
+function NewAddressForm({ accessData, addresshandle }) {
   const [addressData, setAddressData] = useState({ personName: "", mobilenumber: "", pincode: "", locality: "", address: "", city: "", state: "", landmark: "", alternate: "",});
 
   async function handleAddressData({ target }) {
@@ -240,9 +242,8 @@ function NewAddressForm({ userToken, accessData, addresshandle }) {
       [name]: value,
     }));
     if (name === "pincode" && value.length === 6) {
-      const response = await axios.get(
-        `http://localhost:5000/pincode/${value}`
-      );
+      const response = await axios.get(`https://dogandcat-production.up.railway.app/pincode/${value}`)
+      // const response = await axios.get(`http://localhost:5000/pincode/${value}`);
       if (response.data[0].Status != "Error") {
         const town = response.data.map(({ PostOffice }) => {
           const cityAndState = {
@@ -263,11 +264,9 @@ function NewAddressForm({ userToken, accessData, addresshandle }) {
   async function submit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/address",
-        addressData,
-        { headers: { Authorization: `Bearer ${userToken}` } }
-      );
+      
+      const response = await axios.post("https://dogandcat-production.up.railway.app/api/address",addressData,{ headers: { Authorization: `Bearer{userToken}` } } );
+      // const response = await axios.post("http://localhost:5000/api/address",addressData,{ headers: { Authorization: `Bearer{userToken}` } } );
       const sendData = () => {
         return addressData;
       };

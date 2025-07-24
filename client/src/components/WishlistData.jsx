@@ -18,7 +18,8 @@ function WishlistData({isAuthenticated}) {
     if(!isAuthenticated) {navigate('/login'); return}
     const token = localStorage.getItem('token')
     try {
-      const response = await axios.get('http://localhost:5000/api/wishlist',{ headers:{ Authorization:`Bearer ${token}` } });
+      const response = await axios.get('https://dogandcat-production.up.railway.app/api/wishlist',{ headers:{ Authorization:`Bearer ${token}` } });
+      // const response = await axios.get('http://localhost:5000/api/wishlist',{ headers:{ Authorization:`Bearer ${token}` } });
       setWishListData(response.data.message)
     } catch (error) {
       console.log('fetching wishlist data error',error)

@@ -1,9 +1,9 @@
 import '../componentsCss/cat.css'
 import { Button, Card, CardContent, CardMedia, Checkbox, FormControl, Grid, MenuItem, OutlinedInput, Radio, Select, Typography } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setProducts } from '../reduxComponent/slice';
 
 const checkBoxWidth={
@@ -21,7 +21,6 @@ function CatData(){
     breedNameSelected:[], temperamentSelected:[],countrySelected:'', lifeSpanSelected:[], energySelected:'' 
   })
 
-  const products = useSelector((state)=> state.products.products );
   const dispatch = useDispatch()
 
   useEffect(()=>{
@@ -29,7 +28,8 @@ function CatData(){
   },[dispatch])
 
   async function fetchCatData() {
-      const response = await fetch('http://localhost:5000/api/cats');
+      // const response = await fetch('http://localhost:5000/api/cats');
+      const response = await fetch('https://dogandcat-production.up.railway.app/api/cats');
       const responseData = await response.json();
       setCatData(responseData);
       dispatch(setProducts(responseData))
@@ -75,7 +75,8 @@ function CatData(){
           category:'cat',
           data:fliters
         }
-        const response = await axios.post('http://localhost:5000/api/products',requestedBody,{headers:{Authorization:`Bearer ${token}`}})
+        const response = await axios.post('https://dogandcat-production.up.railway.app/api/products',requestedBody,{headers:{Authorization:`Bearer ${token}`}})
+        // const response = await axios.post('http://localhost:5000/api/products',requestedBody,{headers:{Authorization:`Bearer ${token}`}})
         setCatData(response.data.message)
       } catch (error) {
         console.log('send fliter data error',error)
@@ -161,93 +162,3 @@ function CustomSingleCheckBox({ containerClassName, containerName, box, selectLa
 
 
 export default CatData
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- {/* <Grid className='fliters breedname' >
-          <Typography variant='body1' >Breeds</Typography>
-          <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
-            <Select className='select' input={<OutlinedInput />} value={breedNameSeleted} label="Breed Name" onChange={handleChange(setBreedNameSeleted)} multiple renderValue={(selected) => selected.join(', ')} >
-              {breedNames.map((data)=>(
-                  <MenuItem className='menuItem' value={data} key={data} >
-                    <Checkbox checked={breedNameSeleted.includes(data)} />
-                    {data}
-                  </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid> */}
-
-
-{/* <Grid className='fliters Temperament' >
-            <Typography variant='body1' >Temperament</Typography>
-            <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
-              <Select className='select' input={<OutlinedInput />} value={temperamentSeleted} label='Temperament' onChange={handleChange(setTemperamentSeleted)} multiple renderValue={(selected)=> selected.join(', ') } >
-                {alltemperament.map((data)=>(
-                  <MenuItem className='menuItem' value={data} key={data} >
-                    < Checkbox checked={temperamentSeleted.includes(data)}  />
-                    {data}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-        </Grid> */}
-
-
- {/* <Grid className='fliters origin' >
-          <Typography variant='body1' >Country</Typography>
-          <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
-            <Select className='select' input={<OutlinedInput/>} value={countrySelected} label='Country' onChange={handleChange(setCountrySeleted)} renderValue={(selected)=> selected} >
-                {country.map((data)=>(
-                  <MenuItem className='menuItem' value={data} key={data} >
-                    < Checkbox checked={countrySelected === data} />
-                    {data}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-        </Grid> */}
-
-
-
-{/* <Grid className='fliters lifeSpan' >
-           <Typography variant='body1' >Life Span</Typography>
-           <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
-           <Select className='select' input={<OutlinedInput />} value={lifeSpanSelected} label='lifeSpan' onChange={handleChange(setLifeSpanSelected)} multiple renderValue={(selected)=> selected.join(', ') } >
-           {lifeSpan.map((data)=>(
-            <MenuItem className='menuItem' value={data} key={data} >
-            <Checkbox checked={lifeSpanSelected.includes(data)} />
-            {data}
-          </MenuItem>
-           ))}
-           </Select>
-            </FormControl>     
-        </Grid> */}
-
-
-{/* <Grid className='fliters enegryLevel' >
-            <Typography variant='body1' >Energy Level</Typography>
-            <FormControl className='checkbox' sx={{minWidth:250,maxWidth:250}} >
-              <Select className='select' input={<OutlinedInput/>} value={energySelected} label='enegry' onChange={handleChange(setEnergySelected)} renderValue={(selected)=> selected} >
-                {energy.map((data)=>(
-                  <MenuItem className='menuItem'  value={data} key={data} >
-                    <Checkbox checked={energySelected === data} />
-                    {data}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-        </Grid> */}

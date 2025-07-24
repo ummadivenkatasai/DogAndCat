@@ -1,10 +1,16 @@
 .navigation{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 1rem;
     align-items: center;
     background-color: orange;
     width: 100%;
+}
+
+.navigation .websiteName{
+    position: relative;
+    left: 8rem;
+    padding: 0.5rem 2rem;
 }
 
 .navigation .websiteName a{
@@ -12,8 +18,7 @@
     font-size: 25px;
     font-weight: bold;
     color: black;
-    position: relative;
-    left: 8rem;
+    
 }
 
 .navigation .websiteName a:hover{
@@ -26,7 +31,9 @@
     align-items: center;
     justify-content: space-between;
     /* width: 450px; */
-    gap: 30px;
+    gap: 3rem;
+    position: relative;
+    right: 5rem;
     /* border: 1px solid black; */
 }
 
@@ -64,8 +71,8 @@
 
 .navigation .profileOptions{
     position: absolute;
-    right: 13.5rem;
-    top: 4rem;
+    right: 0.1rem;
+    top: 3rem;
     z-index: 3;
     width: 6rem;
     background-color: rgba(255, 166, 0, 0.778);

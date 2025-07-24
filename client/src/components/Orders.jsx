@@ -29,7 +29,7 @@ const GreenStepLabel = (props) => {
 
 function OrderSignIn(){
   return(
-    <Grid className='orderBody' >
+    <Grid className='orderBody loginBody' >
       <Typography variant='h3' >To see orders. Please Login</Typography>
       <Button variant='contained' href='login' >Login</Button>
     </Grid>
@@ -47,7 +47,8 @@ function ListOfOrders(){
   },[])
 
   async function fetchingOrders(){
-    const response = await axios.get('http://localhost:5000/api/orders',{headers:{Authorization:`Bearer ${token}`}});
+    const response = await axios.get('https://dogandcat-production.up.railway.app/api/orders',{headers:{Authorization:`Bearer ${token}`}});
+    // const response = await axios.get('http://localhost:5000/api/orders',{headers:{Authorization:`Bearer ${token}`}});
     const ordersData = response.data.message;
     const reverseOrder = ordersData.reverse();
     setOrderContent(reverseOrder)

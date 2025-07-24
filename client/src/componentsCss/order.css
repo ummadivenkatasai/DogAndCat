@@ -8,6 +8,18 @@
     gap: 1rem;
 }
 
+.orderBody .MuiButton-root{
+    width: 10rem;
+}
+
+.loginBody{
+    /* text-align: center; */
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
+    margin-top: 5rem;
+}
+
 .orderBody a{
     margin-top: 2rem;
     /* font-size: 2rem; */
