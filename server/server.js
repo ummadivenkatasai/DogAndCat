@@ -9,7 +9,10 @@ const { User, Pets } = require('./user')
 
 function createServer() {
     const app = express();
-    app.use(cors());
+    app.use(cors({
+  origin: ['https://dog-and-cat-zeta.vercel.app/'], // Add your Vercel frontend URL here
+  credentials: true
+}));
     app.use(express.json())
 
     app.get('/', async (req, res) => {
