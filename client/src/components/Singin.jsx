@@ -31,8 +31,8 @@ function Signin({prop}) {
     setError('')
   }else{
     try {
-      
-    const response = await axios.post('https://dogandcat-production.up.railway.app/api/auth/signin',formData);
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signin`,formData); 
+    // const response = await axios.post('https://dogandcat-production.up.railway.app/api/auth/signin',formData);
     // const response = await axios.post('http://localhost:5000/api/auth/signin',formData);
     localStorage.setItem("token",response.data.token);
     prop(true);

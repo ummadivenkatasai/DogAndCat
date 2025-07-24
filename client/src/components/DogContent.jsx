@@ -39,7 +39,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
 
   async function fetchingDogData() {
     
-    const response = await axios.get(`https://dogandcat-production.up.railway.app/api/dogs/${_id}`);
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/dogs/${_id}`);
       // const response = await axios.get(`http://localhost:5000/api/dogs/${_id}`);
       const responseData = response.data.dogData;
       setDogData(responseData);
@@ -48,7 +48,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
    async function dogContent() {
     try {
       
-      const response = await axios.get('https://dogandcat-production.up.railway.app/api/dogs');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/dogs`);
       // const response = await axios.get('http://localhost:5000/api/dogs');
       const dogs = response.data;
       const duplicate= new Set();
@@ -68,7 +68,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
   async function checkWishListStatus() {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`https://dogandcat-production.up.railway.app/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
         // const response = await axios.get(`http://localhost:5000/api/wishlist/${_id}`,{ headers:{ Authorization:`Bearer ${token}` } })
         const userWishListItems = response.data.items || [];
         setIsWishList(userWishListItems.some((data)=> data._id === _id ))
@@ -84,14 +84,14 @@ function DogContent({isAuthenticated}) { //onAddToCart
         try {
         if(type === 'wishListBtn'){
           
-          const result = await axios.post(`https://dogandcat-production.up.railway.app/api/wishlist/dog`,{dogData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
+          const result = await axios.post(`${process.env.REACT_APP_API_URL}/api/wishlist/dog`,{dogData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           // const result = await axios.post(`http://localhost:5000/api/wishlist/dog`,{dogData},{headers:{ Authorization:`Bearer ${authoriseToken}` }});
           setIsWishList(result.data.selected)
         }else if( type === 'cartBtn' ){
           setIsCartClick(true);
           
            const cartData = {...dogData,qty:cartQty};
-           await axios.post(`https://dogandcat-production.up.railway.app/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
+           await axios.post(`${process.env.REACT_APP_API_URL}/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
           // const cartResult = await axios.post(`http://localhost:5000/api/cart`,cartData,{headers:{Authorization:`Bearer ${authoriseToken}`}})
         }
         } catch (error) {
@@ -116,7 +116,7 @@ function DogContent({isAuthenticated}) { //onAddToCart
 
   async function checkingPincode() {
     try {
-      const respose = await axios.get(`https://dogandcat-production.up.railway.appcode.in/pincode/${pincodevalue}`);
+      const respose = await axios.get(`${process.env.REACT_APP_API_URL}/pincode/${pincodevalue}`);
       // const respose = await axios.get(`http://localhost:5000/pincode/${pincodevalue}`);
       if (respose.data[0].Status != "Error") {
         const town = respose.data.map(({ PostOffice }) => {return PostOffice[0].Block || null});

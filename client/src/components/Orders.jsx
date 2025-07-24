@@ -47,7 +47,8 @@ function ListOfOrders(){
   },[])
 
   async function fetchingOrders(){
-    const response = await axios.get('https://dogandcat-production.up.railway.app/api/orders',{headers:{Authorization:`Bearer ${token}`}});
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders`,{headers:{Authorization:`Bearer ${token}`}});
+    // const response = await axios.get('https://dogandcat-production.up.railway.app/api/orders',{headers:{Authorization:`Bearer ${token}`}});
     // const response = await axios.get('http://localhost:5000/api/orders',{headers:{Authorization:`Bearer ${token}`}});
     const ordersData = response.data.message;
     const reverseOrder = ordersData.reverse();

@@ -67,8 +67,8 @@ function Checkout() {
         try {
           // const dogResponse = await axios.get('http://localhost:5000/api/dogs');
           // const catresponse = await axios.get('http://localhost:5000/api/cats');
-          const dogResponse = await axios.get('https://dogandcat-production.up.railway.app/api/dogs');
-          const catresponse = await axios.get('https://dogandcat-production.up.railway.app/api/cats');
+          const dogResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/dogs`);
+          const catresponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/cats`);
           dispatch(setProducts([...dogResponse.data,...catresponse.data]))
         } catch (error) {
           console.log('error on getting dog and cat data',error)
@@ -76,7 +76,7 @@ function Checkout() {
       }
 
   async function fetchingAddress() {
-    const response = await axios.get("https://dogandcat-production.up.railway.app/api/address", {headers: { Authorization: `Bearer ${token}` }});
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/address`, {headers: { Authorization: `Bearer ${token}` }});
     // const response = await axios.get("http://localhost:5000/api/address", {
     //   headers: { Authorization: `Bearer ${token}` },
     // });
@@ -89,7 +89,7 @@ function Checkout() {
 
   async function fetchingCartItems() {
     // dogandcat-production.up.railway.app
-    const response = await axios.get("http://localhost:5000/api/cart", { headers: { Authorization: `Bearer ${token}` }});
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cart`, { headers: { Authorization: `Bearer ${token}` }});
     setCartItems(response.data.cartData);
   }
 
@@ -118,7 +118,7 @@ function Checkout() {
     const id = cartData.map((data)=> data._id );
     try {
       dispatch(ordered(id))
-    await axios.post('https://dogandcat-production.up.railway.app/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
+    await axios.post(`${process.env.REACT_APP_API_URL}/api/orders`,cartData,{headers:{Authorization:`Bearer ${token}`}})
       // await axios.post('http://localhost:5000/api/orders',cartData,{headers:{Authorization:`Bearer ${token}`}})
     } catch (error) {
       console.log('send order function error',error)
@@ -126,7 +126,7 @@ function Checkout() {
   }
 
   async function clearCart() {
-    await axios.post("https://dogandcat-production.up.railway.app/api/cart/clear", [], { headers: { Authorization: `Bearer ${token}` }});
+    await axios.post(`${process.env.REACT_APP_API_URL}/api/cart/clear`, [], { headers: { Authorization: `Bearer ${token}` }});
     // await axios.post("http://localhost:5000/api/cart/clear", [], { headers: { Authorization: `Bearer ${token}` }});
   }
 
@@ -242,7 +242,7 @@ function NewAddressForm({ accessData, addresshandle }) {
       [name]: value,
     }));
     if (name === "pincode" && value.length === 6) {
-      const response = await axios.get(`https://dogandcat-production.up.railway.app/pincode/${value}`)
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/pincode/${value}`)
       // const response = await axios.get(`http://localhost:5000/pincode/${value}`);
       if (response.data[0].Status != "Error") {
         const town = response.data.map(({ PostOffice }) => {
@@ -265,7 +265,7 @@ function NewAddressForm({ accessData, addresshandle }) {
     e.preventDefault();
     try {
       
-      const response = await axios.post("https://dogandcat-production.up.railway.app/api/address",addressData,{ headers: { Authorization: `Bearer{userToken}` } } );
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/address`,addressData,{ headers: { Authorization: `Bearer{userToken}` } } );
       // const response = await axios.post("http://localhost:5000/api/address",addressData,{ headers: { Authorization: `Bearer{userToken}` } } );
       const sendData = () => {
         return addressData;
