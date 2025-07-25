@@ -28,8 +28,8 @@ function CatData(){
   },[dispatch])
 
   async function fetchCatData() {
-      // const response = await fetch('http://localhost:5000/api/cats');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cats`);
+      const response = await fetch('http://localhost:5000/api/cats');
+      // const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cats`);
       const responseData = await response.json();
       setCatData(responseData);
       dispatch(setProducts(responseData))
@@ -75,8 +75,8 @@ function CatData(){
           category:'cat',
           data:fliters
         }
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/products `,requestedBody,{headers:{Authorization:`Bearer ${token}`}})
-        // const response = await axios.post('http://localhost:5000/api/products',requestedBody,{headers:{Authorization:`Bearer ${token}`}})
+        // const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/products `,requestedBody,{headers:{Authorization:`Bearer ${token}`}})
+        const response = await axios.post('http://localhost:5000/api/products',requestedBody,{headers:{Authorization:`Bearer ${token}`}})
         setCatData(response.data.message)
       } catch (error) {
         console.log('send fliter data error',error)

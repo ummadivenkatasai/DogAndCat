@@ -36,8 +36,8 @@ function AddToCart({ isAuthenticated }) {
 
   async function fecthingCartData() {
     try {
-      // const response = await axios.get('http://localhost:5000/api/cart', { headers: { Authorization: `Bearer ${token}` } });
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cart`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.get('http://localhost:5000/api/cart', { headers: { Authorization: `Bearer ${token}` } });
+      // // const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cart`, { headers: { Authorization: `Bearer ${token}` } });
       setCartContent(response.data.cartData)
     } catch (error) {
       console.log('feching data error', error)
@@ -57,7 +57,7 @@ function AddToCart({ isAuthenticated }) {
     const updateItems = { ...item, qty: newQty, updateType: type };
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/cart`, updateItems, { headers: { Authorization: `Bearer ${token}` } })
+      await axios.post(`http://localhost:5000/api/cart`, updateItems, { headers: { Authorization: `Bearer ${token}` } })
     } catch (error) {
       console.log('update quantity sending error', error)
     }
@@ -111,15 +111,15 @@ async function updateProducts({type,product}) {
   if( type === 'delete' ){
     if(product._id){
       const productDetails = { ...product, updateType:'delete' }
-      axios.post(`${import.meta.env.VITE_API_URL}/api/cart`,productDetails,{headers:{Authorization:`Bearer ${token}`}})
-      // const response = await axios.post(`http://localhost:5000/api/cart/`,productDetails,{headers:{Authorization:`Bearer ${token}`}});
+      // axios.post(`${import.meta.env.VITE_API_URL}/api/cart`,productDetails,{headers:{Authorization:`Bearer ${token}`}})
+      await axios.post(`http://localhost:5000/api/cart/`,productDetails,{headers:{Authorization:`Bearer ${token}`}});
       window.location.reload()
     }
   }else if(type === 'wishlist' ){
     if(product._id){
       const updateItems = { ...product, updateType:'wishlist' };
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/cart`,updateItems,{headers:{Authorization:`Bearer ${token}`}})
-      // const response = await axios.post('http://localhost:5000/api/cart',updateItems,{headers:{Authorization:`Bearer ${token}`}})
+      // await axios.post(`${import.meta.env.VITE_API_URL}/api/cart`,updateItems,{headers:{Authorization:`Bearer ${token}`}})
+      await axios.post('http://localhost:5000/api/cart',updateItems,{headers:{Authorization:`Bearer ${token}`}})
       window.location.reload()
     }
   }
