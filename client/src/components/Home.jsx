@@ -19,7 +19,7 @@ function Home() {
      async function fetchingImages() {
         try {
           
-          const response= await axios.get(`${process.env.REACT_APP_API_URL}/`);
+          const response= await axios.get(`${import.meta.env.VITE_API_URL}/`);
           // const response= await axios.get('http://localhost:5000/');
           const dogResData = response.data.dog;
           const catResData = response.data.cat;

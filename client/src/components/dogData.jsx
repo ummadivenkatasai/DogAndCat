@@ -25,7 +25,7 @@ function DogData (){
       const breedSet = new Set();
       try {
         
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/dogs`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/dogs`);
         // const response = await fetch("http://localhost:5000/api/dogs");
         const responseData = await response.json();
           setDogData(responseData);
@@ -51,7 +51,7 @@ function DogData (){
         dogDataFetching()
       }else{
         
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/products`,requestedBody,{headers:{ Authorization:`Bearer ${token}` }})
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/products`,requestedBody,{headers:{ Authorization:`Bearer ${token}` }})
         // const response = await axios.post(`http://localhost:5000/api/products`,requestedBody,{headers:{ Authorization:`Bearer ${token}` }})
         setDogData(response.data.message)
       }
